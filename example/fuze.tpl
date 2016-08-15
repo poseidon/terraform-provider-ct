@@ -1,0 +1,18 @@
+# -*- mode: yaml -*-
+# vi: set ft=yaml :
+
+---
+storage:
+  filesystems:
+    - name: "rootfs"
+      mount:
+        device: "/dev/disk/by-label/ROOT"
+        format: "ext4"
+
+  files:
+    - path: "/etc/motd"
+      filesystem: "rootfs"
+      mode: 0644
+      contents:
+        inline: |
+          ${message}
