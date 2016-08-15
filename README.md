@@ -31,6 +31,6 @@ data "fuze_config" "web" {
 }
 
 resource "aws_instance" "web" {
-    user_data = "${data.fuze_config.web.rendered}"
+  user_data = "${data.fuze_config.web.rendered}"
 }
 ```
