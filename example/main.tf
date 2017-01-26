@@ -1,22 +1,22 @@
-data "template_file" "fuze" {
-  template = "${file("${path.module}/fuze.tpl")}"
+data "template_file" "ct" {
+  template = "${file("${path.module}/ct.tpl")}"
 
   vars {
     message = "Hello World!"
   }
 }
 
-data "fuze_config" "example" {
+data "ct_config" "example" {
   pretty_print = true
-  content      = "${data.template_file.fuze.rendered}"
+  content      = "${data.template_file.ct.rendered}"
 }
 
 resource "null_resource" "echo" {
   triggers {
-    fuze_config = "${data.fuze_config.example.id}"
+    ct_config = "${data.ct_config.example.id}"
   }
 
   provisioner "local-exec" {
-    command = "echo '${data.fuze_config.example.rendered}'"
+    command = "echo '${data.ct_config.example.rendered}'"
   }
 }

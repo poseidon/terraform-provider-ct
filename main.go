@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/coreos/terraform-provider-fuze/fuze"
 	"github.com/hashicorp/terraform/plugin"
+
+	"github.com/coreos/terraform-provider-fuze/ct"
 )
 
 func main() {
 	plugin.Serve(&plugin.ServeOpts{
-		ProviderFunc: fuze.Provider,
+		ProviderFunc: ct.Provider,
 	})
 }

@@ -1,0 +1,13 @@
+package: github.com/coreos/terraform-provider-fuze
+import:
+- package: github.com/coreos/container-linux-config-transpiler
+  version: v0.1.0
+  subpackages:
+  - config
+- package: github.com/hashicorp/terraform
+  version: v0.8.5
+  subpackages:
+  - helper/hashcode
+  - helper/schema
+  - plugin
+  - terraform
