@@ -2,9 +2,11 @@ package fuze
 
 import (
 	"encoding/json"
+	"errors"
 	"strconv"
 
-	fuze "github.com/coreos/fuze/config"
+	fuze "github.com/coreos/container-linux-config-transpiler/config"
+
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
 )
@@ -47,9 +49,14 @@ func renderFuzeConfig(d *schema.ResourceData) (string, error) {
 	pretty := d.Get("pretty_print").(bool)
 	config := d.Get("content").(string)
 
-	ignition, err := fuze.ParseAsV2_0_0([]byte(config))
-	if err != nil {
-		return "", err
+	cfg, rpt := fuze.Parse([]byte(config))
+	if rpt.IsFatal() {
+		return "", errors.New(rpt.String())
+	}
+
+	ignition, rpt := fuze.ConvertAs2_0_0(cfg)
+	if rpt.IsFatal() {
+		return "", errors.New(rpt.String())
 	}
 
 	if pretty {
