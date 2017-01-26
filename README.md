@@ -1,12 +1,12 @@
-# Fuze Terraform Provider
+# Container-Linux-Config-Transpiler Terraform Provider
 
-The Fuze provider exposes data sources to render [Ignition] [1]
-configurations in the human-friendly [Fuze] [2] YAML format into
+The CT (formerly known as Fuze) provider exposes data sources to render [Ignition] [1]
+configurations in the human-friendly [Config-Transpiler] [2] YAML format into
 JSON.  The rendered JSON strings can be used as input to other
 Terraform resources, e.g. as user-data for cloud instances.
 
   [1]: https://github.com/coreos/ignition "Ignition"
-  [2]: https://github.com/coreos/fuze     "Fuze"
+  [2]: https://github.com/coreos/container-linux-config-transpiler "CT"
 
 
 ## Installation
@@ -17,7 +17,7 @@ Update your `.terraformrc` file with the path to the binary:
 
 ```hcl
 providers {
-  fuze = "/$GOPATH/bin/terraform-provider-fuze"
+  ct = "/$GOPATH/bin/terraform-provider-fuze"
 }
 ```
 
@@ -25,13 +25,13 @@ providers {
 ## Example Usage
 
 ```hcl
-data "fuze_config" "web" {
+data "ct_config" "web" {
   pretty_print = false
   content      = "${file("web.yaml")}"
 }
 
 resource "aws_instance" "web" {
-  user_data = "${data.fuze_config.web.rendered}"
+  user_data = "${data.ct_config.web.rendered}"
 }
 ```
 

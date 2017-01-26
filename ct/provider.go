@@ -1,4 +1,4 @@
-package fuze
+package ct
 
 import (
 	"github.com/hashicorp/terraform/helper/schema"
@@ -9,7 +9,7 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		DataSourcesMap: map[string]*schema.Resource{
-			"fuze_config": dataSourceFuzeConfig(),
+			"ct_config": dataSourceCTConfig(),
 		},
 	}
 }

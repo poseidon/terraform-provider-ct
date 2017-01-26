@@ -1,19 +1,19 @@
-package fuze
+package ct
 
 import (
 	"encoding/json"
 	"errors"
 	"strconv"
 
-	fuze "github.com/coreos/container-linux-config-transpiler/config"
-
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
+
+	ct "github.com/coreos/container-linux-config-transpiler/config"
 )
 
-func dataSourceFuzeConfig() *schema.Resource {
+func dataSourceCTConfig() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceFuzeConfigRead,
+		Read: dataSourceCTConfigRead,
 
 		Schema: map[string]*schema.Schema{
 			"content": &schema.Schema{
@@ -34,8 +34,8 @@ func dataSourceFuzeConfig() *schema.Resource {
 	}
 }
 
-func dataSourceFuzeConfigRead(d *schema.ResourceData, meta interface{}) error {
-	rendered, err := renderFuzeConfig(d)
+func dataSourceCTConfigRead(d *schema.ResourceData, meta interface{}) error {
+	rendered, err := renderCTConfig(d)
 	if err != nil {
 		return err
 	}
@@ -45,16 +45,16 @@ func dataSourceFuzeConfigRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func renderFuzeConfig(d *schema.ResourceData) (string, error) {
+func renderCTConfig(d *schema.ResourceData) (string, error) {
 	pretty := d.Get("pretty_print").(bool)
 	config := d.Get("content").(string)
 
-	cfg, rpt := fuze.Parse([]byte(config))
+	cfg, rpt := ct.Parse([]byte(config))
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}
 
-	ignition, rpt := fuze.ConvertAs2_0_0(cfg)
+	ignition, rpt := ct.ConvertAs2_0_0(cfg)
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}

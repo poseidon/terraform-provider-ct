@@ -2,7 +2,7 @@ export GO15VENDOREXPERIMENT=1
 
 .PHONY: test build
 
-PACKAGES = $(shell go list ./fuze)
+PACKAGES = $(shell go list ./ct)
 
 build:
 	@go install -v github.com/coreos/terraform-provider-fuze

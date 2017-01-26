@@ -1,4 +1,4 @@
-package fuze
+package ct
 
 import (
 	"testing"

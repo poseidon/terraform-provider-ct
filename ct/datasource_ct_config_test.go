@@ -1,4 +1,4 @@
-package fuze
+package ct
 
 import (
 	"testing"
@@ -8,11 +8,11 @@ import (
 )
 
 var testProviders = map[string]terraform.ResourceProvider{
-	"fuze": Provider(),
+	"ct": Provider(),
 }
 
 const prettyResource = `
-data "fuze_config" "example" {
+data "ct_config" "example" {
   pretty_print = true
   content = <<EOT
 ---
@@ -75,7 +75,7 @@ func TestRender(t *testing.T) {
 			r.TestStep{
 				Config: prettyResource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.fuze_config.example", "rendered", prettyExpected),
+					r.TestCheckResourceAttr("data.ct_config.example", "rendered", prettyExpected),
 				),
 			},
 		},
