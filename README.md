@@ -34,3 +34,30 @@ resource "aws_instance" "web" {
   user_data = "${data.fuze_config.web.rendered}"
 }
 ```
+
+## Build
+
+```
+make
+```
+
+### Dependencies
+
+### Adding Dependencies
+
+After adding a new `import` to the source, use `glide get` to add the dependency to the `glide.yaml` and `glide.lock` files.
+
+```
+glide get github.com/$ORG/$PROJ
+```
+
+### Updating Dependencies
+
+To update an existing package, edit the `glide.yaml` file to the desired verison (most likely a semver tag or git hash), and run `make revendor`.
+
+```
+{{ edit the entry in glide.yaml }}
+make revendor
+```
+
+If the update was successful, `glide.lock` will have been updated to reflect the changes to `glide.yaml` and the package will have been updated in `vendor`.
