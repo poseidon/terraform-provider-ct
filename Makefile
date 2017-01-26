@@ -5,7 +5,7 @@ export GO15VENDOREXPERIMENT=1
 PACKAGES = $(shell go list ./ct)
 
 build:
-	@go install -v github.com/coreos/terraform-provider-fuze
+	@go install -v github.com/coreos/terraform-provider-ct
 
 test:
 	go vet $(PACKAGES)
