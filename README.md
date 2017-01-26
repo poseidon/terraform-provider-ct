@@ -17,7 +17,7 @@ Update your `.terraformrc` file with the path to the binary:
 
 ```hcl
 providers {
-  fuze = "/path/to/terraform-provider-fuze"
+  fuze = "/$GOPATH/bin/terraform-provider-fuze"
 }
 ```
 
