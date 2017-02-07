@@ -11,13 +11,13 @@ Terraform resources, e.g. as user-data for cloud instances.
 
 ## Installation
 
-`go get -u github.com/coreos/terraform-provider-fuze`
+`go get -u github.com/coreos/terraform-provider-ct`
 
 Update your `.terraformrc` file with the path to the binary:
 
 ```hcl
 providers {
-  ct = "/$GOPATH/bin/terraform-provider-fuze"
+  ct = "/$GOPATH/bin/terraform-provider-ct"
 }
 ```
 

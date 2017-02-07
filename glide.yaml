@@ -1,4 +1,4 @@
-package: github.com/coreos/terraform-provider-fuze
+package: github.com/coreos/terraform-provider-ct
 import:
 - package: github.com/coreos/container-linux-config-transpiler
   version: v0.1.0
