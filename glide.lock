@@ -1,5 +1,5 @@
-hash: c6a03af77de469195abf2b3aadc1848b2fc69a376eb56dad8d9bb8df64b15572
-updated: 2017-01-26T13:58:50.755059056-08:00
+hash: cd63b9b0ac99c77e861cce1fc4e7e09e73ba5e2985a205f2a1c6d4563bb7052e
+updated: 2017-03-29T13:57:23.924013023+03:00
 imports:
 - name: github.com/ajeddeloh/yaml
   version: 6b16a5714269b2f70720a45406b1babd947a17ef
@@ -9,8 +9,62 @@ imports:
   version: a3ebdb999b831ecb6ab8a226e31b07b2b9061c47
   subpackages:
   - cidr
+- name: github.com/attic-labs/graphql
+  version: 917f92ca24a759a0e3bfd1b135850f9b0c04682e
+  subpackages:
+  - gqlerrors
+  - language/ast
+  - language/kinds
+  - language/lexer
+  - language/location
+  - language/parser
+  - language/printer
+  - language/source
+  - language/typeInfo
+  - language/visitor
+- name: github.com/attic-labs/noms
+  version: 2b669edcb37f2655b664d36278e2b86935c7a926
+  subpackages:
+  - cmd/util
+  - go/chunks
+  - go/config
+  - go/constants
+  - go/d
+  - go/datas
+  - go/diff
+  - go/hash
+  - go/marshal
+  - go/merge
+  - go/migration
+  - go/nbs
+  - go/nbs/benchmarks/gen
+  - go/ngql
+  - go/nomdl
+  - go/perf/suite
+  - go/spec
+  - go/types
+  - go/util/clienttest
+  - go/util/exit
+  - go/util/functions
+  - go/util/jsontonoms
+  - go/util/outputpager
+  - go/util/profile
+  - go/util/progressreader
+  - go/util/sizecache
+  - go/util/status
+  - go/util/test
+  - go/util/verbose
+  - go/util/writers
+  - samples/go/csv
+  - tools/runner
+- name: github.com/attic-labs/testify
+  version: 4aeb20c38a7bce059590a23553f8a84808c9902f
+  subpackages:
+  - assert
+  - require
+  - suite
 - name: github.com/aws/aws-sdk-go
-  version: 1e6377549087b490b693300bce2c5e286dc87740
+  version: 695fe24acaf9afe80b0ce261d4637f42ba0b4c7d
   subpackages:
   - aws
   - aws/awserr
@@ -29,59 +83,89 @@ imports:
   - aws/session
   - aws/signer/v4
   - private/protocol
+  - private/protocol/json/jsonutil
+  - private/protocol/jsonrpc
   - private/protocol/query
   - private/protocol/query/queryutil
   - private/protocol/rest
   - private/protocol/restxml
   - private/protocol/xml/xmlutil
   - private/waiter
+  - service/dynamodb
   - service/s3
   - service/sts
 - name: github.com/bgentry/go-netrc
   version: 9fd32a8b3d3d3f9d43c341bfe098430e07609480
   subpackages:
   - netrc
+- name: github.com/BurntSushi/toml
+  version: b26d9c308763d68093482582cea63d69be07a0f0
+- name: github.com/clbanning/mxj
+  version: 6752d1ea0ea8cd057b24d9cad2b41f2bbd1dc67a
+- name: github.com/codahale/blake2
+  version: 8d10d0420cbfbdc9c1164c0c4ad3457a6c3771b9
 - name: github.com/coreos/container-linux-config-transpiler
   version: a5263027b5a3196f106a012cb8957938564700da
   subpackages:
   - config
   - config/types
 - name: github.com/coreos/go-semver
-  version: 8ab6407b697782a06568d4b7f1db25550ec2e4c6
+  version: 5e3acbb5668c4c3deb4842615c4098eb61fb6b1e
   subpackages:
   - semver
 - name: github.com/coreos/go-systemd
-  version: 7f737a6bd38784c73b5bf5cd54d9b1d23295e3a0
+  version: 1f9909e51b2dab2487c26d64c8f2e7e580e4c9f5
   subpackages:
   - unit
 - name: github.com/coreos/ignition
-  version: dab3efc23faaeb1f04d16b0dfe8863f951f8536b
+  version: 9a3f177c1c28b1e6e8ee3155bac6f57b833ff3a1
   subpackages:
   - config/types
   - config/validate
   - config/validate/report
 - name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  version: 346938d642f2ec3594ed81d874461961cd0faa76
   subpackages:
   - spew
+- name: github.com/dustin/go-humanize
+  version: 259d2a102b871d17f30e3cd9881a642961a1e486
+- name: github.com/fatih/structs
+  version: a720dfa8df582c51dee1b36feabb906bde1588bd
 - name: github.com/go-ini/ini
-  version: 6e4869b434bd001f6983749881c7ead3545887d8
+  version: e7fea39b01aea8d5671f6858f0532f56e8bff3a5
+- name: github.com/go-ole/go-ole
+  version: de8695c8edbf8236f30d6e1376e20b198a028d42
+  subpackages:
+  - oleutil
+- name: github.com/golang/protobuf
+  version: c9c7427a2a70d2eb3bafa0ab2dc163e45f143317
+  subpackages:
+  - proto
+- name: github.com/golang/snappy
+  version: 553a641470496b2327abcac10b36396bd98e45c9
+- name: github.com/hanwen/go-fuse
+  version: 51b6e5764872b8f447d9aab80830a5250436c8ef
+  subpackages:
+  - fuse
+  - fuse/nodefs
+  - fuse/pathfs
+  - splice
 - name: github.com/hashicorp/errwrap
   version: 7554cd9344cec97297fa6649b055a8c98c2a1e55
 - name: github.com/hashicorp/go-getter
-  version: cc80f38c726badeae53775d179755e1c4953d6cf
+  version: c3d66e76678dce180a7b452653472f949aedfbcd
   subpackages:
   - helper/url
 - name: github.com/hashicorp/go-multierror
   version: ed905158d87462226a13fe39ddf685ea65f1c11f
 - name: github.com/hashicorp/go-plugin
-  version: 8cf118f7a2f0c7ef1c82f66d4f6ac77c7e27dc12
+  version: f72692aebca2008343a9deb06ddb4b17f7051c15
 - name: github.com/hashicorp/go-uuid
   version: 64130c7a86d732268a38cb04cfbaf0cc987fda98
 - name: github.com/hashicorp/go-version
-  version: e96d3840402619007766590ecea8dd7af1292276
+  version: 03c5bf6be031b6dd45afec16b1cf94fc8938bc77
 - name: github.com/hashicorp/hcl
-  version: db4f0768927a665a06c32855186e1bc762bcc8f5
+  version: 630949a3c5fa3c613328e1b8256052cbc2327c9b
   subpackages:
   - hcl/ast
   - hcl/parser
@@ -100,7 +184,7 @@ imports:
 - name: github.com/hashicorp/logutils
   version: 0dc08b1671f34c4250ce212759ebd880f743d883
 - name: github.com/hashicorp/terraform
-  version: b4d477660b5abd20f2a70175460c9603797fada0
+  version: 7c25ef851bd26f720e749983597b36b17061e3ca
   subpackages:
   - config
   - config/module
@@ -120,16 +204,87 @@ imports:
   version: d1caa6c97c9fc1cc9e83bbe34d0603f9ff0ce8bd
 - name: github.com/jmespath/go-jmespath
   version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
+- name: github.com/jpillora/backoff
+  version: 06c7a16c845dc8e0bf575fafeeca0f5462f5eb4d
+- name: github.com/juju/gnuflag
+  version: 4e76c56581859c14d9d87e1ddbe29e1c0f10195f
+- name: github.com/julienschmidt/httprouter
+  version: 6f3f3919c8781ce5c0509c83fffc887a7830c938
+- name: github.com/kch42/buzhash
+  version: 9bdec3dec7c611fa97beadc374d75bdf02cd880e
+- name: github.com/mattn/go-colorable
+  version: ded68f7a9561c023e790de24279db7ebf473ea80
+- name: github.com/mattn/go-isatty
+  version: fc9e8d8ef48496124e79ae0df75490096eccf6fe
+- name: github.com/mgutz/ansi
+  version: 9520e82c474b0a04dd04f8a40959027271bab992
 - name: github.com/mitchellh/copystructure
   version: f81071c9d77b7931f78c90b416a074ecdc50e959
 - name: github.com/mitchellh/go-homedir
   version: b8bc1bf767474819792c23f32d8286a45736f1c6
+- name: github.com/mitchellh/hashstructure
+  version: ab25296c0f51f1022f01cd99dfb45f1775de8799
 - name: github.com/mitchellh/mapstructure
-  version: bfdb1a85537d60bc7e954e600c250219ea497417
+  version: 53818660ed4955e899c0bcafa97299a388bd7c8e
 - name: github.com/mitchellh/reflectwalk
   version: 417edcfd99a4d472c262e58f22b4bfe97580f03e
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
 - name: github.com/satori/go.uuid
-  version: b061729afc07e77a8aa4fad0a2fd840958f1942a
+  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
+- name: github.com/shirou/gopsutil
+  version: 3499dec5c013d054d5d2a99ec48345998034e841
+  subpackages:
+  - cpu
+  - disk
+  - host
+  - internal/common
+  - mem
+  - net
+  - process
+- name: github.com/shirou/w32
+  version: bb4de0191aa41b5507caa14b0650cdbddcd9280b
+- name: github.com/StackExchange/wmi
+  version: 9f32b5905fd6ce7384093f9d048437e79f7b4d85
+- name: github.com/syndtr/goleveldb
+  version: 3c5717caf1475fd25964109a0fc640bd150fce43
+  subpackages:
+  - leveldb
+  - leveldb/cache
+  - leveldb/comparer
+  - leveldb/errors
+  - leveldb/filter
+  - leveldb/iterator
+  - leveldb/journal
+  - leveldb/memdb
+  - leveldb/opt
+  - leveldb/storage
+  - leveldb/table
+  - leveldb/util
 - name: github.com/vincent-petithory/dataurl
   version: 9a301d65acbb728fcc3ace14f45f511a4cfeea9c
+- name: golang.org/x/net
+  version: 05d3205156cb1bdc096578d6457fa161cd950aa2
+  subpackages:
+  - context
+- name: golang.org/x/oauth2
+  version: 7fdf09982454086d5570c7db3e11f360194830ca
+  subpackages:
+  - internal
+- name: golang.org/x/sys
+  version: 9a7256cb28ed514b4e1e5f68959914c4c28a92e0
+  subpackages:
+  - unix
+- name: google.golang.org/appengine
+  version: 56d253d1dd14aa01937e12c73a0971bcfd797ff2
+  subpackages:
+  - internal
+  - internal/base
+  - internal/datastore
+  - internal/log
+  - internal/remote_api
+  - internal/urlfetch
+  - urlfetch
 testImports: []
