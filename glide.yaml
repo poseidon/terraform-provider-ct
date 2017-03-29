@@ -4,8 +4,10 @@ import:
   version: v0.1.0
   subpackages:
   - config
+- package: github.com/aws/aws-sdk-go
+  version: v1.7.9
 - package: github.com/hashicorp/terraform
-  version: v0.8.5
+  version: v0.9.1
   subpackages:
   - helper/hashcode
   - helper/schema
