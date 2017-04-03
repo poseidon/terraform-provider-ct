@@ -20,7 +20,6 @@ import (
 	"net/url"
 
 	"github.com/coreos/ignition/config/validate/report"
-	"github.com/vincent-petithory/dataurl"
 )
 
 var (
@@ -59,14 +58,9 @@ func (u Url) Validate() report.Report {
 		return report.Report{}
 	}
 	switch url.URL(u).Scheme {
-	case "http", "https", "oem":
+	case "http", "https", "oem", "data":
 		return report.Report{}
-	case "data":
-		if _, err := dataurl.DecodeString(u.String()); err != nil {
-			return report.ReportFromError(err, report.EntryError)
-		}
-		return report.Report{}
-	default:
-		return report.ReportFromError(ErrInvalidScheme, report.EntryError)
 	}
+
+	return report.ReportFromError(ErrInvalidScheme, report.EntryError)
 }

@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http/httputil"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -11,11 +12,9 @@ import (
 
 // A Config provides configuration to a service client instance.
 type Config struct {
-	Config        *aws.Config
-	Handlers      request.Handlers
-	Endpoint      string
-	SigningRegion string
-	SigningName   string
+	Config                  *aws.Config
+	Handlers                request.Handlers
+	Endpoint, SigningRegion string
 }
 
 // ConfigProvider provides a generic way for a service client to receive
@@ -105,7 +104,8 @@ func logRequest(r *request.Request) {
 		// Reset the request body because dumpRequest will re-wrap the r.HTTPRequest's
 		// Body as a NoOpCloser and will not be reset after read by the HTTP
 		// client reader.
-		r.ResetBody()
+		r.Body.Seek(r.BodyStart, 0)
+		r.HTTPRequest.Body = ioutil.NopCloser(r.Body)
 	}
 
 	r.Config.Logger.Log(fmt.Sprintf(logReqMsg, r.ClientInfo.ServiceName, r.Operation.Name, string(dumpedBody)))
