@@ -1,16 +1,16 @@
-hash: c6a03af77de469195abf2b3aadc1848b2fc69a376eb56dad8d9bb8df64b15572
-updated: 2017-01-26T13:58:50.755059056-08:00
+hash: bde605e114ae7f36d1f83ed72c462ff4622d67a35d911015695f7f7180247015
+updated: 2017-04-02T17:02:16.704402399-07:00
 imports:
 - name: github.com/ajeddeloh/yaml
-  version: 6b16a5714269b2f70720a45406b1babd947a17ef
+  version: 1072abfea31191db507785e2e0c1b8d1440d35a5
 - name: github.com/alecthomas/units
-  version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
+  version: 6b4e7dc5e3143b85ea77909c72caf89416fc2915
 - name: github.com/apparentlymart/go-cidr
   version: a3ebdb999b831ecb6ab8a226e31b07b2b9061c47
   subpackages:
   - cidr
 - name: github.com/aws/aws-sdk-go
-  version: 1e6377549087b490b693300bce2c5e286dc87740
+  version: d6b4bfeba6997082629986cac2a932a233ba745e
   subpackages:
   - aws
   - aws/awserr
@@ -24,10 +24,10 @@ imports:
   - aws/credentials/stscreds
   - aws/defaults
   - aws/ec2metadata
-  - aws/endpoints
   - aws/request
   - aws/session
   - aws/signer/v4
+  - private/endpoints
   - private/protocol
   - private/protocol/query
   - private/protocol/query/queryutil
@@ -50,12 +50,8 @@ imports:
   version: 8ab6407b697782a06568d4b7f1db25550ec2e4c6
   subpackages:
   - semver
-- name: github.com/coreos/go-systemd
-  version: 7f737a6bd38784c73b5bf5cd54d9b1d23295e3a0
-  subpackages:
-  - unit
 - name: github.com/coreos/ignition
-  version: dab3efc23faaeb1f04d16b0dfe8863f951f8536b
+  version: 3ffd793b1292c6b0b3519bce214bdb41f336faa7
   subpackages:
   - config/types
   - config/validate
@@ -69,19 +65,19 @@ imports:
 - name: github.com/hashicorp/errwrap
   version: 7554cd9344cec97297fa6649b055a8c98c2a1e55
 - name: github.com/hashicorp/go-getter
-  version: cc80f38c726badeae53775d179755e1c4953d6cf
+  version: c3d66e76678dce180a7b452653472f949aedfbcd
   subpackages:
   - helper/url
 - name: github.com/hashicorp/go-multierror
   version: ed905158d87462226a13fe39ddf685ea65f1c11f
 - name: github.com/hashicorp/go-plugin
-  version: 8cf118f7a2f0c7ef1c82f66d4f6ac77c7e27dc12
+  version: f72692aebca2008343a9deb06ddb4b17f7051c15
 - name: github.com/hashicorp/go-uuid
   version: 64130c7a86d732268a38cb04cfbaf0cc987fda98
 - name: github.com/hashicorp/go-version
-  version: e96d3840402619007766590ecea8dd7af1292276
+  version: 03c5bf6be031b6dd45afec16b1cf94fc8938bc77
 - name: github.com/hashicorp/hcl
-  version: db4f0768927a665a06c32855186e1bc762bcc8f5
+  version: 630949a3c5fa3c613328e1b8256052cbc2327c9b
   subpackages:
   - hcl/ast
   - hcl/parser
@@ -100,7 +96,7 @@ imports:
 - name: github.com/hashicorp/logutils
   version: 0dc08b1671f34c4250ce212759ebd880f743d883
 - name: github.com/hashicorp/terraform
-  version: b4d477660b5abd20f2a70175460c9603797fada0
+  version: 6365269541c8e3150ebe638a5c555e1424071417
   subpackages:
   - config
   - config/module
@@ -124,12 +120,14 @@ imports:
   version: f81071c9d77b7931f78c90b416a074ecdc50e959
 - name: github.com/mitchellh/go-homedir
   version: b8bc1bf767474819792c23f32d8286a45736f1c6
+- name: github.com/mitchellh/hashstructure
+  version: ab25296c0f51f1022f01cd99dfb45f1775de8799
 - name: github.com/mitchellh/mapstructure
-  version: bfdb1a85537d60bc7e954e600c250219ea497417
+  version: 53818660ed4955e899c0bcafa97299a388bd7c8e
 - name: github.com/mitchellh/reflectwalk
   version: 417edcfd99a4d472c262e58f22b4bfe97580f03e
 - name: github.com/satori/go.uuid
-  version: b061729afc07e77a8aa4fad0a2fd840958f1942a
+  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/vincent-petithory/dataurl
   version: 9a301d65acbb728fcc3ace14f45f511a4cfeea9c
 testImports: []

@@ -12,5 +12,5 @@ test:
 	go test -v $(PACKAGES)
 
 revendor:
-	@glide update
-	@glide-vc --use-lock-file --no-test-imports --only-code
+	@glide update --strip-vendor
+	@glide-vc --use-lock-file --no-tests --only-code

@@ -14,52 +14,47 @@ import (
 	"sync"
 )
 
-type yamlError string
+// MapSlice encodes and decodes as a YAML map.
+// The order of keys is preserved when encoding and decoding.
+type MapSlice []MapItem
 
-func fail(msg string) {
-	panic(yamlError(msg))
+// MapItem is an item in a MapSlice.
+type MapItem struct {
+	Key, Value interface{}
 }
 
-func handleErr(err *error) {
-	if r := recover(); r != nil {
-		if e, ok := r.(yamlError); ok {
-			*err = errors.New("YAML error: " + string(e))
-		} else {
-			panic(r)
-		}
-	}
+// The Unmarshaler interface may be implemented by types to customize their
+// behavior when being unmarshaled from a YAML document. The UnmarshalYAML
+// method receives a function that may be called to unmarshal the original
+// YAML value into a field or variable. It is safe to call the unmarshal
+// function parameter more than once if necessary.
+type Unmarshaler interface {
+	UnmarshalYAML(unmarshal func(interface{}) error) error
 }
 
-// The Setter interface may be implemented by types to do their own custom
-// unmarshalling of YAML values, rather than being implicitly assigned by
-// the yaml package machinery. If setting the value works, the method should
-// return true.  If it returns false, the value is considered unsupported
-// and is omitted from maps and slices.
-type Setter interface {
-	SetYAML(tag string, value interface{}) bool
-}
-
-// The Getter interface is implemented by types to do their own custom
-// marshalling into a YAML tag and value.
-type Getter interface {
-	GetYAML() (tag string, value interface{})
+// The Marshaler interface may be implemented by types to customize their
+// behavior when being marshaled into a YAML document. The returned value
+// is marshaled in place of the original value implementing Marshaler.
+//
+// If an error is returned by MarshalYAML, the marshaling procedure stops
+// and returns with the provided error.
+type Marshaler interface {
+	MarshalYAML() (interface{}, error)
 }
 
 // Unmarshal decodes the first document found within the in byte slice
 // and assigns decoded values into the out value.
 //
 // Maps and pointers (to a struct, string, int, etc) are accepted as out
-// values.  If an internal pointer within a struct is not initialized,
+// values. If an internal pointer within a struct is not initialized,
 // the yaml package will initialize it if necessary for unmarshalling
 // the provided data. The out parameter must not be nil.
 //
-// The type of the decoded values and the type of out will be considered,
-// and Unmarshal will do the best possible job to unmarshal values
-// appropriately.  It is NOT considered an error, though, to skip values
-// because they are not available in the decoded YAML, or if they are not
-// compatible with the out value. To ensure something was properly
-// unmarshaled use a map or compare against the previous value for the
-// field (usually the zero value).
+// The type of the decoded values should be compatible with the respective
+// values in out. If one or more values cannot be decoded due to a type
+// mismatches, decoding continues partially until the end of the YAML
+// content, and a *yaml.TypeError is returned with details for all
+// missed values.
 //
 // Struct fields are only unmarshalled if they are exported (have an
 // upper case first letter), and are unmarshalled using the field name
@@ -84,7 +79,7 @@ type Getter interface {
 func Unmarshal(in []byte, out interface{}) (err error) {
 	defer handleErr(&err)
 	d := newDecoder()
-	p := newParser(in, UnmarshalMappingKeyTransform)
+	p := newParser(in)
 	defer p.destroy()
 	node := p.parse()
 	if node != nil {
@@ -94,7 +89,21 @@ func Unmarshal(in []byte, out interface{}) (err error) {
 		}
 		d.unmarshal(node, v)
 	}
+	if len(d.terrors) > 0 {
+		return &TypeError{d.terrors}
+	}
 	return nil
+}
+
+func UnmarshalToNode(in []byte) *Node {
+	p := newParser(in)
+	//defer p.destroy()
+	node := p.parse()
+	if node == nil {
+		return nil
+	}
+	tmp := Node(*node)
+	return &tmp
 }
 
 // Marshal serializes the value provided into a YAML document. The structure
@@ -119,11 +128,12 @@ func Unmarshal(in []byte, out interface{}) (err error) {
 //                  Does not apply to zero valued structs.
 //
 //     flow         Marshal using a flow style (useful for structs,
-//                  sequences and maps.
+//                  sequences and maps).
 //
-//     inline       Inline the struct it's applied to, so its fields
-//                  are processed as if they were part of the outer
-//                  struct.
+//     inline       Inline the field, which must be a struct or a map,
+//                  causing all of its fields or keys to be processed as if
+//                  they were part of the outer struct. For maps, keys must
+//                  not conflict with the yaml keys of other struct fields.
 //
 // In addition, if the key is "-", the field is ignored.
 //
@@ -146,15 +156,38 @@ func Marshal(in interface{}) (out []byte, err error) {
 	return
 }
 
-// UnmarshalMappingKeyTransform is a string transformation that is applied to
-// each mapping key in a YAML document before it is unmarshalled. By default,
-// UnmarshalMappingKeyTransform is an identity transform (no modification).
-var UnmarshalMappingKeyTransform transformString = identityTransform
+func handleErr(err *error) {
+	if v := recover(); v != nil {
+		if e, ok := v.(yamlError); ok {
+			*err = e.err
+		} else {
+			panic(v)
+		}
+	}
+}
 
-type transformString func(in string) (out string)
+type yamlError struct {
+	err error
+}
 
-func identityTransform(in string) (out string) {
-	return in
+func fail(err error) {
+	panic(yamlError{err})
+}
+
+func failf(format string, args ...interface{}) {
+	panic(yamlError{fmt.Errorf("yaml: "+format, args...)})
+}
+
+// A TypeError is returned by Unmarshal when one or more fields in
+// the YAML document cannot be properly decoded into the requested
+// types. When this error is returned, the value is still
+// unmarshaled partially.
+type TypeError struct {
+	Errors []string
+}
+
+func (e *TypeError) Error() string {
+	return fmt.Sprintf("yaml: unmarshal errors:\n  %s", strings.Join(e.Errors, "\n  "))
 }
 
 // --------------------------------------------------------------------------
@@ -200,7 +233,7 @@ func getStructInfo(st reflect.Type) (*structInfo, error) {
 	inlineMap := -1
 	for i := 0; i != n; i++ {
 		field := st.Field(i)
-		if field.PkgPath != "" {
+		if field.PkgPath != "" && !field.Anonymous {
 			continue // Private field
 		}
 
@@ -234,15 +267,14 @@ func getStructInfo(st reflect.Type) (*structInfo, error) {
 
 		if inline {
 			switch field.Type.Kind() {
-			// TODO: Implement support for inline maps.
-			//case reflect.Map:
-			//	if inlineMap >= 0 {
-			//		return nil, errors.New("Multiple ,inline maps in struct " + st.String())
-			//	}
-			//	if field.Type.Key() != reflect.TypeOf("") {
-			//		return nil, errors.New("Option ,inline needs a map with string keys in struct " + st.String())
-			//	}
-			//	inlineMap = info.Num
+			case reflect.Map:
+				if inlineMap >= 0 {
+					return nil, errors.New("Multiple ,inline maps in struct " + st.String())
+				}
+				if field.Type.Key() != reflect.TypeOf("") {
+					return nil, errors.New("Option ,inline needs a map with string keys in struct " + st.String())
+				}
+				inlineMap = info.Num
 			case reflect.Struct:
 				sinfo, err := getStructInfo(field.Type)
 				if err != nil {
@@ -303,10 +335,23 @@ func isZero(v reflect.Value) bool {
 		return v.Len() == 0
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return v.Int() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 		return v.Uint() == 0
 	case reflect.Bool:
 		return !v.Bool()
+	case reflect.Struct:
+		vt := v.Type()
+		for i := v.NumField() - 1; i >= 0; i-- {
+			if vt.Field(i).PkgPath != "" {
+				continue // Private field
+			}
+			if !isZero(v.Field(i)) {
+				return false
+			}
+		}
+		return true
 	}
 	return false
 }
