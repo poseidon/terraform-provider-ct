@@ -14,12 +14,24 @@
 
 package types
 
+import (
+	"net/url"
+
+	ignTypes "github.com/coreos/ignition/config/v2_0/types"
+	"github.com/coreos/ignition/config/validate/report"
+)
+
 type Config struct {
-	Ignition Ignition `yaml:"ignition"`
-	Storage  Storage  `yaml:"storage"`
-	Systemd  Systemd  `yaml:"systemd"`
-	Networkd Networkd `yaml:"networkd"`
-	Passwd   Passwd   `yaml:"passwd"`
+	Ignition  Ignition   `yaml:"ignition"`
+	Storage   Storage    `yaml:"storage"`
+	Systemd   Systemd    `yaml:"systemd"`
+	Networkd  Networkd   `yaml:"networkd"`
+	Passwd    Passwd     `yaml:"passwd"`
+	Etcd      *Etcd      `yaml:"etcd"`
+	Flannel   *Flannel   `yaml:"flannel"`
+	Update    *Update    `yaml:"update"`
+	Docker    *Docker    `yaml:"docker"`
+	Locksmith *Locksmith `yaml:"locksmith"`
 }
 
 type Ignition struct {
@@ -34,4 +46,50 @@ type IgnitionConfig struct {
 type ConfigReference struct {
 	Source       string       `yaml:"source"`
 	Verification Verification `yaml:"verification"`
+}
+
+func init() {
+	register2_0(func(in Config, out ignTypes.Config, platform string) (ignTypes.Config, report.Report) {
+		for _, ref := range in.Ignition.Config.Append {
+			newRef, err := convertConfigReference(ref)
+			if err != nil {
+				return out, report.ReportFromError(err, report.EntryError)
+			}
+			out.Ignition.Config.Append = append(out.Ignition.Config.Append, newRef)
+		}
+
+		if in.Ignition.Config.Replace != nil {
+			newRef, err := convertConfigReference(*in.Ignition.Config.Replace)
+			if err != nil {
+				return out, report.ReportFromError(err, report.EntryError)
+			}
+			out.Ignition.Config.Replace = &newRef
+		}
+		return out, report.Report{}
+	})
+}
+
+func convertConfigReference(in ConfigReference) (ignTypes.ConfigReference, error) {
+	source, err := url.Parse(in.Source)
+	if err != nil {
+		return ignTypes.ConfigReference{}, err
+	}
+
+	return ignTypes.ConfigReference{
+		Source:       ignTypes.Url(*source),
+		Verification: convertVerification(in.Verification),
+	}, nil
+}
+
+func convertVerification(in Verification) ignTypes.Verification {
+	if in.Hash.Function == "" || in.Hash.Sum == "" {
+		return ignTypes.Verification{}
+	}
+
+	return ignTypes.Verification{
+		&ignTypes.Hash{
+			Function: in.Hash.Function,
+			Sum:      in.Hash.Sum,
+		},
+	}
 }

@@ -14,26 +14,7 @@
 
 package types
 
-import (
-	"errors"
-	"path"
-
-	"github.com/coreos/ignition/config/validate/report"
-)
-
-var (
-	ErrPathRelative = errors.New("path not absolute")
-)
-
-type Path string
-
-func (p Path) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + string(p) + `"`), nil
-}
-
-func (p Path) Validate() report.Report {
-	if !path.IsAbs(string(p)) {
-		return report.ReportFromError(ErrPathRelative, report.EntryError)
-	}
-	return report.Report{}
+type Passwd struct {
+	Users  []User  `json:"users,omitempty"`
+	Groups []Group `json:"groups,omitempty"`
 }

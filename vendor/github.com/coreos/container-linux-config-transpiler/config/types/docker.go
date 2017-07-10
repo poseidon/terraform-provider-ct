@@ -1,4 +1,4 @@
-// Copyright 2016 CoreOS, Inc.
+// Copyright 2017 CoreOS, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,25 +15,28 @@
 package types
 
 import (
+	"fmt"
+	"strings"
+
 	ignTypes "github.com/coreos/ignition/config/v2_0/types"
 	"github.com/coreos/ignition/config/validate/report"
 )
 
-type Networkd struct {
-	Units []NetworkdUnit `yaml:"units"`
-}
-
-type NetworkdUnit struct {
-	Name     string `yaml:"name"`
-	Contents string `yaml:"contents"`
+type Docker struct {
+	Flags []string `yaml:"flags"`
 }
 
 func init() {
 	register2_0(func(in Config, out ignTypes.Config, platform string) (ignTypes.Config, report.Report) {
-		for _, unit := range in.Networkd.Units {
-			out.Networkd.Units = append(out.Networkd.Units, ignTypes.NetworkdUnit{
-				Name:     ignTypes.NetworkdUnitName(unit.Name),
-				Contents: unit.Contents,
+		if in.Docker != nil {
+			contents := fmt.Sprintf("[Service]\nEnvironment=\"DOCKER_OPTS=%s\"", strings.Join(in.Docker.Flags, " "))
+			out.Systemd.Units = append(out.Systemd.Units, ignTypes.SystemdUnit{
+				Name:   "docker.service",
+				Enable: true,
+				DropIns: []ignTypes.SystemdUnitDropIn{{
+					Name:     "20-clct-docker.conf",
+					Contents: contents,
+				}},
 			})
 		}
 		return out, report.Report{}

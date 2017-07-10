@@ -14,6 +14,14 @@
 
 package types
 
+import (
+	"net/url"
+
+	ignTypes "github.com/coreos/ignition/config/v2_0/types"
+	"github.com/coreos/ignition/config/validate/report"
+	"github.com/vincent-petithory/dataurl"
+)
+
 type File struct {
 	Filesystem string       `yaml:"filesystem"`
 	Path       string       `yaml:"path"`
@@ -40,4 +48,51 @@ type FileUser struct {
 
 type FileGroup struct {
 	Id int `yaml:"id"`
+}
+
+func init() {
+	register2_0(func(in Config, out ignTypes.Config, platform string) (ignTypes.Config, report.Report) {
+		for _, file := range in.Storage.Files {
+			newFile := ignTypes.File{
+				Filesystem: file.Filesystem,
+				Path:       ignTypes.Path(file.Path),
+				Mode:       ignTypes.FileMode(file.Mode),
+				User:       ignTypes.FileUser{Id: file.User.Id},
+				Group:      ignTypes.FileGroup{Id: file.Group.Id},
+			}
+
+			if file.Contents.Inline != "" {
+				newFile.Contents = ignTypes.FileContents{
+					Source: ignTypes.Url{
+						Scheme: "data",
+						Opaque: "," + dataurl.EscapeString(file.Contents.Inline),
+					},
+				}
+			}
+
+			if file.Contents.Remote.Url != "" {
+				source, err := url.Parse(file.Contents.Remote.Url)
+				if err != nil {
+					return out, report.ReportFromError(err, report.EntryError)
+				}
+
+				newFile.Contents = ignTypes.FileContents{Source: ignTypes.Url(*source)}
+			}
+
+			if newFile.Contents == (ignTypes.FileContents{}) {
+				newFile.Contents = ignTypes.FileContents{
+					Source: ignTypes.Url{
+						Scheme: "data",
+						Opaque: ",",
+					},
+				}
+			}
+
+			newFile.Contents.Compression = ignTypes.Compression(file.Contents.Remote.Compression)
+			newFile.Contents.Verification = convertVerification(file.Contents.Remote.Verification)
+
+			out.Storage.Files = append(out.Storage.Files, newFile)
+		}
+		return out, report.Report{}
+	})
 }

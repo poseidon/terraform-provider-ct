@@ -15,25 +15,15 @@
 package types
 
 import (
-	"errors"
 	"path"
-
-	"github.com/coreos/ignition/config/validate/report"
 )
 
-var (
-	ErrPathRelative = errors.New("path not absolute")
-)
+type Directory Node
 
-type Path string
-
-func (p Path) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + string(p) + `"`), nil
-}
-
-func (p Path) Validate() report.Report {
-	if !path.IsAbs(string(p)) {
-		return report.ReportFromError(ErrPathRelative, report.EntryError)
+func (d *Directory) Depth() int {
+	count := 0
+	for p := path.Clean(string(d.Path)); p != "/"; count++ {
+		p = path.Dir(p)
 	}
-	return report.Report{}
+	return count
 }
