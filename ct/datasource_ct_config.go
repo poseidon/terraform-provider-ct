@@ -54,7 +54,7 @@ func renderCTConfig(d *schema.ResourceData) (string, error) {
 		return "", errors.New(rpt.String())
 	}
 
-	ignition, rpt := ct.ConvertAs2_0_0(cfg)
+	ignition, rpt := ct.ConvertAs2_0(cfg, "")
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}
