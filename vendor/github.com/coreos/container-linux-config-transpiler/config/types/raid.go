@@ -14,9 +14,33 @@
 
 package types
 
+import (
+	ignTypes "github.com/coreos/ignition/config/v2_0/types"
+	"github.com/coreos/ignition/config/validate/report"
+)
+
 type Raid struct {
 	Name    string   `yaml:"name"`
 	Level   string   `yaml:"level"`
 	Devices []string `yaml:"devices"`
 	Spares  int      `yaml:"spares"`
+}
+
+func init() {
+	register2_0(func(in Config, out ignTypes.Config, platform string) (ignTypes.Config, report.Report) {
+		for _, array := range in.Storage.Arrays {
+			newArray := ignTypes.Raid{
+				Name:   array.Name,
+				Level:  array.Level,
+				Spares: array.Spares,
+			}
+
+			for _, device := range array.Devices {
+				newArray.Devices = append(newArray.Devices, ignTypes.Path(device))
+			}
+
+			out.Storage.Arrays = append(out.Storage.Arrays, newArray)
+		}
+		return out, report.Report{}
+	})
 }

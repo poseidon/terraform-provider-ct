@@ -14,6 +14,18 @@
 
 package types
 
+import (
+	"fmt"
+
+	"github.com/alecthomas/units"
+	ignTypes "github.com/coreos/ignition/config/v2_0/types"
+	"github.com/coreos/ignition/config/validate/report"
+)
+
+const (
+	BYTES_PER_SECTOR = 512
+)
+
 type Disk struct {
 	Device     string      `yaml:"device"`
 	WipeTable  bool        `yaml:"wipe_table"`
@@ -26,4 +38,58 @@ type Partition struct {
 	Size     string `yaml:"size"`
 	Start    string `yaml:"start"`
 	TypeGUID string `yaml:"type_guid"`
+}
+
+func init() {
+	register2_0(func(in Config, out ignTypes.Config, platform string) (ignTypes.Config, report.Report) {
+		for _, disk := range in.Storage.Disks {
+			newDisk := ignTypes.Disk{
+				Device:    ignTypes.Path(disk.Device),
+				WipeTable: disk.WipeTable,
+			}
+
+			for _, partition := range disk.Partitions {
+				size, err := convertPartitionDimension(partition.Size)
+				if err != nil {
+					return out, report.ReportFromError(err, report.EntryError)
+				}
+				start, err := convertPartitionDimension(partition.Start)
+				if err != nil {
+					return out, report.ReportFromError(err, report.EntryError)
+				}
+
+				newDisk.Partitions = append(newDisk.Partitions, ignTypes.Partition{
+					Label:    ignTypes.PartitionLabel(partition.Label),
+					Number:   partition.Number,
+					Size:     size,
+					Start:    start,
+					TypeGUID: ignTypes.PartitionTypeGUID(partition.TypeGUID),
+				})
+			}
+
+			out.Storage.Disks = append(out.Storage.Disks, newDisk)
+		}
+		return out, report.Report{}
+	})
+}
+
+func convertPartitionDimension(in string) (ignTypes.PartitionDimension, error) {
+	if in == "" {
+		return 0, nil
+	}
+
+	b, err := units.ParseBase2Bytes(in)
+	if err != nil {
+		return 0, err
+	}
+	if b < 0 {
+		return 0, fmt.Errorf("invalid dimension (negative): %q", in)
+	}
+
+	// Translate bytes into sectors
+	sectors := (b / BYTES_PER_SECTOR)
+	if b%BYTES_PER_SECTOR != 0 {
+		sectors++
+	}
+	return ignTypes.PartitionDimension(uint64(sectors)), nil
 }

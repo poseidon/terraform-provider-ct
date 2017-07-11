@@ -16,24 +16,21 @@ package types
 
 import (
 	"errors"
-	"path"
 
 	"github.com/coreos/ignition/config/validate/report"
 )
 
 var (
-	ErrPathRelative = errors.New("path not absolute")
+	ErrCompressionInvalid = errors.New("invalid compression method")
 )
 
-type Path string
+type Compression string
 
-func (p Path) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + string(p) + `"`), nil
-}
-
-func (p Path) Validate() report.Report {
-	if !path.IsAbs(string(p)) {
-		return report.ReportFromError(ErrPathRelative, report.EntryError)
+func (c Compression) Validate() report.Report {
+	switch c {
+	case "", "gzip":
+	default:
+		return report.ReportFromError(ErrCompressionInvalid, report.EntryError)
 	}
 	return report.Report{}
 }

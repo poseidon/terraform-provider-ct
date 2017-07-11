@@ -1,6 +1,4 @@
-export GO15VENDOREXPERIMENT=1
-
-.PHONY: test build
+.PHONY: test build vendor
 
 PACKAGES = $(shell go list ./ct)
 
@@ -11,6 +9,6 @@ test:
 	go vet $(PACKAGES)
 	go test -v $(PACKAGES)
 
-revendor:
+vendor:
 	@glide update --strip-vendor
 	@glide-vc --use-lock-file --no-tests --only-code

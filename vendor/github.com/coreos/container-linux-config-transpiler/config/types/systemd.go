@@ -14,6 +14,11 @@
 
 package types
 
+import (
+	ignTypes "github.com/coreos/ignition/config/v2_0/types"
+	"github.com/coreos/ignition/config/validate/report"
+)
+
 type Systemd struct {
 	Units []SystemdUnit `yaml:"units"`
 }
@@ -29,4 +34,27 @@ type SystemdUnit struct {
 type SystemdUnitDropIn struct {
 	Name     string `yaml:"name"`
 	Contents string `yaml:"contents"`
+}
+
+func init() {
+	register2_0(func(in Config, out ignTypes.Config, platform string) (ignTypes.Config, report.Report) {
+		for _, unit := range in.Systemd.Units {
+			newUnit := ignTypes.SystemdUnit{
+				Name:     ignTypes.SystemdUnitName(unit.Name),
+				Enable:   unit.Enable,
+				Mask:     unit.Mask,
+				Contents: unit.Contents,
+			}
+
+			for _, dropIn := range unit.DropIns {
+				newUnit.DropIns = append(newUnit.DropIns, ignTypes.SystemdUnitDropIn{
+					Name:     ignTypes.SystemdUnitDropInName(dropIn.Name),
+					Contents: dropIn.Contents,
+				})
+			}
+
+			out.Systemd.Units = append(out.Systemd.Units, newUnit)
+		}
+		return out, report.Report{}
+	})
 }
