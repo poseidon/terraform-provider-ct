@@ -20,6 +20,12 @@ func dataSourceCTConfig() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"platform": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+				ForceNew: true,
+			},
 			"pretty_print": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -46,15 +52,18 @@ func dataSourceCTConfigRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func renderCTConfig(d *schema.ResourceData) (string, error) {
-	pretty := d.Get("pretty_print").(bool)
 	config := d.Get("content").(string)
+	platform := d.Get("platform").(string)
+	pretty := d.Get("pretty_print").(bool)
 
+	// parse bytes int a Container Linux Config
 	cfg, rpt := ct.Parse([]byte(config))
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}
 
-	ignition, rpt := ct.ConvertAs2_0(cfg, "")
+	// convert Container Linux Config to an Ignition Config
+	ignition, rpt := ct.ConvertAs2_0(cfg, platform)
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}
