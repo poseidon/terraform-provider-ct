@@ -8,6 +8,9 @@ Terraform resources, e.g. as user-data for cloud instances.
   [1]: https://github.com/coreos/ignition "Ignition"
   [2]: https://github.com/coreos/container-linux-config-transpiler "CT"
 
+## Requirements
+
+* Terraform 0.9.x
 
 ## Installation
 
@@ -20,7 +23,6 @@ providers {
   ct = "/$GOPATH/bin/terraform-provider-ct"
 }
 ```
-
 
 ## Example Usage
 
@@ -35,29 +37,24 @@ resource "aws_instance" "web" {
 }
 ```
 
-## Build
+## Development
 
-```
+To develop the provider plugin locally, you'll need [Go](http://www.golang.org/) 1.8+ installed and a [GOPATH](http://golang.org/doc/code.html#GOPATH) setup. Build the plugin locally.
+
+```sh
 make
 ```
 
-### Dependencies
+Optionally, install the plugin to `$(GOPATH)/bin`.
 
-### Adding Dependencies
-
-After adding a new `import` to the source, use `glide get` to add the dependency to the `glide.yaml` and `glide.lock` files.
-
-```
-glide get github.com/$ORG/$PROJ
+```sh
+make install
 ```
 
-### Updating Dependencies
+### Vendor
 
-To update an existing package, edit the `glide.yaml` file to the desired verison (most likely a semver tag or git hash), and run `make revendor`.
+Add or update dependencies in glide.yaml and vendor. The [glide](https://github.com/Masterminds/glide) and [glide-vc](https://github.com/sgotti/glide-vc) tools vendor and prune dependencies.
 
+```sh
+make vendor
 ```
-{{ edit the entry in glide.yaml }}
-make revendor
-```
-
-If the update was successful, `glide.lock` will have been updated to reflect the changes to `glide.yaml` and the package will have been updated in `vendor`.
