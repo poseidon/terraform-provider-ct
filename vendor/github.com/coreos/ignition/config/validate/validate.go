@@ -20,6 +20,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/coreos/ignition/config/validate/astnode"
 	"github.com/coreos/ignition/config/validate/report"
 )
 
@@ -27,35 +28,10 @@ type validator interface {
 	Validate() report.Report
 }
 
-// AstNode abstracts the differences between yaml and json nodes, providing a
-// common interface
-type AstNode interface {
-	// ValueLineCol returns the line, column, and highlight string of the value of
-	// this node in the source.
-	ValueLineCol(source io.ReadSeeker) (int, int, string)
-
-	// KeyLineCol returns the line, column, and highlight string of the key for the
-	// value of this node in the source.
-	KeyLineCol(source io.ReadSeeker) (int, int, string)
-
-	// LiteralValue returns the value of this node.
-	LiteralValue() interface{}
-
-	// SliceChild returns the child node at the index specified. If this node is not
-	// a slice node, an empty AstNode and false is returned.
-	SliceChild(index int) (AstNode, bool)
-
-	// KeyValueMap returns a map of keys and values. If this node is not a mapping
-	// node, nil and false are returned.
-	KeyValueMap() (map[string]AstNode, bool)
-
-	// Tag returns the struct tag used in the config structure used to unmarshal.
-	Tag() string
-}
-
 // Validate walks down a struct tree calling Validate on every node that implements it, building
-// A report of all the errors, warnings, info, and deprecations it encounters
-func Validate(vObj reflect.Value, ast AstNode, source io.ReadSeeker) (r report.Report) {
+// A report of all the errors, warnings, info, and deprecations it encounters. If checkUnusedKeys
+// is true, Validate will generate warnings for unused keys in the ast, otherwise it will not.
+func Validate(vObj reflect.Value, ast astnode.AstNode, source io.ReadSeeker, checkUnusedKeys bool) (r report.Report) {
 	if !vObj.IsValid() {
 		return
 	}
@@ -85,11 +61,11 @@ func Validate(vObj reflect.Value, ast AstNode, source io.ReadSeeker) (r report.R
 
 	switch vObj.Kind() {
 	case reflect.Ptr:
-		sub_report := Validate(vObj.Elem(), ast, source)
+		sub_report := Validate(vObj.Elem(), ast, source, checkUnusedKeys)
 		sub_report.AddPosition(line, col, "")
 		r.Merge(sub_report)
 	case reflect.Struct:
-		sub_report := validateStruct(vObj, ast, source)
+		sub_report := validateStruct(vObj, ast, source, checkUnusedKeys)
 		sub_report.AddPosition(line, col, "")
 		r.Merge(sub_report)
 	case reflect.Slice:
@@ -100,7 +76,7 @@ func Validate(vObj reflect.Value, ast AstNode, source io.ReadSeeker) (r report.R
 					sub_node = n
 				}
 			}
-			sub_report := Validate(vObj.Index(i), sub_node, source)
+			sub_report := Validate(vObj.Index(i), sub_node, source, checkUnusedKeys)
 			sub_report.AddPosition(line, col, "")
 			r.Merge(sub_report)
 		}
@@ -109,7 +85,7 @@ func Validate(vObj reflect.Value, ast AstNode, source io.ReadSeeker) (r report.R
 }
 
 func ValidateWithoutSource(cfg reflect.Value) (report report.Report) {
-	return Validate(cfg, nil, nil)
+	return Validate(cfg, nil, nil, false)
 }
 
 type field struct {
@@ -137,11 +113,11 @@ func getFields(vObj reflect.Value) []field {
 	return ret
 }
 
-func validateStruct(vObj reflect.Value, ast AstNode, source io.ReadSeeker) report.Report {
+func validateStruct(vObj reflect.Value, ast astnode.AstNode, source io.ReadSeeker, checkUnusedKeys bool) report.Report {
 	r := report.Report{}
 
 	// isFromObject will be true if this struct was unmarshalled from a JSON object.
-	keys, isFromObject := map[string]AstNode{}, false
+	keys, isFromObject := map[string]astnode.AstNode{}, false
 	if ast != nil {
 		keys, isFromObject = ast.KeyValueMap()
 	}
@@ -153,8 +129,8 @@ func validateStruct(vObj reflect.Value, ast AstNode, source io.ReadSeeker) repor
 	tags := []string{}
 
 	for _, f := range getFields(vObj) {
-		// Default to nil AstNode if the field's corrosponding node cannot be found.
-		var sub_node AstNode
+		// Default to nil astnode.AstNode if the field's corrosponding node cannot be found.
+		var sub_node astnode.AstNode
 		// Default to passing a nil source if the field's corrosponding node cannot be found.
 		// This ensures the line numbers reported from all sub-structs are 0 and will be changed by AddPosition
 		var src io.ReadSeeker
@@ -173,17 +149,32 @@ func validateStruct(vObj reflect.Value, ast AstNode, source io.ReadSeeker) repor
 				src = source
 			}
 		}
-		sub_report := Validate(f.Value, sub_node, src)
+
 		// Default to deepest node if the node's type isn't an object,
 		// such as when a json string actually unmarshal to structs (like with version)
 		line, col := 0, 0
 		if ast != nil {
 			line, col, _ = ast.ValueLineCol(src)
 		}
+
+		// If there's a Validate<Name> func for the given field, call it
+		funct := vObj.MethodByName("Validate" + f.Type.Name)
+		if funct.IsValid() {
+			if sub_node != nil {
+				// if sub_node is non-nil, we can get better line/col info
+				line, col, _ = sub_node.ValueLineCol(src)
+			}
+			res := funct.Call(nil)
+			sub_report := res[0].Interface().(report.Report)
+			sub_report.AddPosition(line, col, "")
+			r.Merge(sub_report)
+		}
+
+		sub_report := Validate(f.Value, sub_node, src, checkUnusedKeys)
 		sub_report.AddPosition(line, col, "")
 		r.Merge(sub_report)
 	}
-	if !isFromObject {
+	if !isFromObject || !checkUnusedKeys {
 		// If this struct was not unmarshalled from a JSON object, there cannot be unused keys.
 		return r
 	}

@@ -41,7 +41,7 @@ import:
   subpackages:
   - netrc
 - package: github.com/coreos/container-linux-config-transpiler
-  version: v0.3.1
+  version: v0.5.0
   subpackages:
   - config
 - package: github.com/coreos/go-semver

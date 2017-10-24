@@ -1,5 +1,5 @@
-hash: ceb6ff3cdc6c7e30d1b004ed6e6bcb7b9ec3069ff15d0477d8e5b25458866ae7
-updated: 2017-07-11T10:31:18.708149943-07:00
+hash: 7f4b6532fc2d319225de42b1daa36d25edffad8fd5277894b86bdac95198dc36
+updated: 2017-10-24T21:39:57.528055422+02:00
 imports:
 - name: github.com/ajeddeloh/yaml
   version: 1072abfea31191db507785e2e0c1b8d1440d35a5
@@ -42,11 +42,14 @@ imports:
   subpackages:
   - netrc
 - name: github.com/coreos/container-linux-config-transpiler
-  version: 3e173fb3a4dca4e14541dbb7a4076f64061a4ff6
+  version: be4cb16b0aaf0f6b4fdf63b8b2a081397276bf0f
   subpackages:
   - config
+  - config/astyaml
+  - config/platform
   - config/templating
   - config/types
+  - config/types/util
 - name: github.com/coreos/go-semver
   version: 5e3acbb5668c4c3deb4842615c4098eb61fb6b1e
   subpackages:
@@ -54,13 +57,15 @@ imports:
 - name: github.com/coreos/go-systemd
   version: 7c9533367ef925dc1078d75e5b7141e10da2c4e8
   subpackages:
+  - dbus
   - unit
 - name: github.com/coreos/ignition
-  version: d75d0aa3bf307f0954ce4ea8cac56dacec8d16ce
+  version: 01c039a5ce59acd39e5741713e59abfcb74d0782
   subpackages:
   - config/types
-  - config/v2_0/types
+  - config/v2_1/types
   - config/validate
+  - config/validate/astnode
   - config/validate/report
 - name: github.com/davecgh/go-spew
   version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d

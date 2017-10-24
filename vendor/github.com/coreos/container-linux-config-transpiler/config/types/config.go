@@ -17,7 +17,8 @@ package types
 import (
 	"net/url"
 
-	ignTypes "github.com/coreos/ignition/config/v2_0/types"
+	ignTypes "github.com/coreos/ignition/config/v2_1/types"
+	"github.com/coreos/ignition/config/validate/astnode"
 	"github.com/coreos/ignition/config/validate/report"
 )
 
@@ -35,7 +36,8 @@ type Config struct {
 }
 
 type Ignition struct {
-	Config IgnitionConfig `yaml:"config"`
+	Config   IgnitionConfig `yaml:"config"`
+	Timeouts Timeouts       `yaml:"timeouts"`
 }
 
 type IgnitionConfig struct {
@@ -48,48 +50,65 @@ type ConfigReference struct {
 	Verification Verification `yaml:"verification"`
 }
 
+type Timeouts struct {
+	HTTPResponseHeaders *int `yaml:"http_response_headers"`
+	HTTPTotal           *int `yaml:"http_total"`
+}
+
 func init() {
-	register2_0(func(in Config, out ignTypes.Config, platform string) (ignTypes.Config, report.Report) {
-		for _, ref := range in.Ignition.Config.Append {
-			newRef, err := convertConfigReference(ref)
-			if err != nil {
-				return out, report.ReportFromError(err, report.EntryError)
+	register2_0(func(in Config, ast astnode.AstNode, out ignTypes.Config, platform string) (ignTypes.Config, report.Report, astnode.AstNode) {
+		r := report.Report{}
+		out.Ignition.Timeouts.HTTPResponseHeaders = in.Ignition.Timeouts.HTTPResponseHeaders
+		out.Ignition.Timeouts.HTTPTotal = in.Ignition.Timeouts.HTTPTotal
+		cfgNode, _ := getNodeChildPath(ast, "ignition", "config", "append")
+		for i, ref := range in.Ignition.Config.Append {
+			tmp, _ := getNodeChild(cfgNode, i)
+			newRef, convertReport := convertConfigReference(ref, tmp)
+			r.Merge(convertReport)
+			if convertReport.IsFatal() {
+				// don't add to the output if invalid
+				continue
 			}
 			out.Ignition.Config.Append = append(out.Ignition.Config.Append, newRef)
 		}
 
+		cfgNode, _ = getNodeChildPath(ast, "ignition", "config", "replace")
 		if in.Ignition.Config.Replace != nil {
-			newRef, err := convertConfigReference(*in.Ignition.Config.Replace)
-			if err != nil {
-				return out, report.ReportFromError(err, report.EntryError)
+			newRef, convertReport := convertConfigReference(*in.Ignition.Config.Replace, cfgNode)
+			r.Merge(convertReport)
+			if convertReport.IsFatal() {
+				// don't add to the output if invalid
+				return out, r, ast
 			}
 			out.Ignition.Config.Replace = &newRef
 		}
-		return out, report.Report{}
+		return out, r, ast
 	})
 }
 
-func convertConfigReference(in ConfigReference) (ignTypes.ConfigReference, error) {
-	source, err := url.Parse(in.Source)
+func convertConfigReference(in ConfigReference, ast astnode.AstNode) (ignTypes.ConfigReference, report.Report) {
+	_, err := url.Parse(in.Source)
 	if err != nil {
-		return ignTypes.ConfigReference{}, err
+		r := report.ReportFromError(err, report.EntryError)
+		if n, err := getNodeChild(ast, "source"); err == nil {
+			r.AddPosition(n.ValueLineCol(nil))
+		}
+		return ignTypes.ConfigReference{}, r
 	}
 
 	return ignTypes.ConfigReference{
-		Source:       ignTypes.Url(*source),
+		Source:       in.Source,
 		Verification: convertVerification(in.Verification),
-	}, nil
+	}, report.Report{}
 }
 
 func convertVerification(in Verification) ignTypes.Verification {
 	if in.Hash.Function == "" || in.Hash.Sum == "" {
 		return ignTypes.Verification{}
 	}
+	s := in.Hash.String()
 
 	return ignTypes.Verification{
-		&ignTypes.Hash{
-			Function: in.Hash.Function,
-			Sum:      in.Hash.Sum,
-		},
+		Hash: &s,
 	}
 }
