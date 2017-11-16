@@ -1,4 +1,4 @@
-// Copyright 2016 CoreOS, Inc.
+// Copyright 2015 CoreOS, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package types
+package dbus
 
-import (
-	"errors"
-	"path"
-)
+type set struct {
+	data map[string]bool
+}
 
-var (
-	ErrPathRelative = errors.New("path not absolute")
-)
+func (s *set) Add(value string) {
+	s.data[value] = true
+}
 
-func validatePath(p string) error {
-	if !path.IsAbs(p) {
-		return ErrPathRelative
+func (s *set) Remove(value string) {
+	delete(s.data, value)
+}
+
+func (s *set) Contains(value string) (exists bool) {
+	_, exists = s.data[value]
+	return
+}
+
+func (s *set) Length() int {
+	return len(s.data)
+}
+
+func (s *set) Values() (values []string) {
+	for val, _ := range s.data {
+		values = append(values, val)
 	}
-	return nil
+	return
+}
+
+func newSet() *set {
+	return &set{make(map[string]bool)}
 }

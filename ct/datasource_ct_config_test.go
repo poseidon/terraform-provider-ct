@@ -30,42 +30,64 @@ storage:
       contents:
         inline: |
           Hello World!
+  directories:
+    - path: /foo/bar
+      filesystem: "rootfs"
+      mode: 0644
+      user:
+        name: root
+      group:
+        name: root
 EOT
 }
 `
 
 const prettyExpected = `{
   "ignition": {
-    "version": "2.0.0",
-    "config": {}
+    "config": {},
+    "timeouts": {},
+    "version": "2.1.0"
   },
+  "networkd": {},
+  "passwd": {},
   "storage": {
-    "filesystems": [
+    "directories": [
       {
-        "name": "rootfs",
-        "mount": {
-          "device": "/dev/disk/by-label/ROOT",
-          "format": "ext4"
-        }
+        "filesystem": "rootfs",
+        "group": {
+          "name": "root"
+        },
+        "path": "/foo/bar",
+        "user": {
+          "name": "root"
+        },
+        "mode": 420
       }
     ],
     "files": [
       {
         "filesystem": "rootfs",
+        "group": {},
         "path": "/etc/motd",
+        "user": {},
         "contents": {
           "source": "data:,Hello%20World!%0A",
           "verification": {}
         },
-        "mode": 420,
-        "user": {},
-        "group": {}
+        "mode": 420
+      }
+    ],
+    "filesystems": [
+      {
+        "mount": {
+          "device": "/dev/disk/by-label/ROOT",
+          "format": "ext4"
+        },
+        "name": "rootfs"
       }
     ]
   },
-  "systemd": {},
-  "networkd": {},
-  "passwd": {}
+  "systemd": {}
 }`
 
 const ec2Resource = `
@@ -86,26 +108,27 @@ EOT
 
 const ec2Expected = `{
   "ignition": {
-    "version": "2.0.0",
-    "config": {}
+    "config": {},
+    "timeouts": {},
+    "version": "2.1.0"
   },
+  "networkd": {},
+  "passwd": {},
   "storage": {},
   "systemd": {
     "units": [
       {
-        "name": "etcd-member.service",
-        "enable": true,
         "dropins": [
           {
-            "name": "20-clct-etcd-member.conf",
-            "contents": "[Unit]\nRequires=coreos-metadata.service\nAfter=coreos-metadata.service\n\n[Service]\nEnvironmentFile=/run/metadata/coreos\nExecStart=\nExecStart=/usr/lib/coreos/etcd-wrapper $ETCD_OPTS \\\n  --listen-peer-urls=\"http://${COREOS_EC2_IPV4_LOCAL}:2380\" \\\n  --listen-client-urls=\"http://0.0.0.0:2379\" \\\n  --initial-advertise-peer-urls=\"http://${COREOS_EC2_IPV4_LOCAL}:2380\" \\\n  --advertise-client-urls=\"http://${COREOS_EC2_IPV4_PUBLIC}:2379\" \\\n  --discovery=\"https://discovery.etcd.io/\u003ctoken\u003e\""
+            "contents": "[Unit]\nRequires=coreos-metadata.service\nAfter=coreos-metadata.service\n\n[Service]\nEnvironmentFile=/run/metadata/coreos\nExecStart=\nExecStart=/usr/lib/coreos/etcd-wrapper $ETCD_OPTS \\\n  --listen-peer-urls=\"http://${COREOS_EC2_IPV4_LOCAL}:2380\" \\\n  --listen-client-urls=\"http://0.0.0.0:2379\" \\\n  --initial-advertise-peer-urls=\"http://${COREOS_EC2_IPV4_LOCAL}:2380\" \\\n  --advertise-client-urls=\"http://${COREOS_EC2_IPV4_PUBLIC}:2379\" \\\n  --discovery=\"https://discovery.etcd.io/\u003ctoken\u003e\"",
+            "name": "20-clct-etcd-member.conf"
           }
-        ]
+        ],
+        "enable": true,
+        "name": "etcd-member.service"
       }
     ]
-  },
-  "networkd": {},
-  "passwd": {}
+  }
 }`
 
 func TestRender(t *testing.T) {

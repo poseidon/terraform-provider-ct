@@ -1,4 +1,4 @@
-// Copyright 2016 CoreOS, Inc.
+// Copyright 2017 CoreOS, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@ package types
 
 import (
 	"errors"
-	"path"
 )
 
 var (
-	ErrPathRelative = errors.New("path not absolute")
+	ErrFileIllegalMode = errors.New("illegal file mode")
 )
 
-func validatePath(p string) error {
-	if !path.IsAbs(p) {
-		return ErrPathRelative
+func validateMode(m int) error {
+	if m < 0 || m > 07777 {
+		return ErrFileIllegalMode
 	}
 	return nil
 }

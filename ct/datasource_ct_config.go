@@ -57,13 +57,13 @@ func renderCTConfig(d *schema.ResourceData) (string, error) {
 	pretty := d.Get("pretty_print").(bool)
 
 	// parse bytes int a Container Linux Config
-	cfg, rpt := ct.Parse([]byte(config))
+	cfg, ast, rpt := ct.Parse([]byte(config))
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}
 
 	// convert Container Linux Config to an Ignition Config
-	ignition, rpt := ct.ConvertAs2_0(cfg, platform)
+	ignition, rpt := ct.ConvertAs2_0(cfg, platform, ast)
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}
