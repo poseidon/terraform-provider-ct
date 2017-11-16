@@ -1,8 +1,8 @@
-hash: 7f4b6532fc2d319225de42b1daa36d25edffad8fd5277894b86bdac95198dc36
-updated: 2017-10-24T21:39:57.528055422+02:00
+hash: d958319f1d82f18d39ba93f7a94ac0e4a7d53d5080f0cddbe5bedda5f381565a
+updated: 2017-11-15T16:07:52.205523097-08:00
 imports:
 - name: github.com/ajeddeloh/yaml
-  version: 1072abfea31191db507785e2e0c1b8d1440d35a5
+  version: 6b94386aeefd8c4b8470aee72bfca084c2f91da9
 - name: github.com/alecthomas/units
   version: 6b4e7dc5e3143b85ea77909c72caf89416fc2915
 - name: github.com/apparentlymart/go-cidr
