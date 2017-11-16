@@ -1,12 +1,6 @@
-# Container-Linux-Config-Transpiler Terraform Provider
+# Terraform Provider for Container Linux Configs
 
-The CT (formerly known as Fuze) provider exposes data sources to render [Ignition] [1]
-configurations in the human-friendly [Config-Transpiler] [2] YAML format into
-JSON.  The rendered JSON strings can be used as input to other
-Terraform resources, e.g. as user-data for cloud instances.
-
-  [1]: https://github.com/coreos/ignition "Ignition"
-  [2]: https://github.com/coreos/container-linux-config-transpiler "CT"
+The `ct` provider provides a `ct_config` data source that parses a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md), validates the content, and renders [Ignition](https://github.com/coreos/ignition). The rendered strings can be used as input to other Terraform resources (e.g. user-data for instances).
 
 ## Requirements
 
@@ -14,9 +8,14 @@ Terraform resources, e.g. as user-data for cloud instances.
 
 ## Installation
 
-`go get -u github.com/coreos/terraform-provider-ct`
+Add the `terraform-provider-ct` plugin binary on your filesystem.
 
-Update your `.terraformrc` file with the path to the binary:
+```
+# dev
+go get -u github.com/coreos/terraform-provider-ct
+```
+
+Register the plugin in `~/.terraformrc`.
 
 ```hcl
 providers {
@@ -24,22 +23,25 @@ providers {
 }
 ```
 
-## Example Usage
+## Usage
 
 ```hcl
-data "ct_config" "web" {
+data "ct_config" "worker" {
+  content      = "${file("worker.yaml")}"
+  platform     = "ec2"
   pretty_print = false
-  content      = "${file("web.yaml")}"
 }
 
-resource "aws_instance" "web" {
-  user_data = "${data.ct_config.web.rendered}"
+resource "aws_instance" "worker" {
+  user_data = "${data.ct_config.worker.rendered}"
 }
 ```
 
+The optional platform can be "azure", "ec2", "gce", or [others](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) to perform platform-specific susbstitutions. By default, platform is "" (none, for bare-metal). 
+
 ## Development
 
-To develop the provider plugin locally, you'll need [Go](http://www.golang.org/) 1.8+ installed and a [GOPATH](http://golang.org/doc/code.html#GOPATH) setup. Build the plugin locally.
+To develop the provider plugin locally, set up [Go](http://www.golang.org/) 1.8+ and a valid [GOPATH](http://golang.org/doc/code.html#GOPATH). Build the plugin locally.
 
 ```sh
 make
