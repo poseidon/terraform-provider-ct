@@ -71,6 +71,7 @@ imports:
   - config/v2_1
   - config/v2_1/types
   - config/validate
+  - config/validate/astjson
   - config/validate/astnode
   - config/validate/report
 - name: github.com/davecgh/go-spew
@@ -147,4 +148,8 @@ imports:
   version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/vincent-petithory/dataurl
   version: 9a301d65acbb728fcc3ace14f45f511a4cfeea9c
+- name: go4.org
+  version: 03efcb870d84809319ea509714dd6d19a1498483
+  subpackages:
+  - errorutil
 testImports: []
