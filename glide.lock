@@ -1,6 +1,8 @@
-hash: d958319f1d82f18d39ba93f7a94ac0e4a7d53d5080f0cddbe5bedda5f381565a
-updated: 2017-11-15T16:07:52.205523097-08:00
+hash: 3b89f88d7771261dea99f749d97a61d2f7ea5ac2383ab4c26afae95ad7e4e71d
+updated: 2018-02-14T16:28:19.416251088-08:00
 imports:
+- name: github.com/ajeddeloh/go-json
+  version: 73d058cf8437a1989030afe571eeab9f90eebbbd
 - name: github.com/ajeddeloh/yaml
   version: 6b94386aeefd8c4b8470aee72bfca084c2f91da9
 - name: github.com/alecthomas/units
@@ -10,7 +12,7 @@ imports:
   subpackages:
   - cidr
 - name: github.com/aws/aws-sdk-go
-  version: d6b4bfeba6997082629986cac2a932a233ba745e
+  version: c861d27d0304a79f727e9a8a4e2ac1e74602fdc0
   subpackages:
   - aws
   - aws/awserr
@@ -24,9 +26,11 @@ imports:
   - aws/credentials/stscreds
   - aws/defaults
   - aws/ec2metadata
+  - aws/endpoints
   - aws/request
   - aws/session
   - aws/signer/v4
+  - internal/shareddefaults
   - private/endpoints
   - private/protocol
   - private/protocol/query
@@ -42,7 +46,7 @@ imports:
   subpackages:
   - netrc
 - name: github.com/coreos/container-linux-config-transpiler
-  version: be4cb16b0aaf0f6b4fdf63b8b2a081397276bf0f
+  version: 90d21c6c8e51e38198fd5e6517e961bd7b885832
   subpackages:
   - config
   - config/astyaml
@@ -50,6 +54,7 @@ imports:
   - config/templating
   - config/types
   - config/types/util
+  - internal/util
 - name: github.com/coreos/go-semver
   version: 5e3acbb5668c4c3deb4842615c4098eb61fb6b1e
   subpackages:
@@ -60,9 +65,10 @@ imports:
   - dbus
   - unit
 - name: github.com/coreos/ignition
-  version: 01c039a5ce59acd39e5741713e59abfcb74d0782
+  version: fb24b9e03a4e1a573bd86f185c749c59d3606f7a
   subpackages:
   - config/types
+  - config/v2_1
   - config/v2_1/types
   - config/validate
   - config/validate/astnode
@@ -72,7 +78,7 @@ imports:
   subpackages:
   - spew
 - name: github.com/go-ini/ini
-  version: 6e4869b434bd001f6983749881c7ead3545887d8
+  version: c787282c39ac1fc618827141a1f762240def08a3
 - name: github.com/hashicorp/errwrap
   version: 7554cd9344cec97297fa6649b055a8c98c2a1e55
 - name: github.com/hashicorp/go-getter
