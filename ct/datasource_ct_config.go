@@ -63,7 +63,7 @@ func renderCTConfig(d *schema.ResourceData) (string, error) {
 	}
 
 	// convert Container Linux Config to an Ignition Config
-	ignition, rpt := ct.ConvertAs2_0(cfg, platform, ast)
+	ignition, rpt := ct.Convert(cfg, platform, ast)
 	if rpt.IsFatal() {
 		return "", errors.New(rpt.String())
 	}
