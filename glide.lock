@@ -1,6 +1,8 @@
 hash: ceb6ff3cdc6c7e30d1b004ed6e6bcb7b9ec3069ff15d0477d8e5b25458866ae7
-updated: 2017-07-11T10:31:18.708149943-07:00
+updated: 2018-02-22T22:19:47.96980428-08:00
 imports:
+- name: github.com/ajeddeloh/go-json
+  version: 73d058cf8437a1989030afe571eeab9f90eebbbd
 - name: github.com/ajeddeloh/yaml
   version: 1072abfea31191db507785e2e0c1b8d1440d35a5
 - name: github.com/alecthomas/units
@@ -59,8 +61,10 @@ imports:
   version: d75d0aa3bf307f0954ce4ea8cac56dacec8d16ce
   subpackages:
   - config/types
+  - config/v2_0
   - config/v2_0/types
   - config/validate
+  - config/validate/astjson
   - config/validate/report
 - name: github.com/davecgh/go-spew
   version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
@@ -136,4 +140,8 @@ imports:
   version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/vincent-petithory/dataurl
   version: 9a301d65acbb728fcc3ace14f45f511a4cfeea9c
+- name: go4.org
+  version: 03efcb870d84809319ea509714dd6d19a1498483
+  subpackages:
+  - errorutil
 testImports: []
