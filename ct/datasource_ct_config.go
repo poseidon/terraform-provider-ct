@@ -2,13 +2,15 @@ package ct
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
 
 	ct "github.com/coreos/container-linux-config-transpiler/config"
+	ignition "github.com/coreos/ignition/config/v2_0"
+	ignitionTypesV2_0 "github.com/coreos/ignition/config/v2_0/types"
 )
 
 func dataSourceCTConfig() *schema.Resource {
@@ -24,6 +26,14 @@ func dataSourceCTConfig() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "",
+				ForceNew: true,
+			},
+			"snippets": &schema.Schema{
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Optional: true,
 				ForceNew: true,
 			},
 			"pretty_print": &schema.Schema{
@@ -52,27 +62,50 @@ func dataSourceCTConfigRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func renderCTConfig(d *schema.ResourceData) (string, error) {
-	config := d.Get("content").(string)
+	// unchecked assertions seem to be the norm in Terraform :S
+	content := d.Get("content").(string)
 	platform := d.Get("platform").(string)
+	snippetsIface := d.Get("snippets").([]interface{})
 	pretty := d.Get("pretty_print").(bool)
 
-	// parse bytes int a Container Linux Config
-	cfg, rpt := ct.Parse([]byte(config))
-	if rpt.IsFatal() {
-		return "", errors.New(rpt.String())
+	snippets := make([]string, len(snippetsIface))
+	for i := range snippetsIface {
+		snippets[i] = snippetsIface[i].(string)
 	}
 
-	// convert Container Linux Config to an Ignition Config
-	ignition, rpt := ct.ConvertAs2_0(cfg, platform)
-	if rpt.IsFatal() {
-		return "", errors.New(rpt.String())
+	ign, err := clcToIgnition([]byte(content), platform)
+	if err != nil {
+		return "", err
+	}
+
+	for _, content := range snippets {
+		ignext, err := clcToIgnition([]byte(content), platform)
+		if err != nil {
+			return "", err
+		}
+		ign = ignition.Append(ign, ignext)
 	}
 
 	if pretty {
-		ignitionJSON, err := json.MarshalIndent(&ignition, "", "  ")
+		ignitionJSON, err := json.MarshalIndent(ign, "", "  ")
 		return string(ignitionJSON), err
 	}
 
-	ignitionJSON, err := json.Marshal(&ignition)
+	ignitionJSON, err := json.Marshal(ign)
 	return string(ignitionJSON), err
+}
+
+// Parse Container Linux config and convert to Ignition v2.0.0 format.
+func clcToIgnition(data []byte, platform string) (ignitionTypesV2_0.Config, error) {
+	// parse bytes into a Container Linux Config
+	clc, report := ct.Parse([]byte(data))
+	if report.IsFatal() {
+		return ignitionTypesV2_0.Config{}, fmt.Errorf("error parsing Container Linux Config: %v", report.String())
+	}
+	// convert Container Linux Config to an Ignition Config
+	ign, report := ct.ConvertAs2_0(clc, platform)
+	if report.IsFatal() {
+		return ignitionTypesV2_0.Config{}, fmt.Errorf("error converting to Ignition: %v", report.String())
+	}
+	return ign, nil
 }
