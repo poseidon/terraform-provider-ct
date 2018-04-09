@@ -131,6 +131,58 @@ const ec2Expected = `{
   }
 }`
 
+const snippetsResource = `
+data "ct_config" "combine" {
+	pretty_print = true
+	content = <<EOT
+---
+storage:
+  filesystems:
+    - name: "rootfs"
+      mount:
+        device: "/dev/disk/by-label/ROOT"
+        format: "ext4"
+EOT
+	snippets = [
+<<EOT
+---
+systemd:
+  units:
+    - name: docker.service
+      enable: true
+EOT
+	]
+}
+`
+const snippetsExpected = `{
+  "ignition": {
+    "config": {},
+    "timeouts": {},
+    "version": "2.1.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "filesystems": [
+      {
+        "mount": {
+          "device": "/dev/disk/by-label/ROOT",
+          "format": "ext4"
+        },
+        "name": "rootfs"
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "enable": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
 func TestRender(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -145,6 +197,12 @@ func TestRender(t *testing.T) {
 				Config: ec2Resource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.ec2", "rendered", ec2Expected),
+				),
+			},
+			r.TestStep{
+				Config: snippetsResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.combine", "rendered", snippetsExpected),
 				),
 			},
 		},
