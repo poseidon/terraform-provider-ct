@@ -30,6 +30,11 @@ data "ct_config" "worker" {
   content      = "${file("worker.yaml")}"
   platform     = "ec2"
   pretty_print = false
+
+  snippets = [
+    "${file("units.yaml")}",
+    "${file("storage.yaml")}",
+  ]
 }
 
 resource "aws_instance" "worker" {
@@ -38,6 +43,8 @@ resource "aws_instance" "worker" {
 ```
 
 The optional platform can be "azure", "ec2", "gce", or [others](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) to perform platform-specific susbstitutions. By default, platform is "" (none, for bare-metal). 
+
+The `snippets` field is an optional list of Container Linux Config snippets that are appended to the main config specified in `content` before being rendered into an Ignition config.
 
 ## Development
 
