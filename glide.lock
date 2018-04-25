@@ -1,5 +1,5 @@
-hash: 3b89f88d7771261dea99f749d97a61d2f7ea5ac2383ab4c26afae95ad7e4e71d
-updated: 2018-02-14T16:28:19.416251088-08:00
+hash: e295781b459857e7f67e8b5a3a0861f47ac2b372d3c887d159f2a0904c08aa3e
+updated: 2018-04-25T13:04:17.44955063-07:00
 imports:
 - name: github.com/ajeddeloh/go-json
   version: 73d058cf8437a1989030afe571eeab9f90eebbbd
@@ -46,7 +46,7 @@ imports:
   subpackages:
   - netrc
 - name: github.com/coreos/container-linux-config-transpiler
-  version: 90d21c6c8e51e38198fd5e6517e961bd7b885832
+  version: 73f2769c53710f016a6036f4803ac5af1fbe23ea
   subpackages:
   - config
   - config/astyaml
@@ -60,16 +60,26 @@ imports:
   subpackages:
   - semver
 - name: github.com/coreos/go-systemd
-  version: 7c9533367ef925dc1078d75e5b7141e10da2c4e8
+  version: 40e2722dffead74698ca12a750f64ef313ddce05
   subpackages:
   - dbus
   - unit
 - name: github.com/coreos/ignition
-  version: fb24b9e03a4e1a573bd86f185c749c59d3606f7a
+  version: 8bc8a13ee812ce0755be0245808c3044a7ef0add
   subpackages:
+  - config/shared/errors
+  - config/shared/validations
   - config/types
+  - config/util
+  - config/v1
+  - config/v1/types
+  - config/v2_0
+  - config/v2_0/types
   - config/v2_1
   - config/v2_1/types
+  - config/v2_2
+  - config/v2_2/types
+  - config/v2_3_experimental/types
   - config/validate
   - config/validate/astjson
   - config/validate/astnode
