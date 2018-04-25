@@ -1,0 +1,9 @@
+storage:
+  files:
+    - path: "/etc/coreos/update.conf"
+      filesystem: rootfs
+      mode: 0644
+      contents:
+        inline: |
+          GROUP="alpha"
+          SERVER="update.example.com/v1/update"

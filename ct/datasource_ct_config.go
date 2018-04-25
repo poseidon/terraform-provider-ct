@@ -9,8 +9,8 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 
 	ct "github.com/coreos/container-linux-config-transpiler/config"
-	ignition "github.com/coreos/ignition/config/v2_1"
-	ignitionTypesV2_1 "github.com/coreos/ignition/config/v2_1/types"
+	ignition "github.com/coreos/ignition/config/v2_2"
+	ignitionTypesV2_2 "github.com/coreos/ignition/config/v2_2/types"
 )
 
 func dataSourceCTConfig() *schema.Resource {
@@ -96,16 +96,16 @@ func renderCTConfig(d *schema.ResourceData) (string, error) {
 }
 
 // Parse Container Linux config and convert to Ignition v2.1.0 format.
-func clcToIgnition(data []byte, platform string) (ignitionTypesV2_1.Config, error) {
+func clcToIgnition(data []byte, platform string) (ignitionTypesV2_2.Config, error) {
 	// parse bytes into a Container Linux Config
 	clc, ast, report := ct.Parse([]byte(data))
 	if report.IsFatal() {
-		return ignitionTypesV2_1.Config{}, fmt.Errorf("error parsing Container Linux Config: %v", report.String())
+		return ignitionTypesV2_2.Config{}, fmt.Errorf("error parsing Container Linux Config: %v", report.String())
 	}
 	// convert Container Linux Config to an Ignition Config
 	ign, report := ct.Convert(clc, platform, ast)
 	if report.IsFatal() {
-		return ignitionTypesV2_1.Config{}, fmt.Errorf("error converting to Ignition: %v", report.String())
+		return ignitionTypesV2_2.Config{}, fmt.Errorf("error converting to Ignition: %v", report.String())
 	}
 	return ign, nil
 }

@@ -45,8 +45,11 @@ EOT
 const prettyExpected = `{
   "ignition": {
     "config": {},
+    "security": {
+      "tls": {}
+    },
     "timeouts": {},
-    "version": "2.1.0"
+    "version": "2.2.0"
   },
   "networkd": {},
   "passwd": {},
@@ -67,9 +70,7 @@ const prettyExpected = `{
     "files": [
       {
         "filesystem": "rootfs",
-        "group": {},
         "path": "/etc/motd",
-        "user": {},
         "contents": {
           "source": "data:,Hello%20World!%0A",
           "verification": {}
@@ -109,8 +110,11 @@ EOT
 const ec2Expected = `{
   "ignition": {
     "config": {},
+    "security": {
+      "tls": {}
+    },
     "timeouts": {},
-    "version": "2.1.0"
+    "version": "2.2.0"
   },
   "networkd": {},
   "passwd": {},
@@ -157,8 +161,11 @@ EOT
 const snippetsExpected = `{
   "ignition": {
     "config": {},
+    "security": {
+      "tls": {}
+    },
     "timeouts": {},
-    "version": "2.1.0"
+    "version": "2.2.0"
   },
   "networkd": {},
   "passwd": {},

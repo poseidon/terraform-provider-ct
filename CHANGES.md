@@ -2,6 +2,12 @@
 
 Notable changes between releases.
 
+## v0.3.0 (2018-04-25)
+
+* Render Ignition Configs at Ingition 2.2.0
+* Update `ct` to v0.8.0
+* Add `snippets` field, a list of Container Linux Configs additively appended to the Container Linux Config in `content`
+
 ## v0.2.0 (2017-08-03)
 
 * Add `platform` field to the `ct_config` data source

@@ -9,6 +9,10 @@ data "template_file" "ct" {
 data "ct_config" "example" {
   pretty_print = true
   content      = "${data.template_file.ct.rendered}"
+
+  snippets = [
+    "${file("${path.module}/snippet.yaml")}",
+  ]
 }
 
 resource "null_resource" "echo" {

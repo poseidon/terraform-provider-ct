@@ -2,6 +2,17 @@
 
 The `ct` provider provides a `ct_config` data source that parses a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md), validates the content, and renders [Ignition](https://github.com/coreos/ignition). The rendered strings can be used as input to other Terraform resources (e.g. user-data for instances).
 
+## Ignition schema output
+
+Each minor version of `terraform-provider-ct` is tightly coupled with a minor version of the Ignition schema. Ignition transparently handles old Ignition schema versions, so this isn't normally an issue.
+
+However, it is **not safe** to upgrade between minor versions on existing managed clusters. Minor version upgrades of this plugin **will re-provision your cluster** because the Ignition config output has changed.
+
+| `terraform-provider-ct` | Ignition schema version |
+| ----------------------- | ----------------------- |
+| 0.2.x                   | 2.0                     |
+| 0.3.x                   | 2.2                     |
+
 ## Requirements
 
 * Terraform 0.9.x
@@ -30,6 +41,11 @@ data "ct_config" "worker" {
   content      = "${file("worker.yaml")}"
   platform     = "ec2"
   pretty_print = false
+
+  snippets = [
+    "${file("units.yaml")}",
+    "${file("storage.yaml")}",
+  ]
 }
 
 resource "aws_instance" "worker" {
@@ -38,6 +54,8 @@ resource "aws_instance" "worker" {
 ```
 
 The optional platform can be "azure", "ec2", "gce", or [others](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) to perform platform-specific susbstitutions. By default, platform is "" (none, for bare-metal). 
+
+The `snippets` field is an optional list of Container Linux Config snippets that are appended to the main config specified in `content` before being rendered into an Ignition config.
 
 ## Development
 
