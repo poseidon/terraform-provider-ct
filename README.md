@@ -59,7 +59,9 @@ The `snippets` field is an optional list of Container Linux Config snippets that
 
 ## Development
 
-To develop the provider plugin locally, set up [Go](http://www.golang.org/) 1.9+ and a valid [GOPATH](http://golang.org/doc/code.html#GOPATH). Build the plugin locally.
+### Binary
+
+To develop the provider plugin locally, build an executable with Go v1.11+.
 
 ```sh
 make
@@ -73,8 +75,9 @@ make install
 
 ### Vendor
 
-Add or update dependencies in glide.yaml and vendor. The [glide](https://github.com/Masterminds/glide) and [glide-vc](https://github.com/sgotti/glide-vc) tools vendor and prune dependencies.
+Add or update dependencies in `go.mod` and vendor.
 
-```sh
+```
+make update
 make vendor
 ```

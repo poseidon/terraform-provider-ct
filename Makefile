@@ -1,4 +1,6 @@
 export CGO_ENABLED:=0
+export GO111MODULE=on
+export GOFLAGS=-mod=vendor
 
 VERSION=$(shell ./scripts/git-version)
 PACKAGES = $(shell go list ./ct)
@@ -18,10 +20,14 @@ test:
 	go vet $(PACKAGES)
 	go test -v $(PACKAGES)
 
+.PHONY: update
+update:
+	@GOFLAGS="" go get -u
+	@go mod tidy
+
 .PHONY: vendor
 vendor:
-	@glide update --strip-vendor
-	@glide-vc --use-lock-file --no-tests --only-code
+	@go mod vendor
 
 .PHONY: clean
 clean:
