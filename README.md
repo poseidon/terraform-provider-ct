@@ -59,7 +59,7 @@ The `snippets` field is an optional list of Container Linux Config snippets that
 
 ## Development
 
-To develop the provider plugin locally, set up [Go](http://www.golang.org/) 1.8+ and a valid [GOPATH](http://golang.org/doc/code.html#GOPATH). Build the plugin locally.
+To develop the provider plugin locally, set up [Go](http://www.golang.org/) 1.9+ and a valid [GOPATH](http://golang.org/doc/code.html#GOPATH). Build the plugin locally.
 
 ```sh
 make
