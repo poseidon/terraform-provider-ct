@@ -1,11 +1,11 @@
 language: go
 go:
-  - 1.9.x
+  - "1.9.x"
   - "1.10.x"
   - "1.11.x"
+install:
+  - go get golang.org/x/lint/golint
 script:
   - make
-  - make test
-
 notifications:
   email: change

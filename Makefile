@@ -2,14 +2,16 @@ export CGO_ENABLED:=0
 export GO111MODULE=on
 export GOFLAGS=-mod=vendor
 
-VERSION=$(shell ./scripts/git-version)
-PACKAGES = $(shell go list ./ct)
+VERSION=$(shell git describe --tags --match=v* --always --dirty)
 
 .PHONY: all
-all: bin/terraform-provider-ct
+all: build test vet lint fmt
+
+.PHONY: build
+build: clean bin/terraform-provider-ct
 
 bin/terraform-provider-ct:
-	@go build -o $@ -v github.com/coreos/terraform-provider-ct
+	@go build -o $@ github.com/coreos/terraform-provider-ct
 
 .PHONY: install
 install: bin/terraform-provider-ct
@@ -17,8 +19,19 @@ install: bin/terraform-provider-ct
 
 .PHONY: test
 test:
-	go vet $(PACKAGES)
-	go test -v $(PACKAGES)
+	@go test ./... -cover
+
+.PHONY: vet
+vet:
+	@go vet -all ./...
+
+.PHONY: lint
+lint:
+	@golint -set_exit_status `go list ./...`
+
+.PHONY: fmt
+fmt:
+	@test -z $$(go fmt ./...)
 
 .PHONY: update
 update:
