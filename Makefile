@@ -13,10 +13,6 @@ build: clean bin/terraform-provider-ct
 bin/terraform-provider-ct:
 	@go build -o $@ github.com/coreos/terraform-provider-ct
 
-.PHONY: install
-install: bin/terraform-provider-ct
-	@cp $< $(GOPATH_BIN)
-
 .PHONY: test
 test:
 	@go test ./... -cover
@@ -51,7 +47,8 @@ clean:
 release: \
 	clean \
 	_output/plugin-linux-amd64.tar.gz \
-	_output/plugin-darwin-amd64.tar.gz
+	_output/plugin-darwin-amd64.tar.gz \
+	_output/plugin-windows-amd64.tar.gz
 
 _output/plugin-%.tar.gz: NAME=terraform-provider-ct-$(VERSION)-$*
 _output/plugin-%.tar.gz: DEST=_output/$(NAME)
@@ -62,5 +59,6 @@ _output/plugin-%.tar.gz: _output/%/terraform-provider-ct
 
 _output/linux-amd64/terraform-provider-ct: GOARGS = GOOS=linux GOARCH=amd64
 _output/darwin-amd64/terraform-provider-ct: GOARGS = GOOS=darwin GOARCH=amd64
+_output/windows-amd64/terraform-provider-ct: GOARGS = GOOS=windows GOARCH=amd64
 _output/%/terraform-provider-ct:
 	$(GOARGS) go build -o $@ github.com/coreos/terraform-provider-ct
