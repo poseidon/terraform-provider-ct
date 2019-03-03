@@ -2,19 +2,30 @@
 
 Notable changes between releases.
 
-## v0.3.0 (2018-04-25)
+## v0.3.1
 
-* Render Ignition Configs at Ingition 2.2.0
+* Document usage with the Terraform [3rd-party plugin](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) directory ([#35](https://github.com/coreos/terraform-provider-ct/pull/35))
+* Provide pre-compiled binaries from Go v1.11.5
+  * Add windows release binaries
+
+## v0.3.0
+
+* Render Ignition Configs at Ingition v2.2.0
+* Add `snippets` field for appending Container Linux Configs to `content` ([#22](https://github.com/coreos/terraform-provider-ct/pull/22))
 * Update `ct` to v0.8.0
-* Add `snippets` field, a list of Container Linux Configs additively appended to the Container Linux Config in `content`
 
-## v0.2.0 (2017-08-03)
+## v0.2.1
 
+* Add `snippets` field for appending Container Linux Configs to `content` ([#22](https://github.com/coreos/terraform-provider-ct/pull/22))
+
+## v0.2.0
+
+* Render Ignition Configs at Ignition v2.0.0
 * Add `platform` field to the `ct_config` data source
 * Add support for platform [dynamic templating](https://coreos.com/os/docs/latest/dynamic-data.html)
 * Update to support Terraform v0.9.2+
 * Update Container Linux `ct` to v0.3.1
 
-## v0.1.0 (2016-11-11)
+## v0.1.0
 
 Initial release as `tf-provider-fuze`.
