@@ -2,6 +2,10 @@
 
 Notable changes between releases.
 
+## Latest
+
+* Add compatibility with Terraform v0.12. Retain v0.11 compatibility ([#37](https://github.com/coreos/terraform-provider-ct/pull/37))
+
 ## v0.3.1
 
 * Document usage with the Terraform [3rd-party plugin](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) directory ([#35](https://github.com/coreos/terraform-provider-ct/pull/35))
