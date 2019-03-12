@@ -3,12 +3,13 @@ package terraform
 import (
 	"bytes"
 	"encoding/gob"
-	"errors"
 	"fmt"
 	"io"
 	"sync"
 
-	"github.com/hashicorp/terraform/config/module"
+	"github.com/zclconf/go-cty/cty"
+
+	"github.com/hashicorp/terraform/configs"
 )
 
 func init() {
@@ -25,34 +26,55 @@ func init() {
 // necessary to make a change: the state, diff, config, backend config, etc.
 // This is so that it can run alone without any other data.
 type Plan struct {
-	Diff    *Diff
-	Module  *module.Tree
-	State   *State
-	Vars    map[string]interface{}
+	// Diff describes the resource actions that must be taken when this
+	// plan is applied.
+	Diff *Diff
+
+	// Config represents the entire configuration that was present when this
+	// plan was created.
+	Config *configs.Config
+
+	// State is the Terraform state that was current when this plan was
+	// created.
+	//
+	// It is not allowed to apply a plan that has a stale state, since its
+	// diff could be outdated.
+	State *State
+
+	// Vars retains the variables that were set when creating the plan, so
+	// that the same variables can be applied during apply.
+	Vars map[string]cty.Value
+
+	// Targets, if non-empty, contains a set of resource address strings that
+	// identify graph nodes that were selected as targets for plan.
+	//
+	// When targets are set, any graph node that is not directly targeted or
+	// indirectly targeted via dependencies is excluded from the graph.
 	Targets []string
+
+	// TerraformVersion is the version of Terraform that was used to create
+	// this plan.
+	//
+	// It is not allowed to apply a plan created with a different version of
+	// Terraform, since the other fields of this structure may be interpreted
+	// in different ways between versions.
+	TerraformVersion string
+
+	// ProviderSHA256s is a map giving the SHA256 hashes of the exact binaries
+	// used as plugins for each provider during plan.
+	//
+	// These must match between plan and apply to ensure that the diff is
+	// correctly interpreted, since different provider versions may have
+	// different attributes or attribute value constraints.
+	ProviderSHA256s map[string][]byte
 
 	// Backend is the backend that this plan should use and store data with.
 	Backend *BackendState
 
+	// Destroy indicates that this plan was created for a full destroy operation
+	Destroy bool
+
 	once sync.Once
-}
-
-// Context returns a Context with the data encapsulated in this plan.
-//
-// The following fields in opts are overridden by the plan: Config,
-// Diff, State, Variables.
-func (p *Plan) Context(opts *ContextOpts) (*Context, error) {
-	opts.Diff = p.Diff
-	opts.Module = p.Module
-	opts.State = p.State
-	opts.Targets = p.Targets
-
-	opts.Variables = make(map[string]interface{})
-	for k, v := range p.Vars {
-		opts.Variables[k] = v
-	}
-
-	return NewContext(opts)
 }
 
 func (p *Plan) String() string {
@@ -77,7 +99,7 @@ func (p *Plan) init() {
 		}
 
 		if p.Vars == nil {
-			p.Vars = make(map[string]interface{})
+			p.Vars = make(map[string]cty.Value)
 		}
 	})
 }
@@ -86,68 +108,15 @@ func (p *Plan) init() {
 // the ability in the future to change the file format if we want for any
 // reason.
 const planFormatMagic = "tfplan"
-const planFormatVersion byte = 1
+const planFormatVersion byte = 2
 
 // ReadPlan reads a plan structure out of a reader in the format that
 // was written by WritePlan.
 func ReadPlan(src io.Reader) (*Plan, error) {
-	var result *Plan
-	var err error
-	n := 0
-
-	// Verify the magic bytes
-	magic := make([]byte, len(planFormatMagic))
-	for n < len(magic) {
-		n, err = src.Read(magic[n:])
-		if err != nil {
-			return nil, fmt.Errorf("error while reading magic bytes: %s", err)
-		}
-	}
-	if string(magic) != planFormatMagic {
-		return nil, fmt.Errorf("not a valid plan file")
-	}
-
-	// Verify the version is something we can read
-	var formatByte [1]byte
-	n, err = src.Read(formatByte[:])
-	if err != nil {
-		return nil, err
-	}
-	if n != len(formatByte) {
-		return nil, errors.New("failed to read plan version byte")
-	}
-
-	if formatByte[0] != planFormatVersion {
-		return nil, fmt.Errorf("unknown plan file version: %d", formatByte[0])
-	}
-
-	dec := gob.NewDecoder(src)
-	if err := dec.Decode(&result); err != nil {
-		return nil, err
-	}
-
-	return result, nil
+	return nil, fmt.Errorf("terraform.ReadPlan is no longer in use; use planfile.Open instead")
 }
 
 // WritePlan writes a plan somewhere in a binary format.
 func WritePlan(d *Plan, dst io.Writer) error {
-	// Write the magic bytes so we can determine the file format later
-	n, err := dst.Write([]byte(planFormatMagic))
-	if err != nil {
-		return err
-	}
-	if n != len(planFormatMagic) {
-		return errors.New("failed to write plan format magic bytes")
-	}
-
-	// Write a version byte so we can iterate on version at some point
-	n, err = dst.Write([]byte{planFormatVersion})
-	if err != nil {
-		return err
-	}
-	if n != 1 {
-		return errors.New("failed to write plan version byte")
-	}
-
-	return gob.NewEncoder(dst).Encode(d)
+	return fmt.Errorf("terraform.WritePlan is no longer in use; use planfile.Create instead")
 }
