@@ -1,4 +1,4 @@
-module github.com/coreos/terraform-provider-ct
+module github.com/poseidon/terraform-provider-ct
 
 require (
 	github.com/ajeddeloh/go-json v0.0.0-20160803184958-73d058cf8437 // indirect

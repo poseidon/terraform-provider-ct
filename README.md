@@ -12,7 +12,7 @@ Add the `terraform-provider-ct` plugin binary for your system to the Terraform 3
 
 ```sh
 VERSION=v0.3.1
-wget https://github.com/coreos/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz
+wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
 ```

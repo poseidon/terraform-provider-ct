@@ -11,7 +11,7 @@ all: build test vet lint fmt
 build: clean bin/terraform-provider-ct
 
 bin/terraform-provider-ct:
-	@go build -o $@ github.com/coreos/terraform-provider-ct
+	@go build -o $@ github.com/poseidon/terraform-provider-ct
 
 .PHONY: test
 test:
@@ -61,4 +61,4 @@ _output/linux-amd64/terraform-provider-ct: GOARGS = GOOS=linux GOARCH=amd64
 _output/darwin-amd64/terraform-provider-ct: GOARGS = GOOS=darwin GOARCH=amd64
 _output/windows-amd64/terraform-provider-ct: GOARGS = GOOS=windows GOARCH=amd64
 _output/%/terraform-provider-ct:
-	$(GOARGS) go build -o $@ github.com/coreos/terraform-provider-ct
+	$(GOARGS) go build -o $@ github.com/poseidon/terraform-provider-ct
