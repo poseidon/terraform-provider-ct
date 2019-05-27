@@ -1,3 +1,11 @@
+# cloud.google.com/go v0.36.0
+cloud.google.com/go/storage
+cloud.google.com/go/iam
+cloud.google.com/go/internal
+cloud.google.com/go/internal/optional
+cloud.google.com/go/internal/trace
+cloud.google.com/go/internal/version
+cloud.google.com/go/compute/metadata
 # github.com/agext/levenshtein v1.2.2
 github.com/agext/levenshtein
 # github.com/ajeddeloh/go-json v0.0.0-20160803184958-73d058cf8437
@@ -12,7 +20,7 @@ github.com/apparentlymart/go-cidr/cidr
 github.com/apparentlymart/go-textseg/textseg
 # github.com/armon/go-radix v1.0.0
 github.com/armon/go-radix
-# github.com/aws/aws-sdk-go v1.16.36
+# github.com/aws/aws-sdk-go v1.19.18
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/credentials
 github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds
@@ -92,28 +100,31 @@ github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
+github.com/golang/protobuf/protoc-gen-go/descriptor
 # github.com/google/go-cmp v0.2.0
 github.com/google/go-cmp/cmp
 github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
+# github.com/googleapis/gax-go/v2 v2.0.3
+github.com/googleapis/gax-go/v2
 # github.com/hashicorp/errwrap v1.0.0
 github.com/hashicorp/errwrap
 # github.com/hashicorp/go-cleanhttp v0.5.0
 github.com/hashicorp/go-cleanhttp
-# github.com/hashicorp/go-getter v1.1.0
+# github.com/hashicorp/go-getter v1.3.0
 github.com/hashicorp/go-getter
 github.com/hashicorp/go-getter/helper/url
 # github.com/hashicorp/go-hclog v0.0.0-20181001195459-61d530d6c27f
 github.com/hashicorp/go-hclog
 # github.com/hashicorp/go-multierror v1.0.0
 github.com/hashicorp/go-multierror
-# github.com/hashicorp/go-plugin v0.0.0-20190220160451-3f118e8ee104
+# github.com/hashicorp/go-plugin v1.0.1-0.20190430211030-5692942914bb
 github.com/hashicorp/go-plugin
 github.com/hashicorp/go-plugin/internal/plugin
 # github.com/hashicorp/go-safetemp v1.0.0
 github.com/hashicorp/go-safetemp
-# github.com/hashicorp/go-uuid v1.0.0
+# github.com/hashicorp/go-uuid v1.0.1
 github.com/hashicorp/go-uuid
 # github.com/hashicorp/go-version v1.1.0
 github.com/hashicorp/go-version
@@ -127,7 +138,7 @@ github.com/hashicorp/hcl/hcl/scanner
 github.com/hashicorp/hcl/hcl/strconv
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
-# github.com/hashicorp/hcl2 v0.0.0-20190226234159-7e26f2f34612
+# github.com/hashicorp/hcl2 v0.0.0-20190515223218-4b22149b7cef
 github.com/hashicorp/hcl2/hcl
 github.com/hashicorp/hcl2/hcl/hclsyntax
 github.com/hashicorp/hcl2/hcldec
@@ -145,7 +156,7 @@ github.com/hashicorp/hil/parser
 github.com/hashicorp/hil/scanner
 # github.com/hashicorp/logutils v1.0.0
 github.com/hashicorp/logutils
-# github.com/hashicorp/terraform v0.12.0-beta1
+# github.com/hashicorp/terraform v0.12.0
 github.com/hashicorp/terraform/plugin
 github.com/hashicorp/terraform/helper/hashcode
 github.com/hashicorp/terraform/helper/schema
@@ -180,6 +191,7 @@ github.com/hashicorp/terraform/registry/regsrc
 github.com/hashicorp/terraform/registry/response
 github.com/hashicorp/terraform/svchost/disco
 github.com/hashicorp/terraform/helper/hilmapstructure
+github.com/hashicorp/terraform/lang/blocktoattr
 github.com/hashicorp/terraform/lang/funcs
 github.com/hashicorp/terraform/command/format
 github.com/hashicorp/terraform/configs/configload
@@ -190,7 +202,7 @@ github.com/hashicorp/terraform/svchost
 github.com/hashicorp/terraform/svchost/auth
 github.com/hashicorp/terraform/internal/modsdir
 github.com/hashicorp/terraform/internal/earlyconfig
-# github.com/hashicorp/terraform-config-inspect v0.0.0-20190208230122-b0707673339c
+# github.com/hashicorp/terraform-config-inspect v0.0.0-20190327195015-8022a2663a70
 github.com/hashicorp/terraform-config-inspect/tfconfig
 # github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb
 github.com/hashicorp/yamux
@@ -238,7 +250,7 @@ github.com/vincent-petithory/dataurl
 # github.com/vmihailenco/msgpack v4.0.1+incompatible
 github.com/vmihailenco/msgpack
 github.com/vmihailenco/msgpack/codes
-# github.com/zclconf/go-cty v0.0.0-20190201220620-4ca19710f056
+# github.com/zclconf/go-cty v0.0.0-20190516203816-4fecf87372ec
 github.com/zclconf/go-cty/cty
 github.com/zclconf/go-cty/cty/msgpack
 github.com/zclconf/go-cty/cty/convert
@@ -247,9 +259,24 @@ github.com/zclconf/go-cty/cty/gocty
 github.com/zclconf/go-cty/cty/set
 github.com/zclconf/go-cty/cty/function
 github.com/zclconf/go-cty/cty/function/stdlib
+# go.opencensus.io v0.18.0
+go.opencensus.io/trace
+go.opencensus.io/plugin/ochttp
+go.opencensus.io/exemplar
+go.opencensus.io/internal
+go.opencensus.io/trace/internal
+go.opencensus.io/trace/tracestate
+go.opencensus.io/plugin/ochttp/propagation/b3
+go.opencensus.io/stats
+go.opencensus.io/stats/view
+go.opencensus.io/tag
+go.opencensus.io/trace/propagation
+go.opencensus.io
+go.opencensus.io/stats/internal
+go.opencensus.io/internal/tagencoding
 # go4.org v0.0.0-20180809161055-417644f6feb5
 go4.org/errorutil
-# golang.org/x/crypto v0.0.0-20190222235706-ffb98f73852f
+# golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734
 golang.org/x/crypto/openpgp
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/openpgp/armor
@@ -259,7 +286,7 @@ golang.org/x/crypto/openpgp/s2k
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/cast5
 golang.org/x/crypto/openpgp/elgamal
-# golang.org/x/net v0.0.0-20190213061140-3a22650c66bd
+# golang.org/x/net v0.0.0-20190502183928-7f726cade0ab
 golang.org/x/net/context
 golang.org/x/net/trace
 golang.org/x/net/internal/timeseries
@@ -267,25 +294,48 @@ golang.org/x/net/http2
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/http/httpguts
-# golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223
+golang.org/x/net/context/ctxhttp
+# golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9
+golang.org/x/oauth2
+golang.org/x/oauth2/google
+golang.org/x/oauth2/internal
+golang.org/x/oauth2/jws
+golang.org/x/oauth2/jwt
+# golang.org/x/sys v0.0.0-20190502175342-a43fa875dd82
 golang.org/x/sys/unix
-# golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2
+# golang.org/x/text v0.3.2
 golang.org/x/text/unicode/norm
 golang.org/x/text/transform
 golang.org/x/text/secure/bidirule
 golang.org/x/text/unicode/bidi
+# google.golang.org/api v0.1.0
+google.golang.org/api/iterator
+google.golang.org/api/googleapi
+google.golang.org/api/option
+google.golang.org/api/storage/v1
+google.golang.org/api/transport/http
+google.golang.org/api/googleapi/internal/uritemplates
+google.golang.org/api/internal
+google.golang.org/api/gensupport
+google.golang.org/api/googleapi/transport
+google.golang.org/api/transport/http/internal/propagation
 # google.golang.org/appengine v1.4.0
 google.golang.org/appengine/datastore
 google.golang.org/appengine
 google.golang.org/appengine/internal
 google.golang.org/appengine/internal/datastore
+google.golang.org/appengine/urlfetch
 google.golang.org/appengine/internal/app_identity
 google.golang.org/appengine/internal/modules
 google.golang.org/appengine/internal/base
 google.golang.org/appengine/internal/log
 google.golang.org/appengine/internal/remote_api
+google.golang.org/appengine/internal/urlfetch
 # google.golang.org/genproto v0.0.0-20190201180003-4b09977fb922
 google.golang.org/genproto/googleapis/rpc/status
+google.golang.org/genproto/googleapis/iam/v1
+google.golang.org/genproto/googleapis/rpc/code
+google.golang.org/genproto/googleapis/api/annotations
 # google.golang.org/grpc v1.18.0
 google.golang.org/grpc
 google.golang.org/grpc/credentials
