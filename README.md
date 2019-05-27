@@ -11,7 +11,7 @@
 Add the `terraform-provider-ct` plugin binary for your system to the Terraform 3rd-party [plugin directory](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) `~/.terraform.d/plugins`.
 
 ```sh
-VERSION=v0.3.1
+VERSION=v0.3.2
 wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
@@ -24,7 +24,8 @@ $ tree ~/.terraform.d/
 /home/user/.terraform.d/
 └── plugins
     ├── terraform-provider-ct_v0.3.0
-    └── terraform-provider-ct_v0.3.1
+    ├── terraform-provider-ct_v0.3.1
+    └── terraform-provider-ct_v0.3.2
 ```
 
 ## Usage
@@ -33,7 +34,7 @@ Configure the ct provider in a `providers.tf` file.
 
 ```hcl
 provider "ct" {
-  version = "0.3.1"
+  version = "0.3.2"
 }
 ```
 

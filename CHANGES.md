@@ -4,6 +4,8 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.3.2
+
 * Add compatibility with Terraform v0.12. Retain v0.11 compatibility ([#37](https://github.com/poseidon/terraform-provider-ct/pull/37))
 
 ## v0.3.1
