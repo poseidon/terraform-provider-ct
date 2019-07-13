@@ -8,7 +8,7 @@ cloud.google.com/go/internal/version
 cloud.google.com/go/compute/metadata
 # github.com/agext/levenshtein v1.2.2
 github.com/agext/levenshtein
-# github.com/ajeddeloh/go-json v0.0.0-20160803184958-73d058cf8437
+# github.com/ajeddeloh/go-json v0.0.0-20170920214419-6a2fe990e083
 github.com/ajeddeloh/go-json
 # github.com/ajeddeloh/yaml v0.0.0-20170912190910-6b94386aeefd
 github.com/ajeddeloh/yaml
@@ -69,9 +69,15 @@ github.com/coreos/container-linux-config-transpiler/config/types
 github.com/coreos/container-linux-config-transpiler/config/templating
 github.com/coreos/container-linux-config-transpiler/config/types/util
 github.com/coreos/container-linux-config-transpiler/internal/util
-# github.com/coreos/go-semver v0.2.0
+# github.com/coreos/fcct v0.1.0
+github.com/coreos/fcct/config
+github.com/coreos/fcct/config/common
+github.com/coreos/fcct/config/v1_0
+github.com/coreos/fcct/base/v0_1
+github.com/coreos/fcct/distro/fcos/v0_1
+# github.com/coreos/go-semver v0.3.0
 github.com/coreos/go-semver/semver
-# github.com/coreos/go-systemd v0.0.0-20181012123002-c6f51f82210d
+# github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e
 github.com/coreos/go-systemd/unit
 # github.com/coreos/ignition v0.24.0
 github.com/coreos/ignition/config/v2_2
@@ -90,6 +96,22 @@ github.com/coreos/ignition/config/v2_0
 github.com/coreos/ignition/config/v2_0/types
 github.com/coreos/ignition/config/v1
 github.com/coreos/ignition/config/v1/types
+# github.com/coreos/ignition/v2 v2.0.0
+github.com/coreos/ignition/v2/config/v3_0
+github.com/coreos/ignition/v2/config/v3_0/types
+github.com/coreos/ignition/v2/config/validate
+github.com/coreos/ignition/v2/config/translate
+github.com/coreos/ignition/v2/config/merge
+github.com/coreos/ignition/v2/config/shared/errors
+github.com/coreos/ignition/v2/config/util
+github.com/coreos/ignition/v2/config/shared/validations
+# github.com/coreos/vcontext v0.0.0-20190605182717-e9c4ffaa1f6a
+github.com/coreos/vcontext/tree
+github.com/coreos/vcontext/yaml
+github.com/coreos/vcontext/path
+github.com/coreos/vcontext/report
+github.com/coreos/vcontext/validate
+github.com/coreos/vcontext/json
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/fatih/color v1.7.0
@@ -371,3 +393,5 @@ google.golang.org/grpc/credentials/internal
 google.golang.org/grpc/balancer/base
 google.golang.org/grpc/binarylog/grpc_binarylog_v1
 google.golang.org/grpc/internal/syscall
+# gopkg.in/yaml.v3 v3.0.0-20190502103701-55513cacd4ae
+gopkg.in/yaml.v3
