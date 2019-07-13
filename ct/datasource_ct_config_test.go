@@ -190,6 +190,50 @@ const snippetsExpected = `{
   }
 }`
 
+const fedoraCoreOSResource = `
+data "ct_config" "fedora-coreos" {
+  pretty_print = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.0.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+}
+`
+
+const fedoraCoreOSExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "source": null,
+        "verification": {}
+      }
+    },
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {}
+}`
+
 func TestRender(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -210,6 +254,12 @@ func TestRender(t *testing.T) {
 				Config: snippetsResource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.combine", "rendered", snippetsExpected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", fedoraCoreOSExpected),
 				),
 			},
 		},

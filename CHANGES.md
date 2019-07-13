@@ -4,6 +4,11 @@ Notable changes between releases.
 
 ## Latest
 
+* Allow Fedora CoreOS Config `content`
+  * Render Container Linux Config `content` in Ignition v2.2 format
+  * Render Fedora CoreOS `content` in Ignition v3.x format (determined by content)
+* Fedora CoreOS Configs specify their [own version](https://github.com/coreos/fcct/blob/master/docs/configuration-v1_0.md)
+
 ## v0.3.2
 
 * Add compatibility with Terraform v0.12. Retain v0.11 compatibility ([#37](https://github.com/poseidon/terraform-provider-ct/pull/37))
