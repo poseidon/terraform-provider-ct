@@ -43,6 +43,11 @@ func dataSourceCTConfig() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"strict": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"rendered": &schema.Schema{
 				Type:        schema.TypeString,
 				Computed:    true,
@@ -70,6 +75,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	platform := d.Get("platform").(string)
 	snippetsIface := d.Get("snippets").([]interface{})
 	pretty := d.Get("pretty_print").(bool)
+	strict := d.Get("strict").(bool)
 
 	snippets := make([]string, len(snippetsIface))
 	for i := range snippetsIface {
@@ -77,30 +83,31 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	}
 
 	// Fedora CoreOS Config
-	ign, err := fccToIgnition([]byte(content), pretty)
+	ign, err := fccToIgnition([]byte(content), pretty, strict)
 	if err == fcct.ErrNoVariant {
 		// consider as Container Linux Config
-		ign, err = renderCLC([]byte(content), platform, pretty, snippets)
+		ign, err = renderCLC([]byte(content), platform, pretty, strict, snippets)
 	}
 	return string(ign), err
 }
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
-func fccToIgnition(data []byte, pretty bool) ([]byte, error) {
+func fccToIgnition(data []byte, pretty, strict bool) ([]byte, error) {
 	return fcct.Translate(data, common.TranslateOptions{
 		Pretty: pretty,
+		Strict: strict,
 	})
 }
 
 // Translate Container Linux Config as Ignition JSON.
-func renderCLC(data []byte, platform string, pretty bool, snippets []string) ([]byte, error) {
-	ign, err := clcToIgnition(data, platform)
+func renderCLC(data []byte, platform string, pretty, strict bool, snippets []string) ([]byte, error) {
+	ign, err := clcToIgnition(data, platform, strict)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, snippet := range snippets {
-		ignext, err := clcToIgnition([]byte(snippet), platform)
+		ignext, err := clcToIgnition([]byte(snippet), platform, strict)
 		if err != nil {
 			return nil, err
 		}
@@ -114,9 +121,14 @@ func renderCLC(data []byte, platform string, pretty bool, snippets []string) ([]
 }
 
 // Parse Container Linux config and convert to Ignition v2.2.0 format.
-func clcToIgnition(data []byte, platform string) (ignitionTypesV2_2.Config, error) {
+func clcToIgnition(data []byte, platform string, strict bool) (ignitionTypesV2_2.Config, error) {
 	// parse bytes into a Container Linux Config
 	clc, ast, report := clct.Parse([]byte(data))
+
+	if strict && len(report.Entries) > 0 {
+		return ignitionTypesV2_2.Config{}, fmt.Errorf("error strict parsing Container Linux Config: %v", report.String())
+	}
+
 	if report.IsFatal() {
 		return ignitionTypesV2_2.Config{}, fmt.Errorf("error parsing Container Linux Config: %v", report.String())
 	}

@@ -1,6 +1,7 @@
 package ct
 
 import (
+	"regexp"
 	"testing"
 
 	r "github.com/hashicorp/terraform/helper/resource"
@@ -234,6 +235,14 @@ const fedoraCoreOSExpected = `{
   "systemd": {}
 }`
 
+const invalidResource = `
+data "ct_config" "container-linux-strict" {
+  content = "foo"
+  strict = true
+  some_invalid_field = "strict-mode-will-reject"
+}
+`
+
 func TestRender(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -261,6 +270,18 @@ func TestRender(t *testing.T) {
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", fedoraCoreOSExpected),
 				),
+			},
+		},
+	})
+}
+
+func TestRenderErrors(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config:      invalidResource,
+				ExpectError: regexp.MustCompile("^.*An argument named \"some_invalid_field\" is not expected here"),
 			},
 		},
 	})
