@@ -28,7 +28,6 @@ var (
 	ErrUnknownVersion     = errors.New("unsupported config version")
 	ErrScript             = errors.New("not a config (found coreos-cloudinit script)")
 	ErrDeprecated         = errors.New("config format deprecated")
-	ErrVersion            = errors.New("incorrect config version")
 	ErrCompressionInvalid = errors.New("invalid compression method")
 
 	// Ignition section errors
@@ -63,6 +62,8 @@ var (
 	ErrPathRelative                = errors.New("path not absolute")
 	ErrSparesUnsupportedForLevel   = errors.New("spares unsupported for arrays with a level greater than 0")
 	ErrUnrecognizedRaidLevel       = errors.New("unrecognized raid level")
+	ErrShouldNotExistWithOthers    = errors.New("shouldExist specified false with other options also specified")
+	ErrZeroesWithShouldNotExist    = errors.New("shouldExist is false for a partition and other partition(s) has start or size 0")
 
 	// Passwd section errors
 	ErrPasswdCreateDeprecated      = errors.New("the create object has been deprecated in favor of user-level options")
@@ -84,11 +85,12 @@ var (
 	ErrInvalidNetworkdDropinExt = errors.New("invalid networkd drop-in extension")
 
 	// Misc errors
-	ErrInvalidScheme    = errors.New("invalid url scheme")
-	ErrInvalidUrl       = errors.New("unable to parse url")
-	ErrHashMalformed    = errors.New("malformed hash specifier")
-	ErrHashWrongSize    = errors.New("incorrect size for hash sum")
-	ErrHashUnrecognized = errors.New("unrecognized hash function")
+	ErrInvalidScheme       = errors.New("invalid url scheme")
+	ErrInvalidUrl          = errors.New("unable to parse url")
+	ErrHashMalformed       = errors.New("malformed hash specifier")
+	ErrHashWrongSize       = errors.New("incorrect size for hash sum")
+	ErrHashUnrecognized    = errors.New("unrecognized hash function")
+	ErrEngineConfiguration = errors.New("engine incorrectly configured")
 )
 
 // NewNoInstallSectionError produces an error indicating the given unit, named

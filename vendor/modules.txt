@@ -79,7 +79,7 @@ github.com/coreos/fcct/distro/fcos/v0_1
 github.com/coreos/go-semver/semver
 # github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e
 github.com/coreos/go-systemd/unit
-# github.com/coreos/ignition v0.24.0
+# github.com/coreos/ignition v0.28.0
 github.com/coreos/ignition/config/v2_2
 github.com/coreos/ignition/config/v2_2/types
 github.com/coreos/ignition/config/validate
