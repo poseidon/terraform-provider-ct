@@ -113,6 +113,9 @@ func getArgs(format, tagName string, e interface{}) []string {
 				vars = append(vars, getCliArgs(val)...)
 			} else {
 				key := et.Field(i).Tag.Get(tagName)
+				if ev.Field(i).Kind() == reflect.Ptr {
+					val = reflect.Indirect(ev.Field(i)).Interface()
+				}
 				if _, ok := val.(string); ok {
 					// to handle whitespace characters
 					val = fmt.Sprintf("%q", val)
