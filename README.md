@@ -19,6 +19,7 @@ Render the config with Terraform for machine consumption.
 data "ct_config" "worker" {
   content      = file("worker.yaml")
   pretty_print = false
+  strict       = true
 }
 
 resource "aws_instance" "worker" {
