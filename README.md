@@ -27,7 +27,7 @@ resource "aws_instance" "worker" {
 }
 ```
 
-See the [Container Linux](examples/container-linux.tf) or [Fedora CoreOS](examples/fedora-coreos.tf) examples.
+See the [Container Linux](example/container-linux.tf) or [Fedora CoreOS](example/fedora-coreos.tf) examples.
 
 ## Requirements
 
