@@ -1,0 +1,10 @@
+variant: fcos
+version: 1.0.0
+storage:
+  files:
+    - path: /etc/zincati/config.d/90-disable-feature.toml
+      contents:
+        inline: |
+          [updates]
+          enabled = false
+

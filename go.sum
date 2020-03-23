@@ -150,6 +150,7 @@ github.com/coreos/ignition v0.24.0 h1:RGCRIVtEcOIhrG+pxrrPriqeemAnUu6fSwKGKJoEJ6
 github.com/coreos/ignition v0.24.0/go.mod h1:WJQapxzEn9DE0ryxsGvm8QnBajm/XsS/PkrDqSpz+bA=
 github.com/coreos/ignition v0.28.0 h1:wfX5JdoYrzH7pTJZlebeuwcb/NjzsEO6wgqs2OtVUPE=
 github.com/coreos/ignition v0.28.0/go.mod h1:WJQapxzEn9DE0ryxsGvm8QnBajm/XsS/PkrDqSpz+bA=
+github.com/coreos/ignition v0.35.0 h1:UFodoYq1mOPrbEjtxIsZbThcDyQwAI1owczRDqWmKkQ=
 github.com/coreos/ignition/v2 v2.0.0 h1:2nIU6rQIh2bCSF0PNJKuNNa23L13G031CoxbI4GFojc=
 github.com/coreos/ignition/v2 v2.0.0/go.mod h1:EJP9Gk/u21BPwWa5nT6yYbm5mO0u8JQAAzFqaxgH7Fg=
 github.com/coreos/ignition/v2 v2.1.1 h1:siNZchKAWoLeV708X4QWG9chTYhssE93HBKkZx+JJO8=

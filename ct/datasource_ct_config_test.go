@@ -194,6 +194,7 @@ const snippetsExpected = `{
 const fedoraCoreOSResource = `
 data "ct_config" "fedora-coreos" {
   pretty_print = true
+  strict = true
   content = <<EOT
 ---
 variant: fcos
@@ -235,6 +236,69 @@ const fedoraCoreOSExpected = `{
   "systemd": {}
 }`
 
+const fedoraCoreOSWithSnippets = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.0.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSWithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "source": null,
+        "verification": {}
+      }
+    },
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
 const invalidResource = `
 data "ct_config" "container-linux-strict" {
   content = "foo"
@@ -269,6 +333,12 @@ func TestRender(t *testing.T) {
 				Config: fedoraCoreOSResource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", fedoraCoreOSExpected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSWithSnippets,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSWithSnippetsExpected),
 				),
 			},
 		},

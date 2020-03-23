@@ -8,6 +8,10 @@ resource "local_file" "fedora-coreos-ign" {
 data "ct_config" "fedora-coreos-config" {
   content      = data.template_file.fedora-coreos-worker.rendered
   pretty_print = true
+
+  snippets = [
+    file("${path.module}/content/fcc-snippet.yaml"),
+  ]
 }
 
 # Content (e.g. possibly templated)

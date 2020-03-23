@@ -5,7 +5,20 @@
 Define a Container Linux Config (CLC) or Fedora CoreOS Config (FCC) in version control.
 
 ```yaml
-# worker.yaml Container Linux Config
+# Container Linux Config
+---
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-key foo
+```
+
+```yaml
+# Fedora CoreOS Config
+---
+variant: fcos
+version: 1.0.0
 passwd:
   users:
     - name: core
@@ -16,22 +29,25 @@ passwd:
 Render the config with Terraform for machine consumption.
 
 ```hcl
+# Define a data source
 data "ct_config" "worker" {
   content      = file("worker.yaml")
   pretty_print = false
   strict       = true
+  snippets     = []
 }
 
+# Usage: Render the config as Ignition
 resource "aws_instance" "worker" {
   user_data = data.ct_config.worker.rendered
 }
 ```
 
-See the [Container Linux](example/container-linux.tf) or [Fedora CoreOS](example/fedora-coreos.tf) examples.
+See the [Container Linux](examples/container-linux.tf) or [Fedora CoreOS](examples/fedora-coreos.tf) examples.
 
 ## Requirements
 
-* Terraform v0.11+ [installed](https://www.terraform.io/downloads.html)
+* Terraform v0.12+ [installed](https://www.terraform.io/downloads.html)
 
 ### Ignition Outputs
 
