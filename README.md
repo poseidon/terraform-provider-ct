@@ -41,7 +41,7 @@ Fedora CoreOS Config's contain a `version` that is associated with an Ignition f
 
 | terraform-provider-ct | Ignition (for CLCs) | Ignition (for FCC) |
 |-----------------------|---------------------|--------------------|
-| 0.4.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 | 
+| 0.4.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
 | 0.3.x                 | Renders 2.2.0       | NA                 |
 | 0.2.x                 | Renders 2.0.0       | NA                 |
 

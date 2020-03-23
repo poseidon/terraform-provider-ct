@@ -93,10 +93,11 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
 func fccToIgnition(data []byte, pretty, strict bool) ([]byte, error) {
-	return fcct.Translate(data, common.TranslateOptions{
+	ign, _, err := fcct.Translate(data, common.TranslateOptions{
 		Pretty: pretty,
 		Strict: strict,
 	})
+	return ign, err
 }
 
 // Translate Container Linux Config as Ignition JSON.

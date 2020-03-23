@@ -4,6 +4,9 @@ Notable changes between releases.
 
 ## Latest
 
+* Migrate to the Terraform Plugin SDK ([#56](https://github.com/poseidon/terraform-provider-ct/pull/56))
+* Upgrade fcct from v0.1.0 to v0.4.0
+
 ## v0.4.0
 
 * Support Fedora CoreOS Config `content` ([#52](https://github.com/poseidon/terraform-provider-ct/pull/52))
