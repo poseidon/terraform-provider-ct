@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.)
 
-package v1_0
+package v1_1_exp
 
 import (
 	"reflect"
 
-	base_0_1 "github.com/coreos/fcct/base/v0_1"
+	base_0_2 "github.com/coreos/fcct/base/v0_2_exp"
 	"github.com/coreos/fcct/config/common"
 	fcos_0_1 "github.com/coreos/fcct/distro/fcos/v0_1"
 	"github.com/coreos/fcct/translate"
 
-	"github.com/coreos/ignition/v2/config/v3_0/types"
+	"github.com/coreos/ignition/v2/config/v3_1_experimental/types"
 	ignvalidate "github.com/coreos/ignition/v2/config/validate"
 	"github.com/coreos/vcontext/path"
 	"github.com/coreos/vcontext/report"
@@ -31,17 +31,17 @@ import (
 
 type Config struct {
 	common.Common   `yaml:",inline"`
-	base_0_1.Config `yaml:",inline"`
+	base_0_2.Config `yaml:",inline"`
 	fcos_0_1.Fcos   `yaml:",inline"`
 }
 
 func (c Config) Translate() (types.Config, translate.TranslationSet, error) {
-	cfg, baseTranslations, err := c.Config.ToIgn3_0()
+	cfg, baseTranslations, err := c.Config.ToIgn3_1()
 	if err != nil {
 		return types.Config{}, translate.TranslationSet{}, err
 	}
 
-	finalcfg, distroTranslations, err := c.Fcos.ToIgn3_0(cfg)
+	finalcfg, distroTranslations, err := c.Fcos.ToIgn3_1(cfg)
 	if err != nil {
 		return types.Config{}, translate.TranslationSet{}, err
 	}

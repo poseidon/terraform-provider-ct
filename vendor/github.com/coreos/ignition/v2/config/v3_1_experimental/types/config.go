@@ -1,4 +1,4 @@
-// Copyright 2017 CoreOS, Inc.
+// Copyright 2015 CoreOS, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,17 +15,13 @@
 package types
 
 import (
-	"github.com/coreos/ignition/v2/config/shared/errors"
-
-	"github.com/coreos/vcontext/path"
-	"github.com/coreos/vcontext/report"
+	"github.com/coreos/go-semver/semver"
 )
 
-func (d Directory) Validate(c path.ContextPath) (r report.Report) {
-	r.Merge(d.Node.Validate(c))
-	r.AddOnError(c.Append("mode"), validateMode(d.Mode))
-	if d.Mode == nil {
-		r.AddOnWarn(c.Append("mode"), errors.ErrDirectoryPermissionsUnset)
+var (
+	MaxVersion = semver.Version{
+		Major:      3,
+		Minor:      1,
+		PreRelease: "experimental",
 	}
-	return
-}
+)
