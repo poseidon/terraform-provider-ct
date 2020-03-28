@@ -2,7 +2,7 @@
 
 `terraform-provider-ct` allows Terraform to validate a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) or [Fedora CoreOS Config](https://github.com/coreos/fcct/blob/master/docs/configuration-v1_0.md) and render it as [Ignition](https://github.com/coreos/ignition) for machine consumption.
 
-Define a Container Linux Config (CLC) or Fedora CoreOS Config (FCC) in version control.
+Define a Container Linux Config (CLC) or Fedora CoreOS Config (FCC).
 
 ```yaml
 # Container Linux Config
@@ -57,6 +57,7 @@ Fedora CoreOS Config's contain a `version` that is associated with an Ignition f
 
 | terraform-provider-ct | Ignition (for CLCs) | Ignition (for FCC) |
 |-----------------------|---------------------|--------------------|
+| 0.5.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
 | 0.4.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
 | 0.3.x                 | Renders 2.2.0       | NA                 |
 | 0.2.x                 | Renders 2.0.0       | NA                 |
@@ -66,7 +67,7 @@ Fedora CoreOS Config's contain a `version` that is associated with an Ignition f
 Add the `terraform-provider-ct` plugin binary for your system to the Terraform 3rd-party [plugin directory](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) `~/.terraform.d/plugins`.
 
 ```sh
-VERSION=v0.4.0
+VERSION=v0.5.0
 wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
@@ -81,7 +82,7 @@ $ tree ~/.terraform.d/
     ├── terraform-provider-ct_v0.3.0
     ├── terraform-provider-ct_v0.3.1
     ├── terraform-provider-ct_v0.3.2
-    └── terraform-provider-ct_v0.4.0
+    └── terraform-provider-ct_v0.5.0
 ```
 
 ## Usage
@@ -90,7 +91,7 @@ Configure the ct provider in a `providers.tf` file.
 
 ```hcl
 provider "ct" {
-  version = "0.4.0"
+  version = "0.5.0"
 }
 ```
 
@@ -100,12 +101,12 @@ Run `terraform init` to ensure plugin version requirements are met.
 $ terraform init
 ```
 
-Declare a `ct_config` resource in Terraform. Set the `content` to the contents of a Container Linux Config or Fedora CoreOS Config that should be validated and rendered as Ignition.
+Declare a `ct_config` resource in Terraform. Set the `content` to the contents of a Container Linux Config (CLC) or Fedora CoreOS Config (FCC) that should be validated and rendered as Ignition.
 
 ```hcl
 data "ct_config" "worker" {
   content      = file("worker.yaml")
-  platform     = "ec2"
+  strict       = true
   pretty_print = false
 
   snippets = [
@@ -119,7 +120,7 @@ resource "aws_instance" "worker" {
 }
 ```
 
-For **Container Linux only**, use the `snippets` field to append a list of Container Linux Config snippets and use `platform` if [platform-specific](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) susbstitution is desired.
+Use the `snippets` field to append a list of Container Linux Config (CLC) or Fedora CoreOS Config (FCC) snippets. Use `platform` if [platform-specific](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) susbstitution is desired (Container Linux only).
 
 ## Development
 

@@ -4,6 +4,8 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.5.0
+
 * Add support for Fedora CoreOS `snippets` ([#58](https://github.com/poseidon/terraform-provider-ct/pull/58))
 * Migrate to the Terraform Plugin SDK ([#56](https://github.com/poseidon/terraform-provider-ct/pull/56))
 * Upgrade fcct from v0.1.0 to v0.4.0 ([#57](https://github.com/poseidon/terraform-provider-ct/pull/57))
