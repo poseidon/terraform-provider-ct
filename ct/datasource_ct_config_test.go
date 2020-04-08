@@ -50,7 +50,7 @@ const prettyExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "2.2.0"
+    "version": "2.3.0"
   },
   "networkd": {},
   "passwd": {},
@@ -115,7 +115,7 @@ const ec2Expected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "2.2.0"
+    "version": "2.3.0"
   },
   "networkd": {},
   "passwd": {},
@@ -166,7 +166,7 @@ const snippetsExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "2.2.0"
+    "version": "2.3.0"
   },
   "networkd": {},
   "passwd": {},
@@ -324,7 +324,7 @@ const emptySnippetExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "2.2.0"
+    "version": "2.3.0"
   },
   "networkd": {},
   "passwd": {},

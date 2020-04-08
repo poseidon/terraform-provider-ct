@@ -51,12 +51,13 @@ See the [Container Linux](examples/container-linux.tf) or [Fedora CoreOS](exampl
 
 ### Ignition Outputs
 
-Container Linux Configs are coupled with the render tool. For example, all CLCs are rendered in Ignition v2.2.0 format. A future `terraform-provider-ct` release would be needed to bump that version.
+Container Linux Configs are coupled with the render tool. For example, all CLCs are rendered in Ignition v2.3.0 format. A future `terraform-provider-ct` release would be needed to bump that version.
 
 Fedora CoreOS Config's contain a `version` that is associated with an Ignition format verison. For example, FCC's with `version: 1.0.0` produce Ignition `3.0.0`. A future `terraform-provider-ct` release would be needed to add support for newer versions, but FCCs could continue specifying `1.0.0` indefintely.
 
 | terraform-provider-ct | Ignition (for CLCs) | Ignition (for FCC) |
 |-----------------------|---------------------|--------------------|
+| 0.6.x                 | Renders 2.3.0       | FCC 1.0.0 -> Ignition 3.0.0 |
 | 0.5.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
 | 0.4.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
 | 0.3.x                 | Renders 2.2.0       | NA                 |

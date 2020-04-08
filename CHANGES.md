@@ -4,6 +4,8 @@ Notable changes between releases.
 
 ## Latest
 
+* Render Container Linux Config `content` to Ignition v2.3 format ([#60](https://github.com/poseidon/terraform-provider-ct/pull/60))
+
 ## v0.5.1
 
 * Allow empty string snippets ([#61](https://github.com/poseidon/terraform-provider-ct/pull/61))

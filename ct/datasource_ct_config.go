@@ -12,8 +12,8 @@ import (
 	fcct "github.com/coreos/fcct/config"
 	"github.com/coreos/fcct/config/common"
 
-	ignition "github.com/coreos/ignition/config/v2_2"
-	ignitionTypes "github.com/coreos/ignition/config/v2_2/types"
+	ignition "github.com/coreos/ignition/config/v2_3"
+	ignitionTypes "github.com/coreos/ignition/config/v2_3/types"
 	ignitionV2 "github.com/coreos/ignition/v2/config/v3_0"
 )
 
