@@ -25,7 +25,7 @@ import (
 	"github.com/coreos/container-linux-config-transpiler/config/astyaml"
 	"github.com/coreos/container-linux-config-transpiler/internal/util"
 
-	ignTypes "github.com/coreos/ignition/config/v2_2/types"
+	ignTypes "github.com/coreos/ignition/config/v2_3/types"
 	"github.com/coreos/ignition/config/validate/astnode"
 	"github.com/coreos/ignition/config/validate/report"
 	"github.com/vincent-petithory/dataurl"
@@ -35,8 +35,9 @@ var (
 	DefaultFileMode = 0644
 	DefaultDirMode  = 0755
 
-	WarningUnsetFileMode = fmt.Errorf("mode unspecified for file, defaulting to %#o", DefaultFileMode)
-	WarningUnsetDirMode  = fmt.Errorf("mode unspecified for directory, defaulting to %#o", DefaultDirMode)
+	WarningUnsetFileMode        = fmt.Errorf("mode unspecified for file, defaulting to %#o", DefaultFileMode)
+	InfoUnsetFileModeWithAppend = fmt.Errorf("mode unspecified for file, defaulting to %#o if the file does not exist", DefaultFileMode)
+	WarningUnsetDirMode         = fmt.Errorf("mode unspecified for directory, defaulting to %#o", DefaultDirMode)
 
 	ErrTooManyFileSources = errors.New("only one of the following can be set: local, inline, remote.url")
 )
@@ -95,7 +96,11 @@ type Link struct {
 
 func (f File) ValidateMode() report.Report {
 	if f.Mode == nil {
-		return report.ReportFromError(WarningUnsetFileMode, report.EntryWarning)
+		if f.Append {
+			return report.ReportFromError(InfoUnsetFileModeWithAppend, report.EntryInfo)
+		} else {
+			return report.ReportFromError(WarningUnsetFileMode, report.EntryWarning)
+		}
 	}
 	return report.Report{}
 }
@@ -131,6 +136,9 @@ func init() {
 		for i, file := range in.Storage.Files {
 			if file.Mode == nil {
 				file.Mode = util.IntToPtr(DefaultFileMode)
+			}
+			if file.Filesystem == "" {
+				file.Filesystem = "root"
 			}
 			file_node, _ := getNodeChild(files_node, i)
 			newFile := ignTypes.File{
@@ -246,6 +254,9 @@ func init() {
 			if dir.Mode == nil {
 				dir.Mode = util.IntToPtr(DefaultDirMode)
 			}
+			if dir.Filesystem == "" {
+				dir.Filesystem = "root"
+			}
 			newDir := ignTypes.Directory{
 				Node: ignTypes.Node{
 					Filesystem: dir.Filesystem,
@@ -271,6 +282,9 @@ func init() {
 			out.Storage.Directories = append(out.Storage.Directories, newDir)
 		}
 		for _, link := range in.Storage.Links {
+			if link.Filesystem == "" {
+				link.Filesystem = "root"
+			}
 			newLink := ignTypes.Link{
 				Node: ignTypes.Node{
 					Filesystem: link.Filesystem,

@@ -1,4 +1,4 @@
-// Copyright 2019 Red Hat, Inc.
+// Copyright 2015 CoreOS, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,49 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package v3_1_experimental
+package v2_3
 
 import (
-	"reflect"
+	"github.com/coreos/ignition/config/shared/errors"
+	"github.com/coreos/ignition/config/v2_2"
+	"github.com/coreos/ignition/config/v2_3/types"
+	"github.com/coreos/ignition/config/validate"
+	"github.com/coreos/ignition/config/validate/report"
 
-	"github.com/coreos/ignition/v2/config/merge"
-	"github.com/coreos/ignition/v2/config/shared/errors"
-	"github.com/coreos/ignition/v2/config/util"
-	"github.com/coreos/ignition/v2/config/v3_1_experimental/types"
-	"github.com/coreos/ignition/v2/config/validate"
-
+	json "github.com/ajeddeloh/go-json"
 	"github.com/coreos/go-semver/semver"
-	"github.com/coreos/vcontext/report"
 )
-
-func Merge(parent, child types.Config) types.Config {
-	vParent := reflect.ValueOf(parent)
-	vChild := reflect.ValueOf(child)
-
-	vRes := merge.MergeStruct(vParent, vChild)
-	res := vRes.Interface().(types.Config)
-	return res
-}
 
 // Parse parses the raw config into a types.Config struct and generates a report of any
 // errors, warnings, info, and deprecations it encountered
 func Parse(rawConfig []byte) (types.Config, report.Report, error) {
 	if isEmpty(rawConfig) {
 		return types.Config{}, report.Report{}, errors.ErrEmpty
+	} else if isCloudConfig(rawConfig) {
+		return types.Config{}, report.Report{}, errors.ErrCloudConfig
+	} else if isScript(rawConfig) {
+		return types.Config{}, report.Report{}, errors.ErrScript
 	}
 
+	var err error
 	var config types.Config
-	if rpt, err := util.HandleParseErrors(rawConfig, &config); err != nil {
-		return types.Config{}, rpt, err
+
+	err = json.Unmarshal(rawConfig, &config)
+
+	version, semverErr := semver.NewVersion(config.Ignition.Version)
+
+	if err != nil || semverErr != nil || version.LessThan(types.MaxVersion) {
+		// We can fail unmarshaling if it's an older config. Attempt to parse
+		// it as such.
+		config, rpt, err := v2_2.Parse(rawConfig)
+		if err != nil {
+			return types.Config{}, rpt, err
+		}
+		return Translate(config), rpt, err
 	}
 
-	version, err := semver.NewVersion(config.Ignition.Version)
-
-	if err != nil || *version != types.MaxVersion {
+	if *version != types.MaxVersion {
 		return types.Config{}, report.Report{}, errors.ErrUnknownVersion
 	}
 
-	rpt := validate.ValidateWithContext(config, rawConfig)
+	rpt := validate.ValidateConfig(rawConfig, config)
 	if rpt.IsFatal() {
 		return types.Config{}, rpt, errors.ErrInvalid
 	}

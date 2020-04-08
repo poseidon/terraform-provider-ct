@@ -18,13 +18,13 @@ import (
 	"fmt"
 
 	"github.com/alecthomas/units"
-	ignTypes "github.com/coreos/ignition/config/v2_2/types"
+	ignTypes "github.com/coreos/ignition/config/v2_3/types"
 	"github.com/coreos/ignition/config/validate/astnode"
 	"github.com/coreos/ignition/config/validate/report"
 )
 
 const (
-	BYTES_PER_SECTOR = 512
+	MEGABYTE = 1024 * 1024
 )
 
 var (
@@ -43,12 +43,12 @@ type Disk struct {
 }
 
 type Partition struct {
-	Label    string `yaml:"label"`
-	Number   int    `yaml:"number"`
-	Size     string `yaml:"size"`
-	Start    string `yaml:"start"`
-	GUID     string `yaml:"guid"`
-	TypeGUID string `yaml:"type_guid"`
+	Label    *string `yaml:"label"`
+	Number   int     `yaml:"number"`
+	Size     string  `yaml:"size"`
+	Start    string  `yaml:"start"`
+	GUID     string  `yaml:"guid"`
+	TypeGUID string  `yaml:"type_guid"`
 }
 
 func init() {
@@ -61,6 +61,7 @@ func init() {
 			}
 
 			for part_idx, partition := range disk.Partitions {
+				partition := partition // golang--
 				size, err := convertPartitionDimension(partition.Size)
 				if err != nil {
 					convertReport := report.ReportFromError(err, report.EntryError)
@@ -88,8 +89,8 @@ func init() {
 				newPart := ignTypes.Partition{
 					Label:    partition.Label,
 					Number:   partition.Number,
-					Size:     size,
-					Start:    start,
+					SizeMiB:  size,
+					StartMiB: start,
 					GUID:     partition.GUID,
 					TypeGUID: partition.TypeGUID,
 				}
@@ -102,23 +103,23 @@ func init() {
 	})
 }
 
-func convertPartitionDimension(in string) (int, error) {
+func convertPartitionDimension(in string) (*int, error) {
 	if in == "" {
-		return 0, nil
+		return nil, nil
 	}
 
 	b, err := units.ParseBase2Bytes(in)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	if b < 0 {
-		return 0, fmt.Errorf("invalid dimension (negative): %q", in)
+		return nil, fmt.Errorf("invalid dimension (negative): %q", in)
 	}
 
-	// Translate bytes into sectors
-	sectors := (b / BYTES_PER_SECTOR)
-	if b%BYTES_PER_SECTOR != 0 {
-		sectors++
+	// Translate bytes into Megabytes
+	megs := int(b / MEGABYTE)
+	if b%MEGABYTE != 0 {
+		return nil, fmt.Errorf("invalid dimension (finest granularity is 1MiB)")
 	}
-	return int(sectors), nil
+	return &megs, nil
 }

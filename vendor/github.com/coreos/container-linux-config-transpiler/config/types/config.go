@@ -15,14 +15,22 @@
 package types
 
 import (
+	"errors"
 	"net/url"
 
-	ignTypes "github.com/coreos/ignition/config/v2_2/types"
+	ignTypes "github.com/coreos/ignition/config/v2_3/types"
 	"github.com/coreos/ignition/config/validate/astnode"
 	"github.com/coreos/ignition/config/validate/report"
 )
 
+var (
+	ErrInvalidVersion = errors.New("Invalid version. Only version 0 is supported")
+)
+
 type Config struct {
+	// Version is intentionally undocumented. It is only for if we need to make a breaking
+	// change in the future.
+	Version   int        `yaml:"version"`
 	Ignition  Ignition   `yaml:"ignition"`
 	Storage   Storage    `yaml:"storage"`
 	Systemd   Systemd    `yaml:"systemd"`
@@ -54,6 +62,13 @@ type ConfigReference struct {
 type Timeouts struct {
 	HTTPResponseHeaders *int `yaml:"http_response_headers"`
 	HTTPTotal           *int `yaml:"http_total"`
+}
+
+func (c Config) ValidateVersion() report.Report {
+	if c.Version != 0 {
+		return report.ReportFromError(ErrInvalidVersion, report.EntryError)
+	}
+	return report.Report{}
 }
 
 func init() {
