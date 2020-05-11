@@ -80,8 +80,10 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	strict := d.Get("strict").(bool)
 
 	snippets := make([]string, len(snippetsIface))
-	for i := range snippetsIface {
-		snippets[i] = snippetsIface[i].(string)
+	for i, v := range snippetsIface {
+		if v != nil {
+			snippets[i] = v.(string)
+		}
 	}
 
 	// Fedora CoreOS Config
