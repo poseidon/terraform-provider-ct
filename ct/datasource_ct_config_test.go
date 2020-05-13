@@ -307,6 +307,31 @@ data "ct_config" "container-linux-strict" {
 }
 `
 
+const emptySnippet = `
+data "ct_config" "empty-snippet" {
+	content = ""
+
+	pretty_print = true
+
+	snippets = [""]
+}
+`
+
+const emptySnippetExpected = `{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {},
+  "systemd": {}
+}`
+
 func TestRender(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -339,6 +364,12 @@ func TestRender(t *testing.T) {
 				Config: fedoraCoreOSWithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSWithSnippetsExpected),
+				),
+			},
+			r.TestStep{
+				Config: emptySnippet,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.empty-snippet", "rendered", emptySnippetExpected),
 				),
 			},
 		},
