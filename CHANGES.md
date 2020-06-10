@@ -4,6 +4,10 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.5.1
+
+* Allow empty string snippets ([#61](https://github.com/poseidon/terraform-provider-ct/pull/61))
+
 ## v0.5.0
 
 * Add support for Fedora CoreOS `snippets` ([#58](https://github.com/poseidon/terraform-provider-ct/pull/58))
