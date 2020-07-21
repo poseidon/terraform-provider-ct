@@ -4,7 +4,12 @@ Notable changes between releases.
 
 ## Latest
 
-* Render Container Linux Config `content` to Ignition v2.3 format ([#60](https://github.com/poseidon/terraform-provider-ct/pull/60))
+* Add Fedora CoreOS Config v1.1.0 support ([#63](https://github.com/poseidon/terraform-provider-ct/pull/63))
+  * Accept FCC v1.1.0 and output Ignition v3.1.0
+  * Continue to support FCC v1.0.0 and output Ignition v3.0.0
+  * Support merging FCC snippets into v1.0.0 or v1.1.0 FCC content
+  * Note: Version skew among snippets and content is not supported
+* Change Container Linux Config to render Ignition v2.3.0 ([#60](https://github.com/poseidon/terraform-provider-ct/pull/60))
 
 ## v0.5.1
 

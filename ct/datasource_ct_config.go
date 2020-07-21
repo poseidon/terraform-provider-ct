@@ -14,7 +14,10 @@ import (
 
 	ignition "github.com/coreos/ignition/config/v2_3"
 	ignitionTypes "github.com/coreos/ignition/config/v2_3/types"
-	ignitionV2 "github.com/coreos/ignition/v2/config/v3_0"
+	ignition30 "github.com/coreos/ignition/v2/config/v3_0"
+	ignition30Types "github.com/coreos/ignition/v2/config/v3_0/types"
+	ignition31 "github.com/coreos/ignition/v2/config/v3_1"
+	ignition31Types "github.com/coreos/ignition/v2/config/v3_1/types"
 )
 
 func dataSourceCTConfig() *schema.Resource {
@@ -106,11 +109,53 @@ func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte,
 		return nil, err
 	}
 
-	ign, _, err := ignitionV2.Parse(ignBytes)
-	if err != nil {
-		return nil, err
+	if len(snippets) == 0 {
+		return ignBytes, nil
 	}
 
+	// merge FCC snippets into main Ignition config
+	return mergeFCCSnippets(ignBytes, pretty, strict, snippets)
+}
+
+// Manually parse main Fedora CoreOS Config's Ignition using fallback Ignition
+// versions. Then translate and parse FCC snippets as the chosen Ignition
+// version to merge.
+// version
+// Upstream might later handle: https://github.com/coreos/fcct/issues/118
+// Note: This means snippets version must match the main config version.
+func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) ([]byte, error) {
+
+	ign, _, err := ignition31.Parse(ignBytes)
+	if err == nil {
+		// FCC config v1.1.0
+		ign, err = mergeFCC11(ign, snippets, pretty, strict)
+		if err != nil {
+			return nil, fmt.Errorf("FCC v1.1.0 merge error: %v", err)
+		}
+		if pretty {
+			return json.MarshalIndent(ign, "", "  ")
+		}
+		return json.Marshal(ign)
+	}
+
+	var ign30 ignition30Types.Config
+	ign30, _, err = ignition30.Parse(ignBytes)
+	if err != nil {
+		return nil, fmt.Errorf("FCC v1.0.0 parse error: %v", err)
+	}
+	// FCC config v1.0.0
+	ign30, err = mergeFCCV10(ign30, snippets, pretty, strict)
+	if err != nil {
+		return nil, fmt.Errorf("FCC v1.0.0 merge error: %v", err)
+	}
+	if pretty {
+		return json.MarshalIndent(ign30, "", "  ")
+	}
+	return json.Marshal(ign30)
+}
+
+// merge FCC v1.1.0 snippets
+func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bool) (ignition31Types.Config, error) {
 	for _, snippet := range snippets {
 		ignextBytes, _, err := fcct.Translate([]byte(snippet), common.TranslateOptions{
 			Pretty: pretty,
@@ -119,19 +164,40 @@ func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte,
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
 			if err == fcct.ErrNoVariant {
-				return []byte{}, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
+				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
 			}
-			return nil, err
+			return ign, fmt.Errorf("snippet v1.1.0 translate error: %v", err)
 		}
-		ignext, _, err := ignitionV2.Parse(ignextBytes)
-
-		ign = ignitionV2.Merge(ign, ignext)
+		ignext, _, err := ignition31.Parse(ignextBytes)
+		if err != nil {
+			return ign, fmt.Errorf("snippet parse error: %v, expect v1.1.0", err)
+		}
+		ign = ignition31.Merge(ign, ignext)
 	}
+	return ign, nil
+}
 
-	if pretty {
-		return json.MarshalIndent(ign, "", "  ")
+// merge FCC v1.0.0 snippets
+func mergeFCCV10(ign ignition30Types.Config, snippets []string, pretty, strict bool) (ignition30Types.Config, error) {
+	for _, snippet := range snippets {
+		ignextBytes, _, err := fcct.Translate([]byte(snippet), common.TranslateOptions{
+			Pretty: pretty,
+			Strict: strict,
+		})
+		if err != nil {
+			// For FCC, require snippets be FCCs (don't fall-through to CLC)
+			if err == fcct.ErrNoVariant {
+				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
+			}
+			return ign, fmt.Errorf("snippet v1.0.0 translate error: %v", err)
+		}
+		ignext, _, err := ignition30.Parse(ignextBytes)
+		if err != nil {
+			return ign, fmt.Errorf("snippet parse error: %v, expect v1.0.0", err)
+		}
+		ign = ignition30.Merge(ign, ignext)
 	}
-	return json.Marshal(ign)
+	return ign, nil
 }
 
 // Translate Container Linux Config as Ignition JSON.

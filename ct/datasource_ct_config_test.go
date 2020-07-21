@@ -12,8 +12,8 @@ var testProviders = map[string]terraform.ResourceProvider{
 	"ct": Provider(),
 }
 
-const prettyResource = `
-data "ct_config" "example" {
+const containerLinuxResource = `
+data "ct_config" "container-linux" {
   pretty_print = true
   content = <<EOT
 ---
@@ -43,7 +43,7 @@ EOT
 }
 `
 
-const prettyExpected = `{
+const containerLinuxExpected = `{
   "ignition": {
     "config": {},
     "security": {
@@ -92,8 +92,8 @@ const prettyExpected = `{
   "systemd": {}
 }`
 
-const ec2Resource = `
-data "ct_config" "ec2" {
+const containerLinuxPlatformResource = `
+data "ct_config" "container-linux-platform" {
   pretty_print = true
 	platform = "ec2"
   content  = <<EOT
@@ -108,7 +108,7 @@ EOT
 }
 `
 
-const ec2Expected = `{
+const containerLinuxPlatformExpected = `{
   "ignition": {
     "config": {},
     "security": {
@@ -136,8 +136,8 @@ const ec2Expected = `{
   }
 }`
 
-const snippetsResource = `
-data "ct_config" "combine" {
+const containerLinuxSnippetsResource = `
+data "ct_config" "container-linux-snippets" {
 	pretty_print = true
 	content = <<EOT
 ---
@@ -159,7 +159,7 @@ EOT
 	]
 }
 `
-const snippetsExpected = `{
+const containerLinuxSnippetsExpected = `{
   "ignition": {
     "config": {},
     "security": {
@@ -191,7 +191,149 @@ const snippetsExpected = `{
   }
 }`
 
+func TestContainerLinuxConfig(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config: containerLinuxResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.container-linux", "rendered", containerLinuxExpected),
+				),
+			},
+			r.TestStep{
+				Config: containerLinuxPlatformResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.container-linux-platform", "rendered", containerLinuxPlatformExpected),
+				),
+			},
+			r.TestStep{
+				Config: containerLinuxSnippetsResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.container-linux-snippets", "rendered", containerLinuxSnippetsExpected),
+				),
+			},
+		},
+	})
+}
+
 const fedoraCoreOSResource = `
+data "ct_config" "fedora-coreos" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.1.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+}
+`
+
+const fedoraCoreOSExpected = `{
+  "ignition": {
+    "version": "3.1.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  }
+}`
+
+const fedoraCoreOSWithSnippets = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.1.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.1.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSWithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.1.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
+func TestFedoraCoreOSConfigV11(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config: fedoraCoreOSResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", fedoraCoreOSExpected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSWithSnippets,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSWithSnippetsExpected),
+				),
+			},
+		},
+	})
+}
+
+const fedoraCoreOSV10Resource = `
 data "ct_config" "fedora-coreos" {
   pretty_print = true
   strict = true
@@ -208,18 +350,8 @@ EOT
 }
 `
 
-const fedoraCoreOSExpected = `{
+const fedoraCoreOSV10Expected = `{
   "ignition": {
-    "config": {
-      "replace": {
-        "source": null,
-        "verification": {}
-      }
-    },
-    "security": {
-      "tls": {}
-    },
-    "timeouts": {},
     "version": "3.0.0"
   },
   "passwd": {
@@ -231,12 +363,10 @@ const fedoraCoreOSExpected = `{
         ]
       }
     ]
-  },
-  "storage": {},
-  "systemd": {}
+  }
 }`
 
-const fedoraCoreOSWithSnippets = `
+const fedoraCoreOSV10WithSnippets = `
 data "ct_config" "fedora-coreos-snippets" {
   pretty_print = true
   strict = true
@@ -264,7 +394,7 @@ EOT
 }
 `
 
-const fedoraCoreOSWithSnippetsExpected = `{
+const fedoraCoreOSV10WithSnippetsExpected = `{
   "ignition": {
     "config": {
       "replace": {
@@ -299,6 +429,106 @@ const fedoraCoreOSWithSnippetsExpected = `{
   }
 }`
 
+func TestFedoraCoreOSConfigV10(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config: fedoraCoreOSV10Resource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", fedoraCoreOSV10Expected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSV10WithSnippets,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV10WithSnippetsExpected),
+				),
+			},
+		},
+	})
+}
+
+const fedoraCoreOSMixSnippetBehind = `
+data "ct_config" "fedora-coreos-mix-versions" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.1.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+func TestFedoraCoreOSMix_SnippetBehind(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config:      fedoraCoreOSMixSnippetBehind,
+				ExpectError: regexp.MustCompile("^.*FCC v1.1.0 merge error: snippet parse error: unsupported config version, expect v1.1.0"),
+			},
+		},
+	})
+}
+
+const fedoraCoreOSMixSnippetAhead = `
+data "ct_config" "fedora-coreos-mix-versions" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.0.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.1.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config:      fedoraCoreOSMixSnippetAhead,
+				ExpectError: regexp.MustCompile("^.*FCC v1.0.0 merge error: snippet parse error: unsupported config version, expect v1.0.0"),
+			},
+		},
+	})
+}
+
 const invalidResource = `
 data "ct_config" "container-linux-strict" {
   content = "foo"
@@ -307,12 +537,23 @@ data "ct_config" "container-linux-strict" {
 }
 `
 
+func TestInvalidResource(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config:      invalidResource,
+				ExpectError: regexp.MustCompile("^.*An argument named \"some_invalid_field\" is not expected here"),
+			},
+		},
+	})
+}
+
+// forbidden in strict mode
 const emptySnippet = `
 data "ct_config" "empty-snippet" {
-	content = ""
-
 	pretty_print = true
-
+	content = ""
 	snippets = [""]
 }
 `
@@ -332,57 +573,15 @@ const emptySnippetExpected = `{
   "systemd": {}
 }`
 
-func TestRender(t *testing.T) {
+func TestAllowEmptySnippet(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
-				Config: prettyResource,
-				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.example", "rendered", prettyExpected),
-				),
-			},
-			r.TestStep{
-				Config: ec2Resource,
-				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.ec2", "rendered", ec2Expected),
-				),
-			},
-			r.TestStep{
-				Config: snippetsResource,
-				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.combine", "rendered", snippetsExpected),
-				),
-			},
-			r.TestStep{
-				Config: fedoraCoreOSResource,
-				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", fedoraCoreOSExpected),
-				),
-			},
-			r.TestStep{
-				Config: fedoraCoreOSWithSnippets,
-				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSWithSnippetsExpected),
-				),
-			},
 			r.TestStep{
 				Config: emptySnippet,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.empty-snippet", "rendered", emptySnippetExpected),
 				),
-			},
-		},
-	})
-}
-
-func TestRenderErrors(t *testing.T) {
-	r.UnitTest(t, r.TestCase{
-		Providers: testProviders,
-		Steps: []r.TestStep{
-			r.TestStep{
-				Config:      invalidResource,
-				ExpectError: regexp.MustCompile("^.*An argument named \"some_invalid_field\" is not expected here"),
 			},
 		},
 	})
