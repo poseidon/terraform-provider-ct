@@ -66,6 +66,8 @@ github.com/aws/aws-sdk-go/service/sts/stsiface
 github.com/bgentry/go-netrc/netrc
 # github.com/bgentry/speakeasy v0.1.0
 github.com/bgentry/speakeasy
+# github.com/clarketm/json v1.14.1
+github.com/clarketm/json
 # github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5be564a0b
 github.com/coreos/container-linux-config-transpiler/config
 github.com/coreos/container-linux-config-transpiler/config/astyaml
@@ -74,19 +76,24 @@ github.com/coreos/container-linux-config-transpiler/config/templating
 github.com/coreos/container-linux-config-transpiler/config/types
 github.com/coreos/container-linux-config-transpiler/config/types/util
 github.com/coreos/container-linux-config-transpiler/internal/util
-# github.com/coreos/fcct v0.4.0
+# github.com/coreos/fcct v0.6.0
+github.com/coreos/fcct/base
 github.com/coreos/fcct/base/v0_1
-github.com/coreos/fcct/base/v0_2_exp
+github.com/coreos/fcct/base/v0_2
+github.com/coreos/fcct/base/v0_3_exp
 github.com/coreos/fcct/config
 github.com/coreos/fcct/config/common
 github.com/coreos/fcct/config/v1_0
-github.com/coreos/fcct/config/v1_1_exp
+github.com/coreos/fcct/config/v1_1
+github.com/coreos/fcct/config/v1_2_exp
 github.com/coreos/fcct/distro/fcos/v0_1
 github.com/coreos/fcct/translate
 # github.com/coreos/go-semver v0.3.0
 github.com/coreos/go-semver/semver
 # github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e
 github.com/coreos/go-systemd/unit
+# github.com/coreos/go-systemd/v22 v22.0.0
+github.com/coreos/go-systemd/v22/unit
 # github.com/coreos/ignition v0.35.0
 github.com/coreos/ignition/config/shared/errors
 github.com/coreos/ignition/config/shared/validations
@@ -106,14 +113,16 @@ github.com/coreos/ignition/config/validate
 github.com/coreos/ignition/config/validate/astjson
 github.com/coreos/ignition/config/validate/astnode
 github.com/coreos/ignition/config/validate/report
-# github.com/coreos/ignition/v2 v2.1.1
+# github.com/coreos/ignition/v2 v2.3.0
 github.com/coreos/ignition/v2/config/merge
 github.com/coreos/ignition/v2/config/shared/errors
 github.com/coreos/ignition/v2/config/shared/validations
 github.com/coreos/ignition/v2/config/util
 github.com/coreos/ignition/v2/config/v3_0
 github.com/coreos/ignition/v2/config/v3_0/types
-github.com/coreos/ignition/v2/config/v3_1_experimental/types
+github.com/coreos/ignition/v2/config/v3_1
+github.com/coreos/ignition/v2/config/v3_1/types
+github.com/coreos/ignition/v2/config/v3_2_experimental/types
 github.com/coreos/ignition/v2/config/validate
 # github.com/coreos/vcontext v0.0.0-20191017033345-260217907eb5
 github.com/coreos/vcontext/json
