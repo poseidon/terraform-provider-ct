@@ -75,7 +75,7 @@ _output/%/terraform-provider-ct:
 	$(GOARGS) go build -o $@ github.com/poseidon/terraform-provider-ct
 
 release-sign:
-	sha256sum _output/*.zip > _output/terraform-provider-ct_$(SEMVER)_SHA256SUMS
+	cd _output; sha256sum *.zip > terraform-provider-ct_$(SEMVER)_SHA256SUMS
 	gpg2 --armor --detach-sign _output/terraform-provider-ct-$(VERSION)-linux-amd64.tar.gz
 	gpg2 --armor --detach-sign _output/terraform-provider-ct-$(VERSION)-darwin-amd64.tar.gz
 	gpg2 --armor --detach-sign _output/terraform-provider-ct-$(VERSION)-windows-amd64.tar.gz

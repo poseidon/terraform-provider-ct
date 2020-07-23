@@ -4,6 +4,8 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.6.0
+
 * Add Fedora CoreOS Config v1.1.0 support ([#63](https://github.com/poseidon/terraform-provider-ct/pull/63))
   * Accept FCC v1.1.0 and output Ignition v3.1.0
   * Continue to support FCC v1.0.0 and output Ignition v3.0.0

@@ -8,7 +8,7 @@ Configure the config transpiler provider (e.g. `providers.tf`).
 
 ```hcl
 provider "ct" {
-  version = "0.5.0"
+  version = "0.6.0"
 }
 ```
 
@@ -88,7 +88,7 @@ Notes:
 Add the `terraform-provider-ct` plugin binary for your system to the Terraform 3rd-party [plugin directory](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) `~/.terraform.d/plugins`.
 
 ```sh
-VERSION=v0.5.0
+VERSION=v0.6.0
 wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz
 mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
@@ -100,7 +100,7 @@ Terraform plugin binary names are versioned to allow for migrations of managed i
 $ tree ~/.terraform.d/
 /home/user/.terraform.d/
 └── plugins
-    ├── terraform-provider-ct_v0.5.0
+    ├── terraform-provider-ct_v0.6.0
     └── terraform-provider-ct_v0.5.1
 ```
 

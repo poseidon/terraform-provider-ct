@@ -8,7 +8,7 @@ Configure the config transpiler provider (e.g. `providers.tf`).
 
 ```hcl
 provider "ct" {
-  version = "0.5.0"
+  version = "0.6.0"
 }
 ```
 
