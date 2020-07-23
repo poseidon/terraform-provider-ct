@@ -1,6 +1,16 @@
 # terraform-provider-ct
 
-`terraform-provider-ct` allows Terraform to validate a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) or [Fedora CoreOS Config](https://github.com/coreos/fcct/blob/master/docs/configuration-v1_1.md) and render it as [Ignition](https://github.com/coreos/ignition) for machine consumption.
+`terraform-provider-ct` allows Terraform to validate a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) or [Fedora CoreOS Config](https://github.com/coreos/fcct/blob/master/docs/configuration-v1_1.md) and transpile it as [Ignition](https://github.com/coreos/ignition) for machine consumption.
+
+## Usage
+
+Configure the config transpiler provider (e.g. `providers.tf`).
+
+```hcl
+provider "ct" {
+  version = "0.5.0"
+}
+```
 
 Define a Container Linux Config (CLC) or Fedora CoreOS Config (FCC).
 
@@ -26,24 +36,30 @@ passwd:
         - ssh-key foo
 ```
 
-Render the config with Terraform for machine consumption.
+Define a `ct_config` data source and render for machine consumption.
 
 ```hcl
-# Define a data source
 data "ct_config" "worker" {
   content      = file("worker.yaml")
-  pretty_print = false
   strict       = true
-  snippets     = []
+  pretty_print = false
+
+  snippets = [
+    file("units.yaml"),
+    file("storage.yaml"),
+  ]
 }
 
-# Usage: Render the config as Ignition
 resource "aws_instance" "worker" {
   user_data = data.ct_config.worker.rendered
 }
 ```
 
-See the [Container Linux](examples/container-linux.tf) or [Fedora CoreOS](examples/fedora-coreos.tf) examples.
+Run `terraform init` to ensure plugin version requirements are met.
+
+```
+$ terraform init
+```
 
 ## Requirements
 
@@ -87,43 +103,6 @@ $ tree ~/.terraform.d/
     ├── terraform-provider-ct_v0.5.0
     └── terraform-provider-ct_v0.5.1
 ```
-
-## Usage
-
-Configure the ct provider in a `providers.tf` file.
-
-```hcl
-provider "ct" {
-  version = "0.5.0"
-}
-```
-
-Run `terraform init` to ensure plugin version requirements are met.
-
-```
-$ terraform init
-```
-
-Declare a `ct_config` resource in Terraform. Set the `content` to the contents of a Container Linux Config (CLC) or Fedora CoreOS Config (FCC) that should be validated and rendered as Ignition.
-
-```hcl
-data "ct_config" "worker" {
-  content      = file("worker.yaml")
-  strict       = true
-  pretty_print = false
-
-  snippets = [
-    file("units.yaml"),
-    file("storage.yaml"),
-  ]
-}
-
-resource "aws_instance" "worker" {
-  user_data = data.ct_config.worker.rendered
-}
-```
-
-Use the `snippets` field to append a list of Container Linux Config (CLC) or Fedora CoreOS Config (FCC) snippets. Use `platform` if [platform-specific](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) susbstitution is desired (Container Linux only).
 
 ## Development
 
