@@ -48,9 +48,11 @@ clean:
 release: \
 	clean \
 	_output/plugin-linux-amd64.tar.gz \
+	_output/plugin-linux-arm64.tar.gz \
 	_output/plugin-darwin-amd64.tar.gz \
 	_output/plugin-windows-amd64.tar.gz \
 	_output/plugin-linux_amd64.zip \
+	_output/plugin-linux_arm64.zip \
 	_output/plugin-darwin_amd64.zip \
 	_output/plugin-windows_amd64.zip
 
@@ -69,6 +71,7 @@ _output/plugin-%.zip: _output/%/terraform-provider-ct
 	@zip -j $(DEST).zip $(DEST)/terraform-provider-ct_$(VERSION)
 
 _output/linux-amd64/terraform-provider-ct: GOARGS = GOOS=linux GOARCH=amd64
+_output/linux-arm64/terraform-provider-ct: GOARGS = GOOS=linux GOARCH=arm64
 _output/darwin-amd64/terraform-provider-ct: GOARGS = GOOS=darwin GOARCH=amd64
 _output/windows-amd64/terraform-provider-ct: GOARGS = GOOS=windows GOARCH=amd64
 _output/%/terraform-provider-ct:
@@ -77,6 +80,7 @@ _output/%/terraform-provider-ct:
 release-sign:
 	cd _output; sha256sum *.zip > terraform-provider-ct_$(SEMVER)_SHA256SUMS
 	gpg2 --armor --detach-sign _output/terraform-provider-ct-$(VERSION)-linux-amd64.tar.gz
+	gpg2 --armor --detach-sign _output/terraform-provider-ct-$(VERSION)-linux-arm64.tar.gz
 	gpg2 --armor --detach-sign _output/terraform-provider-ct-$(VERSION)-darwin-amd64.tar.gz
 	gpg2 --armor --detach-sign _output/terraform-provider-ct-$(VERSION)-windows-amd64.tar.gz
 	gpg2 --detach-sign _output/terraform-provider-ct_$(SEMVER)_SHA256SUMS
@@ -84,6 +88,7 @@ release-sign:
 release-verify: NAME=_output/terraform-provider-ct
 release-verify:
 	gpg2 --verify $(NAME)-$(VERSION)-linux-amd64.tar.gz.asc $(NAME)-$(VERSION)-linux-amd64.tar.gz
+	gpg2 --verify $(NAME)-$(VERSION)-linux-arm64.tar.gz.asc $(NAME)-$(VERSION)-linux-arm64.tar.gz
 	gpg2 --verify $(NAME)-$(VERSION)-darwin-amd64.tar.gz.asc $(NAME)-$(VERSION)-darwin-amd64.tar.gz
 	gpg2 --verify $(NAME)-$(VERSION)-windows-amd64.tar.gz.asc $(NAME)-$(VERSION)-windows-amd64.tar.gz
 	gpg2 --verify $(NAME)_$(SEMVER)_SHA256SUMS.sig $(NAME)_$(SEMVER)_SHA256SUMS
