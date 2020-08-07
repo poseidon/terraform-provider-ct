@@ -4,6 +4,11 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.6.1
+
+* Fix zip archive artifacts for Darwin and Windows ([#67](https://github.com/poseidon/terraform-provider-ct/pull/67))
+* Add Linux ARM64 release artifacts ([#66](https://github.com/poseidon/terraform-provider-ct/pull/66))
+
 ## v0.6.0
 
 * Add Fedora CoreOS Config v1.1.0 support ([#63](https://github.com/poseidon/terraform-provider-ct/pull/63))
@@ -12,6 +17,7 @@ Notable changes between releases.
   * Support merging FCC snippets into v1.0.0 or v1.1.0 FCC content
   * Note: Version skew among snippets and content is not supported
 * Change Container Linux Config to render Ignition v2.3.0 ([#60](https://github.com/poseidon/terraform-provider-ct/pull/60))
+* Add zip archive format with signed checksum
 
 ## v0.5.1
 
