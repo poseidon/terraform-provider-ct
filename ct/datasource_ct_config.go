@@ -35,6 +35,11 @@ func dataSourceCTConfig() *schema.Resource {
 				Default:  "",
 				ForceNew: true,
 			},
+			"files_dir": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+			},
 			"snippets": &schema.Schema{
 				Type: schema.TypeList,
 				Elem: &schema.Schema{
@@ -78,6 +83,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	// unchecked assertions seem to be the norm in Terraform :S
 	content := d.Get("content").(string)
 	platform := d.Get("platform").(string)
+	filesDir := d.Get("files_dir").(string)
 	snippetsIface := d.Get("snippets").([]interface{})
 	pretty := d.Get("pretty_print").(bool)
 	strict := d.Get("strict").(bool)
@@ -90,7 +96,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	}
 
 	// Fedora CoreOS Config
-	ign, err := fccToIgnition([]byte(content), pretty, strict, snippets)
+	ign, err := fccToIgnition([]byte(content), filesDir, pretty, strict, snippets)
 	if err == fcct.ErrNoVariant {
 		// consider as Container Linux Config
 		ign, err = renderCLC([]byte(content), platform, pretty, strict, snippets)
@@ -99,10 +105,13 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 }
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
-func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
+func fccToIgnition(data []byte, filesDir string, pretty, strict bool, snippets []string) ([]byte, error) {
 	ignBytes, _, err := fcct.Translate(data, common.TranslateOptions{
 		Pretty: pretty,
 		Strict: strict,
+		BaseOptions: common.BaseOptions{
+			FilesDir: filesDir,
+		},
 	})
 	// ErrNoVariant indicates data is a CLC, not an FCC
 	if err != nil {
