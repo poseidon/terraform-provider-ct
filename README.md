@@ -7,8 +7,15 @@
 Configure the config transpiler provider (e.g. `providers.tf`).
 
 ```hcl
-provider "ct" {
-  version = "0.6.0"
+provider "ct" {}
+
+terraform {
+  required_providers {
+    ct = {
+      source  = "poseidon/ct"
+      version = "0.6.1"
+    }
+  }
 }
 ```
 
@@ -28,7 +35,7 @@ passwd:
 # Fedora CoreOS Config
 ---
 variant: fcos
-version: 1.0.0
+version: 1.1.0
 passwd:
   users:
     - name: core
@@ -83,9 +90,28 @@ Notes:
 
 * Fedora CoreOS Config `snippets` must match the version set in the content. Version skew among snippets is **not** supported.
 
-## Install
+## Development
 
-Add the `terraform-provider-ct` plugin binary for your system to the Terraform 3rd-party [plugin directory](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) `~/.terraform.d/plugins`.
+### Binary
+
+To develop the provider plugin locally, build an executable with Go v1.12+.
+
+```
+make
+```
+
+### Vendor
+
+Add or update dependencies in `go.mod` and vendor.
+
+```
+make update
+make vendor
+```
+
+## Legacy Install
+
+For Terraform v0.12, add the `terraform-provider-ct` plugin binary for your system to the Terraform 3rd-party [plugin directory](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) `~/.terraform.d/plugins`.
 
 ```sh
 VERSION=v0.6.0
@@ -104,21 +130,3 @@ $ tree ~/.terraform.d/
     └── terraform-provider-ct_v0.5.1
 ```
 
-## Development
-
-### Binary
-
-To develop the provider plugin locally, build an executable with Go v1.11+.
-
-```
-make
-```
-
-### Vendor
-
-Add or update dependencies in `go.mod` and vendor.
-
-```
-make update
-make vendor
-```

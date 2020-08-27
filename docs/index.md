@@ -7,8 +7,15 @@
 Configure the config transpiler provider (e.g. `providers.tf`).
 
 ```hcl
-provider "ct" {
-  version = "0.6.0"
+provider "ct" {}
+
+terraform {
+  required_providers {
+    ct = {
+      source  = "poseidon/ct"
+      version = "0.6.1"
+    }
+  }
 }
 ```
 
@@ -28,7 +35,7 @@ passwd:
 # Fedora CoreOS Config
 ---
 variant: fcos
-version: 1.0.0
+version: 1.1.0
 passwd:
   users:
     - name: core
