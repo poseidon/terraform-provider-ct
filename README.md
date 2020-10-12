@@ -1,4 +1,4 @@
-# terraform-provider-ct
+# terraform-provider-ct [![Build Status](https://github.com/poseidon/terraform-provider-ct/workflows/test/badge.svg)](https://github.com/poseidon/terraform-provider-ct/actions?query=workflow%3Atest+branch%3Amaster)
 
 `terraform-provider-ct` allows Terraform to validate a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) or [Fedora CoreOS Config](https://github.com/coreos/fcct/blob/master/docs/configuration-v1_1.md) and transpile it as [Ignition](https://github.com/coreos/ignition) for machine consumption.
 
