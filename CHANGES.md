@@ -4,6 +4,11 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.7.0
+
+* Add Fedora CoreOS Config v1.2.0 support ([#71](https://github.com/poseidon/terraform-provider-ct/pull/71))
+  * Accept FCC v1.2.0 and output Ignition v3.2.0
+
 ## v0.6.1
 
 * Fix zip archive artifacts for Darwin and Windows ([#67](https://github.com/poseidon/terraform-provider-ct/pull/67))
