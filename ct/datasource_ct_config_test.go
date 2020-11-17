@@ -191,6 +191,31 @@ const containerLinuxSnippetsExpected = `{
   }
 }`
 
+const containerLinuxSnippetsPrettyFalseResource = `
+data "ct_config" "container-linux-snippets" {
+	pretty_print = false
+	content = <<EOT
+---
+storage:
+  filesystems:
+    - name: "rootfs"
+      mount:
+        device: "/dev/disk/by-label/ROOT"
+        format: "ext4"
+EOT
+	snippets = [
+<<EOT
+---
+systemd:
+  units:
+    - name: docker.service
+      enable: true
+EOT
+	]
+}
+`
+const containerLinuxSnippetsPrettyFalseExpected = `{"ignition":{"config":{},"security":{"tls":{}},"timeouts":{},"version":"2.3.0"},"networkd":{},"passwd":{},"storage":{"filesystems":[{"mount":{"device":"/dev/disk/by-label/ROOT","format":"ext4"},"name":"rootfs"}]},"systemd":{"units":[{"enable":true,"name":"docker.service"}]}}`
+
 func TestContainerLinuxConfig(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -211,6 +236,12 @@ func TestContainerLinuxConfig(t *testing.T) {
 				Config: containerLinuxSnippetsResource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.container-linux-snippets", "rendered", containerLinuxSnippetsExpected),
+				),
+			},
+			r.TestStep{
+				Config: containerLinuxSnippetsPrettyFalseResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.container-linux-snippets", "rendered", containerLinuxSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -327,6 +358,36 @@ const fedoraCoreOSV12WithSnippetsExpected = `{
   }
 }`
 
+const fedoraCoreOSV12WithSnippetsPrettyFalse = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = false
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.2.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.2.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSV12WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.2.0"},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+
 func TestFedoraCoreOSConfigV12(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -341,6 +402,12 @@ func TestFedoraCoreOSConfigV12(t *testing.T) {
 				Config: fedoraCoreOSV12WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV12WithSnippetsExpected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSV12WithSnippetsPrettyFalse,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV12WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -443,6 +510,36 @@ const fedoraCoreOSV11WithSnippetsExpected = `{
   }
 }`
 
+const fedoraCoreOSV11WithSnippetsPrettyFalse = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = false
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.1.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.1.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSV11WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.1.0"},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+
 func TestFedoraCoreOSConfigV11(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -457,6 +554,12 @@ func TestFedoraCoreOSConfigV11(t *testing.T) {
 				Config: fedoraCoreOSV11WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV11WithSnippetsExpected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSV11WithSnippetsPrettyFalse,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV11WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -559,6 +662,36 @@ const fedoraCoreOSV10WithSnippetsExpected = `{
   }
 }`
 
+const fedoraCoreOSV10WithSnippetsPrettyFalse = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = false
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.0.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSV10WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"source":null,"verification":{}}},"security":{"tls":{}},"timeouts":{},"version":"3.0.0"},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+
 func TestFedoraCoreOSConfigV10(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
@@ -573,6 +706,12 @@ func TestFedoraCoreOSConfigV10(t *testing.T) {
 				Config: fedoraCoreOSV10WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV10WithSnippetsExpected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSV10WithSnippetsPrettyFalse,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV10WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
