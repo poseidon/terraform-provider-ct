@@ -149,7 +149,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 		if pretty {
 			return json.MarshalIndent(ign31, "", "  ")
 		}
-		return json.Marshal(ign)
+		return json.Marshal(ign31)
 	}
 
 	var ign30 ignition30Types.Config
