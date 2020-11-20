@@ -4,6 +4,12 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.7.1
+
+* Fix possible empty rendered Ignition ([#72](https://github.com/poseidon/terraform-provider-ct/pull/72))
+  * Fix regression in rendering Fedora CoreOS v1.1.0 Configs with `snippets` and `pretty_print = false`
+* Remove Terraform v0.12.x instructions
+
 ## v0.7.0
 
 * Add Fedora CoreOS Config v1.2.0 support ([#71](https://github.com/poseidon/terraform-provider-ct/pull/71))

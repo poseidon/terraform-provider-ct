@@ -13,7 +13,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.7.0"
+      version = "0.7.1"
     }
   }
 }
@@ -70,7 +70,7 @@ $ terraform init
 
 ## Requirements
 
-* Terraform v0.12+ [installed](https://www.terraform.io/downloads.html)
+* Terraform v0.13+ [installed](https://www.terraform.io/downloads.html)
 
 ## Versions
 
@@ -80,7 +80,7 @@ Container Linux Configs render a fixed Ignition version, depending on the `terra
 
 | terraform-provider-ct | CLC to Ignition     | FCC to Ignition    |
 |-----------------------|---------------------|--------------------|
-| 0.7.x                 | Renders 2.3.0       | FCC (1.0, 1.1, 1.2) -> Ignition (3.0, 3.1,3.2) |
+| 0.7.x                 | Renders 2.3.0       | FCC (1.0, 1.1, 1.2) -> Ignition (3.0, 3.1, 3.2) |
 | 0.6.x                 | Renders 2.3.0       | FCC 1.0.0 -> Ignition 3.0.0, FCC 1.1.0 -> Ignition v3.1.0 |
 | 0.5.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
 | 0.4.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
@@ -108,26 +108,5 @@ Add or update dependencies in `go.mod` and vendor.
 ```
 make update
 make vendor
-```
-
-## Legacy Install
-
-For Terraform v0.12, add the `terraform-provider-ct` plugin binary for your system to the Terraform 3rd-party [plugin directory](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) `~/.terraform.d/plugins`.
-
-```sh
-VERSION=v0.6.0
-wget https://github.com/poseidon/terraform-provider-ct/releases/download/$VERSION/terraform-provider-ct-$VERSION-linux-amd64.tar.gz
-tar xzf terraform-provider-ct-$VERSION-linux-amd64.tar.gz
-mv terraform-provider-ct-$VERSION-linux-amd64/terraform-provider-ct ~/.terraform.d/plugins/terraform-provider-ct_$VERSION
-```
-
-Terraform plugin binary names are versioned to allow for migrations of managed infrastructure.
-
-```
-$ tree ~/.terraform.d/
-/home/user/.terraform.d/
-└── plugins
-    ├── terraform-provider-ct_v0.6.0
-    └── terraform-provider-ct_v0.5.1
 ```
 
