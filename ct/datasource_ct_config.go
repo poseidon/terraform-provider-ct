@@ -133,10 +133,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 		if err != nil {
 			return nil, fmt.Errorf("FCC v1.2.0 merge error: %v", err)
 		}
-		if pretty {
-			return json.MarshalIndent(ign, "", "  ")
-		}
-		return json.Marshal(ign)
+		return marshalJSON(ign, pretty)
 	}
 
 	ign31, _, err := ignition31.Parse(ignBytes)
@@ -146,10 +143,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 		if err != nil {
 			return nil, fmt.Errorf("FCC v1.1.0 merge error: %v", err)
 		}
-		if pretty {
-			return json.MarshalIndent(ign31, "", "  ")
-		}
-		return json.Marshal(ign)
+		return marshalJSON(ign31, pretty)
 	}
 
 	var ign30 ignition30Types.Config
@@ -162,10 +156,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 	if err != nil {
 		return nil, fmt.Errorf("FCC v1.0.0 merge error: %v", err)
 	}
-	if pretty {
-		return json.MarshalIndent(ign30, "", "  ")
-	}
-	return json.Marshal(ign30)
+	return marshalJSON(ign30, pretty)
 }
 
 // merge FCC v1.2.0 snippets
@@ -252,10 +243,7 @@ func renderCLC(data []byte, platform string, pretty, strict bool, snippets []str
 		ign = ignition.Append(ign, ignext)
 	}
 
-	if pretty {
-		return json.MarshalIndent(ign, "", "  ")
-	}
-	return json.Marshal(ign)
+	return marshalJSON(ign, pretty)
 }
 
 // Parse Container Linux config and convert to Ignition v2.2.0 format.
@@ -276,4 +264,11 @@ func clcToIgnition(data []byte, platform string, strict bool) (ignitionTypes.Con
 		return ignitionTypes.Config{}, fmt.Errorf("error converting to Ignition: %v", report.String())
 	}
 	return ign, nil
+}
+
+func marshalJSON(v interface{}, pretty bool) ([]byte, error) {
+	if pretty {
+		return json.MarshalIndent(v, "", "  ")
+	}
+	return json.Marshal(v)
 }
