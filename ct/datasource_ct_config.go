@@ -1,12 +1,14 @@
 package ct
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	clct "github.com/coreos/container-linux-config-transpiler/config"
 	fcct "github.com/coreos/fcct/config"
@@ -24,7 +26,7 @@ import (
 
 func dataSourceCTConfig() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceCTConfigRead,
+		ReadContext: dataSourceCTConfigRead,
 
 		Schema: map[string]*schema.Schema{
 			"content": &schema.Schema{
@@ -64,15 +66,17 @@ func dataSourceCTConfig() *schema.Resource {
 	}
 }
 
-func dataSourceCTConfigRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceCTConfigRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+
 	rendered, err := renderConfig(d)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.Set("rendered", rendered)
 	d.SetId(strconv.Itoa(hashcode.String(rendered)))
-	return nil
+	return diags
 }
 
 // Render a Fedora CoreOS Config or Container Linux Config as Ignition JSON.
@@ -80,9 +84,9 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	// unchecked assertions seem to be the norm in Terraform :S
 	content := d.Get("content").(string)
 	platform := d.Get("platform").(string)
-	snippetsIface := d.Get("snippets").([]interface{})
 	pretty := d.Get("pretty_print").(bool)
 	strict := d.Get("strict").(bool)
+	snippetsIface := d.Get("snippets").([]interface{})
 
 	snippets := make([]string, len(snippetsIface))
 	for i, v := range snippetsIface {

@@ -1,12 +1,11 @@
 package ct
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// Provider returns a config transpiler Terraform ResourceProvider.
-func Provider() terraform.ResourceProvider {
+// Provider returns a config transpiler Provider.
+func Provider() *schema.Provider {
 	return &schema.Provider{
 		DataSourcesMap: map[string]*schema.Resource{
 			"ct_config": dataSourceCTConfig(),

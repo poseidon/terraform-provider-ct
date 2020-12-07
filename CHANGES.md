@@ -4,6 +4,8 @@ Notable changes between releases.
 
 ## Latest
 
+* Migrate to Terraform Plugin SDK v2.3.0 ([#75](https://github.com/poseidon/terraform-provider-ct/pull/75))
+
 ## v0.7.1
 
 * Fix possible empty rendered Ignition ([#72](https://github.com/poseidon/terraform-provider-ct/pull/72))

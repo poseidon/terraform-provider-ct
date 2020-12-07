@@ -4,11 +4,11 @@ import (
 	"regexp"
 	"testing"
 
-	r "github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-var testProviders = map[string]terraform.ResourceProvider{
+var testProviders = map[string]*schema.Provider{
 	"ct": Provider(),
 }
 
@@ -752,7 +752,7 @@ func TestFedoraCoreOSMix_SnippetBehind(t *testing.T) {
 		Steps: []r.TestStep{
 			r.TestStep{
 				Config:      fedoraCoreOSMixSnippetBehind,
-				ExpectError: regexp.MustCompile("^.*FCC v1.1.0 merge error: snippet parse error: unsupported config version, expect v1.1.0"),
+				ExpectError: regexp.MustCompile("FCC v1.1.0 merge error: snippet parse error: unsupported config version, expect v1.1.0"),
 			},
 		},
 	})
@@ -792,7 +792,7 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 		Steps: []r.TestStep{
 			r.TestStep{
 				Config:      fedoraCoreOSMixSnippetAhead,
-				ExpectError: regexp.MustCompile("^.*FCC v1.0.0 merge error: snippet parse error: unsupported config version, expect v1.0.0"),
+				ExpectError: regexp.MustCompile("FCC v1.0.0 merge error: snippet parse error: unsupported config version, expect v1.0.0"),
 			},
 		},
 	})
@@ -812,7 +812,7 @@ func TestInvalidResource(t *testing.T) {
 		Steps: []r.TestStep{
 			r.TestStep{
 				Config:      invalidResource,
-				ExpectError: regexp.MustCompile("^.*An argument named \"some_invalid_field\" is not expected here"),
+				ExpectError: regexp.MustCompile("An argument named \"some_invalid_field\" is not expected here"),
 			},
 		},
 	})
