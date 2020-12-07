@@ -81,20 +81,25 @@ github.com/coreos/container-linux-config-transpiler/config/templating
 github.com/coreos/container-linux-config-transpiler/config/types
 github.com/coreos/container-linux-config-transpiler/config/types/util
 github.com/coreos/container-linux-config-transpiler/internal/util
-# github.com/coreos/fcct v0.7.0
-github.com/coreos/fcct/base
+# github.com/coreos/fcct v0.8.0
+github.com/coreos/fcct/base/util
 github.com/coreos/fcct/base/v0_1
 github.com/coreos/fcct/base/v0_2
 github.com/coreos/fcct/base/v0_3
 github.com/coreos/fcct/base/v0_4_exp
 github.com/coreos/fcct/config
 github.com/coreos/fcct/config/common
-github.com/coreos/fcct/config/v1_0
-github.com/coreos/fcct/config/v1_1
-github.com/coreos/fcct/config/v1_2
-github.com/coreos/fcct/config/v1_3_exp
-github.com/coreos/fcct/distro/fcos/v0_1
+github.com/coreos/fcct/config/fcos/v1_0
+github.com/coreos/fcct/config/fcos/v1_1
+github.com/coreos/fcct/config/fcos/v1_2
+github.com/coreos/fcct/config/fcos/v1_3
+github.com/coreos/fcct/config/fcos/v1_4_exp
+github.com/coreos/fcct/config/rhcos/v0_1
+github.com/coreos/fcct/config/rhcos/v0_2_exp
+github.com/coreos/fcct/config/util
 github.com/coreos/fcct/translate
+# github.com/coreos/go-json v0.0.0-20170920214419-6a2fe990e083
+github.com/coreos/go-json
 # github.com/coreos/go-semver v0.3.0
 github.com/coreos/go-semver/semver
 # github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e
@@ -120,7 +125,7 @@ github.com/coreos/ignition/config/validate
 github.com/coreos/ignition/config/validate/astjson
 github.com/coreos/ignition/config/validate/astnode
 github.com/coreos/ignition/config/validate/report
-# github.com/coreos/ignition/v2 v2.7.0
+# github.com/coreos/ignition/v2 v2.8.1
 github.com/coreos/ignition/v2/config/merge
 github.com/coreos/ignition/v2/config/shared/errors
 github.com/coreos/ignition/v2/config/shared/validations
@@ -133,7 +138,7 @@ github.com/coreos/ignition/v2/config/v3_2
 github.com/coreos/ignition/v2/config/v3_2/types
 github.com/coreos/ignition/v2/config/v3_3_experimental/types
 github.com/coreos/ignition/v2/config/validate
-# github.com/coreos/vcontext v0.0.0-20191017033345-260217907eb5
+# github.com/coreos/vcontext v0.0.0-20201120045928-b0e13dab675c
 github.com/coreos/vcontext/json
 github.com/coreos/vcontext/path
 github.com/coreos/vcontext/report
@@ -291,6 +296,8 @@ github.com/mitchellh/mapstructure
 github.com/mitchellh/reflectwalk
 # github.com/oklog/run v1.0.0
 github.com/oklog/run
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
 # github.com/posener/complete v1.2.1
 github.com/posener/complete
 github.com/posener/complete/cmd
@@ -299,6 +306,8 @@ github.com/posener/complete/match
 # github.com/spf13/afero v1.2.2
 github.com/spf13/afero
 github.com/spf13/afero/mem
+# github.com/stretchr/testify v1.5.1
+github.com/stretchr/testify/assert
 # github.com/ulikunitz/xz v0.5.5
 github.com/ulikunitz/xz
 github.com/ulikunitz/xz/internal/hash
@@ -518,6 +527,8 @@ google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/pluginpb
+# gopkg.in/yaml.v2 v2.2.2
+gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.0-20191010095647-fc94e3f71652
 gopkg.in/yaml.v3
 # honnef.co/go/tools v0.0.1-2020.1.4
