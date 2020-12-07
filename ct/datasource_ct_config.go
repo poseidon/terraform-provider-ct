@@ -93,7 +93,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 
 	// Fedora CoreOS Config
 	ign, err := fccToIgnition([]byte(content), pretty, strict, snippets)
-	if err == fcct.ErrNoVariant {
+	if err == common.ErrNoVariant {
 		// consider as Container Linux Config
 		ign, err = renderCLC([]byte(content), platform, pretty, strict, snippets)
 	}
@@ -102,7 +102,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
 func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	ignBytes, _, err := fcct.Translate(data, common.TranslateOptions{
+	ignBytes, _, err := fcct.TranslateBytes(data, common.TranslateBytesOptions{
 		Pretty: pretty,
 		Strict: strict,
 	})
@@ -162,13 +162,13 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 // merge FCC v1.2.0 snippets
 func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bool) (ignition32Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := fcct.Translate([]byte(snippet), common.TranslateOptions{
+		ignextBytes, _, err := fcct.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
 			Strict: strict,
 		})
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
-			if err == fcct.ErrNoVariant {
+			if err == common.ErrNoVariant {
 				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
 			}
 			return ign, fmt.Errorf("snippet v1.2.0 translate error: %v", err)
@@ -185,13 +185,13 @@ func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bo
 // merge FCC v1.1.0 snippets
 func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bool) (ignition31Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := fcct.Translate([]byte(snippet), common.TranslateOptions{
+		ignextBytes, _, err := fcct.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
 			Strict: strict,
 		})
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
-			if err == fcct.ErrNoVariant {
+			if err == common.ErrNoVariant {
 				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
 			}
 			return ign, fmt.Errorf("snippet v1.1.0 translate error: %v", err)
@@ -208,13 +208,13 @@ func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bo
 // merge FCC v1.0.0 snippets
 func mergeFCCV10(ign ignition30Types.Config, snippets []string, pretty, strict bool) (ignition30Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := fcct.Translate([]byte(snippet), common.TranslateOptions{
+		ignextBytes, _, err := fcct.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
 			Strict: strict,
 		})
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
-			if err == fcct.ErrNoVariant {
+			if err == common.ErrNoVariant {
 				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
 			}
 			return ign, fmt.Errorf("snippet v1.0.0 translate error: %v", err)
