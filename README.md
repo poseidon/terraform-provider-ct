@@ -80,6 +80,7 @@ Container Linux Configs render a fixed Ignition version, depending on the `terra
 
 | terraform-provider-ct | CLC to Ignition     | FCC to Ignition    |
 |-----------------------|---------------------|--------------------|
+| 0.8.x                 | Renders 2.3.0       | FCC (1.0, 1.1, 1.2, 1.3) -> Ignition (3.0, 3.1, 3.2, 3.2)
 | 0.7.x                 | Renders 2.3.0       | FCC (1.0, 1.1, 1.2) -> Ignition (3.0, 3.1, 3.2) |
 | 0.6.x                 | Renders 2.3.0       | FCC 1.0.0 -> Ignition 3.0.0, FCC 1.1.0 -> Ignition v3.1.0 |
 | 0.5.x                 | Renders 2.2.0       | FCC 1.0.0 -> Ignition 3.0.0 |
