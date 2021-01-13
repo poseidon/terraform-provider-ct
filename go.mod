@@ -8,8 +8,8 @@ require (
 	github.com/coreos/fcct v0.9.0
 	github.com/coreos/ignition v0.35.0
 	github.com/coreos/ignition/v2 v2.8.1
-	github.com/hashicorp/terraform-plugin-sdk v1.8.0
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.3.0
+	github.com/hashicorp/terraform-plugin-sdk v1.16.0
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.4.0
 	go4.org v0.0.0-20200312051459-7028f7b4a332 // indirect
 )
 
