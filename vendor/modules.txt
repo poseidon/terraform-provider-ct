@@ -73,7 +73,7 @@ github.com/coreos/container-linux-config-transpiler/config/templating
 github.com/coreos/container-linux-config-transpiler/config/types
 github.com/coreos/container-linux-config-transpiler/config/types/util
 github.com/coreos/container-linux-config-transpiler/internal/util
-# github.com/coreos/fcct v0.8.0
+# github.com/coreos/fcct v0.9.0
 github.com/coreos/fcct/base/util
 github.com/coreos/fcct/base/v0_1
 github.com/coreos/fcct/base/v0_2

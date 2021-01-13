@@ -5,6 +5,7 @@ Notable changes between releases.
 ## Latest
 
 * Migrate to Terraform Plugin SDK v2.3.0 ([#75](https://github.com/poseidon/terraform-provider-ct/pull/75))
+* Add Fedora CoreOS Config v1.3.0 support ([#76](https://github.com/poseidon/terraform-provider-ct/pull/76))
 
 ## v0.7.1
 
