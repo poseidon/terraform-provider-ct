@@ -13,7 +13,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.7.1"
+      version = "0.8.0"
     }
   }
 }
@@ -35,7 +35,7 @@ passwd:
 # Fedora CoreOS Config
 ---
 variant: fcos
-version: 1.2.0
+version: 1.3.0
 passwd:
   users:
     - name: core
