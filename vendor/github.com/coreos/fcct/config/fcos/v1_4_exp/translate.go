@@ -63,6 +63,9 @@ const (
 // validation is performed on input or output.
 func (c Config) ToIgn3_3Unvalidated(options common.TranslateOptions) (types.Config, translate.TranslationSet, report.Report) {
 	ret, ts, r := c.Config.ToIgn3_3Unvalidated(options)
+	if r.IsFatal() {
+		return types.Config{}, translate.TranslationSet{}, r
+	}
 	r.Merge(c.processBootDevice(&ret, &ts, options))
 	return ret, ts, r
 }
@@ -97,13 +100,15 @@ func (c Config) processBootDevice(config *types.Config, ts *translate.Translatio
 
 	// compute layout rendering options
 	var wantBIOSPart bool
+	var wantEFIPart bool
 	var wantPRePPart bool
 	layout := c.BootDevice.Layout
 	switch {
 	case layout == nil || *layout == "x86_64":
 		wantBIOSPart = true
+		wantEFIPart = true
 	case *layout == "aarch64":
-		// neither BIOS or PReP
+		wantEFIPart = true
 	case *layout == "ppc64le":
 		wantPRePPart = true
 	default:
@@ -134,11 +139,14 @@ func (c Config) processBootDevice(config *types.Config, ts *translate.Translatio
 					TypeGUID: util.StrToPtr(prepTypeGuid),
 				})
 			}
+			if wantEFIPart {
+				disk.Partitions = append(disk.Partitions, types.Partition{
+					Label:    util.StrToPtr(fmt.Sprintf("esp-%d", labelIndex)),
+					SizeMiB:  util.IntToPtr(espV1SizeMiB),
+					TypeGUID: util.StrToPtr(espTypeGuid),
+				})
+			}
 			disk.Partitions = append(disk.Partitions, types.Partition{
-				Label:    util.StrToPtr(fmt.Sprintf("esp-%d", labelIndex)),
-				SizeMiB:  util.IntToPtr(espV1SizeMiB),
-				TypeGUID: util.StrToPtr(espTypeGuid),
-			}, types.Partition{
 				Label:   util.StrToPtr(fmt.Sprintf("boot-%d", labelIndex)),
 				SizeMiB: util.IntToPtr(bootV1SizeMiB),
 			}, types.Partition{
@@ -147,15 +155,17 @@ func (c Config) processBootDevice(config *types.Config, ts *translate.Translatio
 			renderedTranslations.AddFromCommonSource(path.New("yaml", "boot_device", "mirror", "devices", i), path.New("json", "storage", "disks", len(rendered.Storage.Disks)), disk)
 			rendered.Storage.Disks = append(rendered.Storage.Disks, disk)
 
-			// add ESP filesystem
-			espFilesystem := types.Filesystem{
-				Device:         fmt.Sprintf("/dev/disk/by-partlabel/esp-%d", labelIndex),
-				Format:         util.StrToPtr("vfat"),
-				Label:          util.StrToPtr(fmt.Sprintf("esp-%d", labelIndex)),
-				WipeFilesystem: util.BoolToPtr(true),
+			if wantEFIPart {
+				// add ESP filesystem
+				espFilesystem := types.Filesystem{
+					Device:         fmt.Sprintf("/dev/disk/by-partlabel/esp-%d", labelIndex),
+					Format:         util.StrToPtr("vfat"),
+					Label:          util.StrToPtr(fmt.Sprintf("esp-%d", labelIndex)),
+					WipeFilesystem: util.BoolToPtr(true),
+				}
+				renderedTranslations.AddFromCommonSource(path.New("yaml", "boot_device", "mirror", "devices", i), path.New("json", "storage", "filesystems", len(rendered.Storage.Filesystems)), espFilesystem)
+				rendered.Storage.Filesystems = append(rendered.Storage.Filesystems, espFilesystem)
 			}
-			renderedTranslations.AddFromCommonSource(path.New("yaml", "boot_device", "mirror", "devices", i), path.New("json", "storage", "filesystems", len(rendered.Storage.Filesystems)), espFilesystem)
-			rendered.Storage.Filesystems = append(rendered.Storage.Filesystems, espFilesystem)
 		}
 
 		// create RAIDs

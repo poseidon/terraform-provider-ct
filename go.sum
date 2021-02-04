@@ -92,6 +92,8 @@ github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5
 github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5be564a0b/go.mod h1:SlcxXZQ2c42knj8pezMiQsM1f+ADxFMjGetuMKR/YSQ=
 github.com/coreos/fcct v0.9.0 h1:QSm3DdbFNtdTBInIP6MaqiRip+evfPyCClJFxcbb4Qs=
 github.com/coreos/fcct v0.9.0/go.mod h1:8kkx/D0vbHrrKgosVfVbYUiy70f4wMl/xQFKNLLMzGQ=
+github.com/coreos/fcct v0.10.0 h1:or1sVKg39HtM+MU3dXc05BLQZobnMGURrhfgVqxTrMM=
+github.com/coreos/fcct v0.10.0/go.mod h1:8kkx/D0vbHrrKgosVfVbYUiy70f4wMl/xQFKNLLMzGQ=
 github.com/coreos/go-json v0.0.0-20170920214419-6a2fe990e083 h1:iLYct0QOZLUuTbFBf+PDiKvpG1xPicwkcgnKaGCeTgc=
 github.com/coreos/go-json v0.0.0-20170920214419-6a2fe990e083/go.mod h1:FmxyHfvrCFfCsXRylD4QQRlQmvzl+DG6iTHyEEykPfU=
 github.com/coreos/go-semver v0.3.0 h1:wkHLiw0WNATZnSG7epLsujiMCgPAc9xhjJ4tgnAxmfM=
@@ -104,6 +106,8 @@ github.com/coreos/ignition v0.35.0 h1:UFodoYq1mOPrbEjtxIsZbThcDyQwAI1owczRDqWmKk
 github.com/coreos/ignition v0.35.0/go.mod h1:WJQapxzEn9DE0ryxsGvm8QnBajm/XsS/PkrDqSpz+bA=
 github.com/coreos/ignition/v2 v2.8.1 h1:gKCX6NwGGFh866MvpJlq2ZCqppVbWK0DA/uflL34tDU=
 github.com/coreos/ignition/v2 v2.8.1/go.mod h1:A5lFFzA2/zvZQPVEvI1lR5WPLWRb7KZ7Q1QOeUMtcAc=
+github.com/coreos/ignition/v2 v2.9.0 h1:Zl5N08OyqlECB8BrBlMDp3Jf1ShwVTtREPcUq/YO034=
+github.com/coreos/ignition/v2 v2.9.0/go.mod h1:A5lFFzA2/zvZQPVEvI1lR5WPLWRb7KZ7Q1QOeUMtcAc=
 github.com/coreos/vcontext v0.0.0-20201120045928-b0e13dab675c h1:jA28WeORitsxGFVWhyWB06sAG2HbLHPQuHwDydhU2CQ=
 github.com/coreos/vcontext v0.0.0-20201120045928-b0e13dab675c/go.mod h1:z4pMVvaUrxs98RROlIYdAQCKhEicjnTirOaVyDRH5h8=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
