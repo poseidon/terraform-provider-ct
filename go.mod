@@ -9,7 +9,7 @@ require (
 	github.com/coreos/ignition v0.35.0
 	github.com/coreos/ignition/v2 v2.9.0
 	github.com/hashicorp/terraform-plugin-sdk v1.16.0
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.4.0
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.4.4
 	go4.org v0.0.0-20200312051459-7028f7b4a332 // indirect
 )
 
