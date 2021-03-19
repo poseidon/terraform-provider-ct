@@ -1,6 +1,5 @@
 export CGO_ENABLED:=0
 export GO111MODULE=on
-export GOFLAGS=-mod=vendor
 
 VERSION=$(shell git describe --tags --match=v* --always --dirty)
 SEMVER=$(shell git describe --tags --match=v* --always --dirty | cut -c 2-)
@@ -29,15 +28,6 @@ lint:
 .PHONY: fmt
 fmt:
 	@test -z $$(go fmt ./...)
-
-.PHONY: update
-update:
-	@GOFLAGS="" go get -u
-	@go mod tidy
-
-.PHONY: vendor
-vendor:
-	@go mod vendor
 
 .PHONY: clean
 clean:
