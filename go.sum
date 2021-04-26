@@ -91,6 +91,8 @@ github.com/clarketm/json v1.14.1 h1:43bkbTTKKdDx7crs3WHzkrnH6S1EvAF1VZrdFGMmmz4=
 github.com/clarketm/json v1.14.1/go.mod h1:ynr2LRfb0fQU34l07csRNBTcivjySLLiY1YzQqKVfdo=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
+github.com/coreos/butane v0.11.0 h1:BmoXR3YPIYlSVaV7AW98Yhr7eVj8/P3xeNn13Tpyr9M=
+github.com/coreos/butane v0.11.0/go.mod h1:FAzykYJ92Wohb81M63qkfi+VKLKS2WW287g8fnvIrWE=
 github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5be564a0b h1:ncpb1vSLw4mC2l+3GNEGw2t0V0Gb+mHe0qIYZicwbT0=
 github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5be564a0b/go.mod h1:SlcxXZQ2c42knj8pezMiQsM1f+ADxFMjGetuMKR/YSQ=
 github.com/coreos/fcct v0.10.0 h1:or1sVKg39HtM+MU3dXc05BLQZobnMGURrhfgVqxTrMM=
@@ -108,6 +110,8 @@ github.com/coreos/ignition v0.35.0/go.mod h1:WJQapxzEn9DE0ryxsGvm8QnBajm/XsS/Pkr
 github.com/coreos/ignition/v2 v2.8.1/go.mod h1:A5lFFzA2/zvZQPVEvI1lR5WPLWRb7KZ7Q1QOeUMtcAc=
 github.com/coreos/ignition/v2 v2.9.0 h1:Zl5N08OyqlECB8BrBlMDp3Jf1ShwVTtREPcUq/YO034=
 github.com/coreos/ignition/v2 v2.9.0/go.mod h1:A5lFFzA2/zvZQPVEvI1lR5WPLWRb7KZ7Q1QOeUMtcAc=
+github.com/coreos/ignition/v2 v2.9.1-0.20210304043908-47da4066daa8 h1:+EWz7B9m/XyAb/6NQfrwy7vvJ8CwFViiCAHnpZAi9BE=
+github.com/coreos/ignition/v2 v2.9.1-0.20210304043908-47da4066daa8/go.mod h1:A5lFFzA2/zvZQPVEvI1lR5WPLWRb7KZ7Q1QOeUMtcAc=
 github.com/coreos/vcontext v0.0.0-20201120045928-b0e13dab675c h1:jA28WeORitsxGFVWhyWB06sAG2HbLHPQuHwDydhU2CQ=
 github.com/coreos/vcontext v0.0.0-20201120045928-b0e13dab675c/go.mod h1:z4pMVvaUrxs98RROlIYdAQCKhEicjnTirOaVyDRH5h8=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=

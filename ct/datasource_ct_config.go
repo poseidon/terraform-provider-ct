@@ -10,9 +10,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	butane "github.com/coreos/butane/config"
+	"github.com/coreos/butane/config/common"
 	clct "github.com/coreos/container-linux-config-transpiler/config"
-	fcct "github.com/coreos/fcct/config"
-	"github.com/coreos/fcct/config/common"
 
 	ignition "github.com/coreos/ignition/config/v2_3"
 	ignitionTypes "github.com/coreos/ignition/config/v2_3/types"
@@ -106,7 +106,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
 func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	ignBytes, _, err := fcct.TranslateBytes(data, common.TranslateBytesOptions{
+	ignBytes, _, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
 		Pretty: pretty,
 		Strict: strict,
 	})
@@ -127,7 +127,7 @@ func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte,
 // versions. Then translate and parse FCC snippets as the chosen Ignition
 // version to merge.
 // version
-// Upstream might later handle: https://github.com/coreos/fcct/issues/118
+// Upstream might later handle: https://github.com/coreos/butane/issues/118
 // Note: This means snippets version must match the main config version.
 func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) ([]byte, error) {
 	ign, _, err := ignition32.Parse(ignBytes)
@@ -166,7 +166,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 // merge FCC v1.2.0 snippets
 func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bool) (ignition32Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := fcct.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
 			Strict: strict,
 		})
@@ -189,7 +189,7 @@ func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bo
 // merge FCC v1.1.0 snippets
 func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bool) (ignition31Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := fcct.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
 			Strict: strict,
 		})
@@ -212,7 +212,7 @@ func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bo
 // merge FCC v1.0.0 snippets
 func mergeFCCV10(ign ignition30Types.Config, snippets []string, pretty, strict bool) (ignition30Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := fcct.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
 			Strict: strict,
 		})

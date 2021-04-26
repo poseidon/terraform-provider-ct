@@ -4,13 +4,13 @@ require (
 	github.com/ajeddeloh/go-json v0.0.0-20170920214419-6a2fe990e083 // indirect
 	github.com/ajeddeloh/yaml v0.0.0-20170912190910-6b94386aeefd // indirect
 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d // indirect
+	github.com/coreos/butane v0.11.0
 	github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5be564a0b
-	github.com/coreos/fcct v0.10.0
 	github.com/coreos/ignition v0.35.0
-	github.com/coreos/ignition/v2 v2.9.0
+	github.com/coreos/ignition/v2 v2.9.1-0.20210304043908-47da4066daa8
 	github.com/hashicorp/terraform-plugin-sdk v1.17.1
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.6.1
 	go4.org v0.0.0-20200312051459-7028f7b4a332 // indirect
 )
 
-go 1.13
+go 1.15
