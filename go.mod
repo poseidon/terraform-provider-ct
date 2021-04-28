@@ -8,7 +8,7 @@ require (
 	github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5be564a0b
 	github.com/coreos/ignition v0.35.0
 	github.com/coreos/ignition/v2 v2.9.1-0.20210304043908-47da4066daa8
-	github.com/hashicorp/terraform-plugin-sdk v1.17.1
+	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.6.1
 	go4.org v0.0.0-20200312051459-7028f7b4a332 // indirect
 )
