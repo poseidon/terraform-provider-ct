@@ -107,8 +107,12 @@ github.com/coreos/ignition v0.35.0 h1:UFodoYq1mOPrbEjtxIsZbThcDyQwAI1owczRDqWmKk
 github.com/coreos/ignition v0.35.0/go.mod h1:WJQapxzEn9DE0ryxsGvm8QnBajm/XsS/PkrDqSpz+bA=
 github.com/coreos/ignition/v2 v2.9.1-0.20210304043908-47da4066daa8 h1:+EWz7B9m/XyAb/6NQfrwy7vvJ8CwFViiCAHnpZAi9BE=
 github.com/coreos/ignition/v2 v2.9.1-0.20210304043908-47da4066daa8/go.mod h1:A5lFFzA2/zvZQPVEvI1lR5WPLWRb7KZ7Q1QOeUMtcAc=
+github.com/coreos/ignition/v2 v2.10.1 h1:T8vH2bZZvfUNmuyOqAdAb+iBEgjhkuue4LFwVvEupdw=
+github.com/coreos/ignition/v2 v2.10.1/go.mod h1:a8C/cdb3l3zhKke3zSdqYRChKm+iCSrf4Mk3UeZPpT0=
 github.com/coreos/vcontext v0.0.0-20201120045928-b0e13dab675c h1:jA28WeORitsxGFVWhyWB06sAG2HbLHPQuHwDydhU2CQ=
 github.com/coreos/vcontext v0.0.0-20201120045928-b0e13dab675c/go.mod h1:z4pMVvaUrxs98RROlIYdAQCKhEicjnTirOaVyDRH5h8=
+github.com/coreos/vcontext v0.0.0-20210407161507-4ee6c745c8bd h1:iHdPNrKIKSSlAy6nCmBliwn7xFTDu+OoFkArqMTr6Zc=
+github.com/coreos/vcontext v0.0.0-20210407161507-4ee6c745c8bd/go.mod h1:z4pMVvaUrxs98RROlIYdAQCKhEicjnTirOaVyDRH5h8=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
