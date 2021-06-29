@@ -1,6 +1,6 @@
 # config-transpiler Provider
 
-`terraform-provider-ct` allows Terraform to validate a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) or [Fedora CoreOS Config](https://github.com/coreos/fcct/blob/master/docs/configuration-v1_2.md) and transpile it as [Ignition](https://github.com/coreos/ignition) for machine consumption.
+`terraform-provider-ct` allows Terraform to validate a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) or a [Butane config](https://coreos.github.io/butane/specs/) and transpile it as an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
 
 ## Usage
 
@@ -13,13 +13,13 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.7.1"
+      version = "0.8.0"
     }
   }
 }
 ```
 
-Define a Container Linux Config (CLC) or Fedora CoreOS Config (FCC).
+Define a Container Linux Config (CLC) or Butane config (for Fedora CoreOS):
 
 ```yaml
 # Container Linux Config
@@ -32,10 +32,10 @@ passwd:
 ```
 
 ```yaml
-# Fedora CoreOS Config
+# Butane config
 ---
 variant: fcos
-version: 1.2.0
+version: 1.3.0
 passwd:
   users:
     - name: core
