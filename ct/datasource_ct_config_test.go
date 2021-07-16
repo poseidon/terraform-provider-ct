@@ -250,6 +250,171 @@ func TestContainerLinuxConfig(t *testing.T) {
 
 // Fedora CoreOS
 
+const fedoraCoreOSV14Resource = `
+data "ct_config" "fedora-coreos" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.4.0
+storage:
+  luks:
+    - name: data
+      device: /dev/vdb
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+}
+`
+
+const fedoraCoreOSV14Expected = `{
+  "ignition": {
+    "version": "3.3.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "luks": [
+      {
+        "device": "/dev/vdb",
+        "name": "data"
+      }
+    ]
+  }
+}`
+
+const fedoraCoreOSV14WithSnippets = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.4.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.4.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSV14WithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.3.0"
+  },
+  "kernelArguments": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
+const fedoraCoreOSV14WithSnippetsPrettyFalse = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = false
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.4.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.4.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSV14WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.3.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+
+func TestFedoraCoreOSConfigV14(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			r.TestStep{
+				Config: fedoraCoreOSV14Resource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", fedoraCoreOSV14Expected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSV14WithSnippets,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV14WithSnippetsExpected),
+				),
+			},
+			r.TestStep{
+				Config: fedoraCoreOSV14WithSnippetsPrettyFalse,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", fedoraCoreOSV14WithSnippetsPrettyFalseExpected),
+				),
+			},
+		},
+	})
+}
+
 const fedoraCoreOSV13Resource = `
 data "ct_config" "fedora-coreos" {
   pretty_print = true

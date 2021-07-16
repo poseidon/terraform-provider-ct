@@ -35,7 +35,7 @@ passwd:
 # Butane config
 ---
 variant: fcos
-version: 1.3.0
+version: 1.4.0
 passwd:
   users:
     - name: core
@@ -80,6 +80,7 @@ Container Linux Configs render a fixed Ignition version, depending on the `terra
 
 | terraform-provider-ct | CLC to Ignition     | Butane to Ignition    |
 |-----------------------|---------------------|--------------------|
+| 0.9.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3, 1.4) -> Ignition (3.0, 3.1, 3.2, 3.2, 3.3)
 | 0.8.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3) -> Ignition (3.0, 3.1, 3.2, 3.2)
 | 0.7.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2) -> Ignition (3.0, 3.1, 3.2) |
 | 0.6.x                 | Renders 2.3.0       | Butane (1.0, 1.1) -> Ignition (3.0, 3.1) |

@@ -22,6 +22,8 @@ import (
 	ignition31Types "github.com/coreos/ignition/v2/config/v3_1/types"
 	ignition32 "github.com/coreos/ignition/v2/config/v3_2"
 	ignition32Types "github.com/coreos/ignition/v2/config/v3_2/types"
+	ignition33 "github.com/coreos/ignition/v2/config/v3_3"
+	ignition33Types "github.com/coreos/ignition/v2/config/v3_3/types"
 )
 
 func dataSourceCTConfig() *schema.Resource {
@@ -130,14 +132,24 @@ func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte,
 // Upstream might later handle: https://github.com/coreos/butane/issues/118
 // Note: This means snippets version must match the main config version.
 func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	ign, _, err := ignition32.Parse(ignBytes)
+	ign33, _, err := ignition33.Parse(ignBytes)
+	if err == nil {
+		// FCC config v1.4.0
+		ign33, err = mergeFCC14(ign33, snippets, pretty, strict)
+		if err != nil {
+			return nil, fmt.Errorf("FCC v1.4.0 merge error: %v", err)
+		}
+		return marshalJSON(ign33, pretty)
+	}
+
+	ign32, _, err := ignition32.Parse(ignBytes)
 	if err == nil {
 		// FCC config v1.2.0
-		ign, err = mergeFCC12(ign, snippets, pretty, strict)
+		ign32, err = mergeFCC12(ign32, snippets, pretty, strict)
 		if err != nil {
 			return nil, fmt.Errorf("FCC v1.2.0 merge error: %v", err)
 		}
-		return marshalJSON(ign, pretty)
+		return marshalJSON(ign32, pretty)
 	}
 
 	ign31, _, err := ignition31.Parse(ignBytes)
@@ -161,6 +173,29 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 		return nil, fmt.Errorf("FCC v1.0.0 merge error: %v", err)
 	}
 	return marshalJSON(ign30, pretty)
+}
+
+// merge FCC v1.4.0 snippets
+func mergeFCC14(ign ignition33Types.Config, snippets []string, pretty, strict bool) (ignition33Types.Config, error) {
+	for _, snippet := range snippets {
+		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+			Pretty: pretty,
+			Strict: strict,
+		})
+		if err != nil {
+			// For FCC, require snippets be FCCs (don't fall-through to CLC)
+			if err == common.ErrNoVariant {
+				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
+			}
+			return ign, fmt.Errorf("snippet v1.4.0 translate error: %v", err)
+		}
+		ignext, _, err := ignition33.Parse(ignextBytes)
+		if err != nil {
+			return ign, fmt.Errorf("snippet parse error: %v, expect v1.4.0", err)
+		}
+		ign = ignition33.Merge(ign, ignext)
+	}
+	return ign, nil
 }
 
 // merge FCC v1.2.0 snippets
