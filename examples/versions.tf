@@ -7,9 +7,9 @@ terraform {
 
     ct = {
       source  = "poseidon/ct"
-      version = "~> 0.8.0"
+      version = "~> 0.9.0"
       #source = "terraform.localhost/poseidon/ct"
-      #version = "0.8.0"
+      #version = "0.9.0"
     }
   }
 }

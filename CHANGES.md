@@ -4,6 +4,14 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.9.0
+
+* Add Butane Config v1.4.0 support ([#100](https://github.com/poseidon/terraform-provider-ct/pull/100))
+  * Accept Butane v1.4.0 config/snippets and render Ignition v3.3.0
+* Rename Fedora CoreOS Configs to Butane Configs
+* Remove Go module vendoring
+* Remove tarball release format
+
 ## v0.8.0
 
 * Migrate to Terraform Plugin SDK v2.3.0 ([#75](https://github.com/poseidon/terraform-provider-ct/pull/75))

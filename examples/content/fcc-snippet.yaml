@@ -1,5 +1,5 @@
 variant: fcos
-version: 1.3.0
+version: 1.4.0
 storage:
   files:
     - path: /etc/zincati/config.d/90-disable-feature.toml

@@ -13,7 +13,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.8.0"
+      version = "0.9.0"
     }
   }
 }
@@ -102,13 +102,3 @@ To develop the provider plugin locally, build an executable with Go v1.13+.
 ```
 make
 ```
-
-### Vendor
-
-Add or update dependencies in `go.mod` and vendor.
-
-```
-make update
-make vendor
-```
-
