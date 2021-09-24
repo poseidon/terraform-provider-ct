@@ -97,7 +97,7 @@ Notes:
 
 ### Binary
 
-To develop the provider plugin locally, build an executable with Go v1.13+.
+To develop the provider plugin locally, build an executable with Go v1.16+.
 
 ```
 make

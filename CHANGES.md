@@ -4,6 +4,9 @@ Notable changes between releases.
 
 ## Latest
 
+* Update Go version to v1.16+
+* Add `darwin-arm64` release target
+
 ## v0.9.0
 
 * Add Butane Config v1.4.0 support ([#100](https://github.com/poseidon/terraform-provider-ct/pull/100))

@@ -13,4 +13,4 @@ require (
 	go4.org v0.0.0-20200312051459-7028f7b4a332 // indirect
 )
 
-go 1.15
+go 1.16
