@@ -4,6 +4,8 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.9.1
+
 * Update Go version to v1.16+
 * Add `darwin-arm64` release target
 

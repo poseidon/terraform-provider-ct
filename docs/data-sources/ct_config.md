@@ -1,6 +1,6 @@
 # ct_config Data Source
 
-Load [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) (CLC) or [Fedora CoreOS Config](https://github.com/coreos/fcct/blob/master/docs/configuration-v1_1.md) (FCC) content, validate the config, and transpile to [Ignition](https://github.com/coreos/ignition) machine format.
+Validate a [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) or a [Butane config](https://coreos.github.io/butane/specs/) and transpile it to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
 
 ## Usage
 
