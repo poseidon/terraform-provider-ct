@@ -7,7 +7,7 @@ require (
 	github.com/coreos/butane v0.13.1
 	github.com/coreos/container-linux-config-transpiler v0.9.1-0.20200402130652-e4d5be564a0b
 	github.com/coreos/ignition v0.35.0
-	github.com/coreos/ignition/v2 v2.12.0
+	github.com/coreos/ignition/v2 v2.13.0
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.9.0
 	go4.org v0.0.0-20200312051459-7028f7b4a332 // indirect
