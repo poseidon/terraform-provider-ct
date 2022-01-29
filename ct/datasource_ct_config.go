@@ -108,13 +108,15 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
 func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	ignBytes, _, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
+	ignBytes, report, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
 		Pretty: pretty,
-		Strict: strict,
 	})
 	// ErrNoVariant indicates data is a CLC, not an FCC
 	if err != nil {
 		return nil, err
+	}
+	if strict && len(report.Entries) > 0 {
+		return nil, fmt.Errorf("strict parsing error: %v", report.String())
 	}
 
 	if len(snippets) == 0 {
@@ -178,9 +180,8 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 // merge FCC v1.4.0 snippets
 func mergeFCC14(ign ignition33Types.Config, snippets []string, pretty, strict bool) (ignition33Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
-			Strict: strict,
 		})
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
@@ -189,6 +190,10 @@ func mergeFCC14(ign ignition33Types.Config, snippets []string, pretty, strict bo
 			}
 			return ign, fmt.Errorf("snippet v1.4.0 translate error: %v", err)
 		}
+		if strict && len(report.Entries) > 0 {
+			return ign, fmt.Errorf("strict parsing error: %v", report.String())
+		}
+
 		ignext, _, err := ignition33.Parse(ignextBytes)
 		if err != nil {
 			return ign, fmt.Errorf("snippet parse error: %v, expect v1.4.0", err)
@@ -201,9 +206,8 @@ func mergeFCC14(ign ignition33Types.Config, snippets []string, pretty, strict bo
 // merge FCC v1.2.0 snippets
 func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bool) (ignition32Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
-			Strict: strict,
 		})
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
@@ -212,6 +216,10 @@ func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bo
 			}
 			return ign, fmt.Errorf("snippet v1.2.0 translate error: %v", err)
 		}
+		if strict && len(report.Entries) > 0 {
+			return ign, fmt.Errorf("strict parsing error: %v", report.String())
+		}
+
 		ignext, _, err := ignition32.Parse(ignextBytes)
 		if err != nil {
 			return ign, fmt.Errorf("snippet parse error: %v, expect v1.2.0", err)
@@ -224,9 +232,8 @@ func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bo
 // merge FCC v1.1.0 snippets
 func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bool) (ignition31Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
-			Strict: strict,
 		})
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
@@ -235,6 +242,10 @@ func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bo
 			}
 			return ign, fmt.Errorf("snippet v1.1.0 translate error: %v", err)
 		}
+		if strict && len(report.Entries) > 0 {
+			return ign, fmt.Errorf("strict parsing error: %v", report.String())
+		}
+
 		ignext, _, err := ignition31.Parse(ignextBytes)
 		if err != nil {
 			return ign, fmt.Errorf("snippet parse error: %v, expect v1.1.0", err)
@@ -247,9 +258,8 @@ func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bo
 // merge FCC v1.0.0 snippets
 func mergeFCCV10(ign ignition30Types.Config, snippets []string, pretty, strict bool) (ignition30Types.Config, error) {
 	for _, snippet := range snippets {
-		ignextBytes, _, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
-			Strict: strict,
 		})
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
@@ -258,6 +268,10 @@ func mergeFCCV10(ign ignition30Types.Config, snippets []string, pretty, strict b
 			}
 			return ign, fmt.Errorf("snippet v1.0.0 translate error: %v", err)
 		}
+		if strict && len(report.Entries) > 0 {
+			return ign, fmt.Errorf("strict parsing error: %v", report.String())
+		}
+
 		ignext, _, err := ignition30.Parse(ignextBytes)
 		if err != nil {
 			return ign, fmt.Errorf("snippet parse error: %v, expect v1.0.0", err)
