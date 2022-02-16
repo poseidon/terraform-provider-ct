@@ -13,7 +13,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.9.2"
+      version = "0.10.0"
     }
   }
 }
@@ -75,12 +75,15 @@ $ terraform init
 
 ## Versions
 
-Butane configs contain a `version` that is associated with an Ignition format version. For example, a Butane config with `version: 1.0.0` would produce an Ignition config with version `3.0.0`, across future releases.
+Butane configs are converted to the current (according to this provider) stable Ignition config and merged together. For example, a Butane Config with `version: 1.2.0` would produce an Ignition config with version `v3.3.0`. This relies on Ignition's [forward compatibility](https://github.com/coreos/ignition/blob/main/config/v3_3/config.go#L61).
 
 Container Linux Configs render a fixed Ignition version, depending on the `terraform-provider-ct` release, so updating alters the rendered Ignition version.
 
+Before `terraform-provider-ct` v0.10.0, Butane configs contained a `version` that was associated with an Ignition format version. For example, a Butane config with `version: 1.0.0` would produce an Ignition config with version `3.0.0`.
+
 | terraform-provider-ct | CLC to Ignition     | Butane to Ignition    |
 |-----------------------|---------------------|--------------------|
+| 0.10.x                | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3, 1.4) -> Ignition 3.3 |
 | 0.9.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3, 1.4) -> Ignition (3.0, 3.1, 3.2, 3.2, 3.3)
 | 0.8.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3) -> Ignition (3.0, 3.1, 3.2, 3.2)
 | 0.7.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2) -> Ignition (3.0, 3.1, 3.2) |
@@ -89,10 +92,6 @@ Container Linux Configs render a fixed Ignition version, depending on the `terra
 | 0.4.x                 | Renders 2.2.0       | Butane 1.0.0 -> Ignition 3.0.0 |
 | 0.3.x                 | Renders 2.2.0       | NA                 |
 | 0.2.x                 | Renders 2.0.0       | NA                 |
-
-Notes:
-
-* Butane config `snippets` must match the version set in the content. Version skew among snippets is **not** supported.
 
 ## Development
 

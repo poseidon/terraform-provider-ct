@@ -16,14 +16,7 @@ import (
 
 	ignition "github.com/coreos/ignition/config/v2_3"
 	ignitionTypes "github.com/coreos/ignition/config/v2_3/types"
-	ignition30 "github.com/coreos/ignition/v2/config/v3_0"
-	ignition30Types "github.com/coreos/ignition/v2/config/v3_0/types"
-	ignition31 "github.com/coreos/ignition/v2/config/v3_1"
-	ignition31Types "github.com/coreos/ignition/v2/config/v3_1/types"
-	ignition32 "github.com/coreos/ignition/v2/config/v3_2"
-	ignition32Types "github.com/coreos/ignition/v2/config/v3_2/types"
 	ignition33 "github.com/coreos/ignition/v2/config/v3_3"
-	ignition33Types "github.com/coreos/ignition/v2/config/v3_3/types"
 )
 
 func dataSourceCTConfig() *schema.Resource {
@@ -97,8 +90,8 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 		}
 	}
 
-	// Fedora CoreOS Config
-	ign, err := fccToIgnition([]byte(content), pretty, strict, snippets)
+	// Butane Config
+	ign, err := butaneToIgnition([]byte(content), pretty, strict, snippets)
 	if err == common.ErrNoVariant {
 		// consider as Container Linux Config
 		ign, err = renderCLC([]byte(content), platform, pretty, strict, snippets)
@@ -107,7 +100,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 }
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
-func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
+func butaneToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
 	ignBytes, report, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
 		Pretty: pretty,
 	})
@@ -119,66 +112,17 @@ func fccToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte,
 		return nil, fmt.Errorf("strict parsing error: %v", report.String())
 	}
 
-	if len(snippets) == 0 {
-		return ignBytes, nil
-	}
-
 	// merge FCC snippets into main Ignition config
 	return mergeFCCSnippets(ignBytes, pretty, strict, snippets)
 }
 
-// Manually parse main Fedora CoreOS Config's Ignition using fallback Ignition
-// versions. Then translate and parse FCC snippets as the chosen Ignition
-// version to merge.
-// version
-// Upstream might later handle: https://github.com/coreos/butane/issues/118
-// Note: This means snippets version must match the main config version.
+// Parse Fedora CoreOS Ignition and Butane snippets into Ignition Config.
 func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	ign33, _, err := ignition33.Parse(ignBytes)
-	if err == nil {
-		// FCC config v1.4.0
-		ign33, err = mergeFCC14(ign33, snippets, pretty, strict)
-		if err != nil {
-			return nil, fmt.Errorf("FCC v1.4.0 merge error: %v", err)
-		}
-		return marshalJSON(ign33, pretty)
-	}
-
-	ign32, _, err := ignition32.Parse(ignBytes)
-	if err == nil {
-		// FCC config v1.2.0
-		ign32, err = mergeFCC12(ign32, snippets, pretty, strict)
-		if err != nil {
-			return nil, fmt.Errorf("FCC v1.2.0 merge error: %v", err)
-		}
-		return marshalJSON(ign32, pretty)
-	}
-
-	ign31, _, err := ignition31.Parse(ignBytes)
-	if err == nil {
-		// FCC config v1.1.0
-		ign31, err = mergeFCC11(ign31, snippets, pretty, strict)
-		if err != nil {
-			return nil, fmt.Errorf("FCC v1.1.0 merge error: %v", err)
-		}
-		return marshalJSON(ign31, pretty)
-	}
-
-	var ign30 ignition30Types.Config
-	ign30, _, err = ignition30.Parse(ignBytes)
+	ign, _, err := ignition33.ParseCompatibleVersion(ignBytes)
 	if err != nil {
-		return nil, fmt.Errorf("FCC v1.0.0 parse error: %v", err)
+		return nil, fmt.Errorf("%v", err)
 	}
-	// FCC config v1.0.0
-	ign30, err = mergeFCCV10(ign30, snippets, pretty, strict)
-	if err != nil {
-		return nil, fmt.Errorf("FCC v1.0.0 merge error: %v", err)
-	}
-	return marshalJSON(ign30, pretty)
-}
 
-// merge FCC v1.4.0 snippets
-func mergeFCC14(ign ignition33Types.Config, snippets []string, pretty, strict bool) (ignition33Types.Config, error) {
 	for _, snippet := range snippets {
 		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
 			Pretty: pretty,
@@ -186,99 +130,22 @@ func mergeFCC14(ign ignition33Types.Config, snippets []string, pretty, strict bo
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
 			if err == common.ErrNoVariant {
-				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
+				return nil, fmt.Errorf("Butane snippets require `variant`: %v", err)
 			}
-			return ign, fmt.Errorf("snippet v1.4.0 translate error: %v", err)
+			return nil, fmt.Errorf("Butane translate error: %v", err)
 		}
 		if strict && len(report.Entries) > 0 {
-			return ign, fmt.Errorf("strict parsing error: %v", report.String())
+			return nil, fmt.Errorf("strict parsing error: %v", report.String())
 		}
 
-		ignext, _, err := ignition33.Parse(ignextBytes)
+		ignext, _, err := ignition33.ParseCompatibleVersion(ignextBytes)
 		if err != nil {
-			return ign, fmt.Errorf("snippet parse error: %v, expect v1.4.0", err)
+			return nil, fmt.Errorf("snippet parse error: %v, expect v1.4.0", err)
 		}
 		ign = ignition33.Merge(ign, ignext)
 	}
-	return ign, nil
-}
 
-// merge FCC v1.2.0 snippets
-func mergeFCC12(ign ignition32Types.Config, snippets []string, pretty, strict bool) (ignition32Types.Config, error) {
-	for _, snippet := range snippets {
-		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
-			Pretty: pretty,
-		})
-		if err != nil {
-			// For FCC, require snippets be FCCs (don't fall-through to CLC)
-			if err == common.ErrNoVariant {
-				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
-			}
-			return ign, fmt.Errorf("snippet v1.2.0 translate error: %v", err)
-		}
-		if strict && len(report.Entries) > 0 {
-			return ign, fmt.Errorf("strict parsing error: %v", report.String())
-		}
-
-		ignext, _, err := ignition32.Parse(ignextBytes)
-		if err != nil {
-			return ign, fmt.Errorf("snippet parse error: %v, expect v1.2.0", err)
-		}
-		ign = ignition32.Merge(ign, ignext)
-	}
-	return ign, nil
-}
-
-// merge FCC v1.1.0 snippets
-func mergeFCC11(ign ignition31Types.Config, snippets []string, pretty, strict bool) (ignition31Types.Config, error) {
-	for _, snippet := range snippets {
-		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
-			Pretty: pretty,
-		})
-		if err != nil {
-			// For FCC, require snippets be FCCs (don't fall-through to CLC)
-			if err == common.ErrNoVariant {
-				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
-			}
-			return ign, fmt.Errorf("snippet v1.1.0 translate error: %v", err)
-		}
-		if strict && len(report.Entries) > 0 {
-			return ign, fmt.Errorf("strict parsing error: %v", report.String())
-		}
-
-		ignext, _, err := ignition31.Parse(ignextBytes)
-		if err != nil {
-			return ign, fmt.Errorf("snippet parse error: %v, expect v1.1.0", err)
-		}
-		ign = ignition31.Merge(ign, ignext)
-	}
-	return ign, nil
-}
-
-// merge FCC v1.0.0 snippets
-func mergeFCCV10(ign ignition30Types.Config, snippets []string, pretty, strict bool) (ignition30Types.Config, error) {
-	for _, snippet := range snippets {
-		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
-			Pretty: pretty,
-		})
-		if err != nil {
-			// For FCC, require snippets be FCCs (don't fall-through to CLC)
-			if err == common.ErrNoVariant {
-				return ign, fmt.Errorf("Fedora CoreOS snippets require `variant`: %v", err)
-			}
-			return ign, fmt.Errorf("snippet v1.0.0 translate error: %v", err)
-		}
-		if strict && len(report.Entries) > 0 {
-			return ign, fmt.Errorf("strict parsing error: %v", report.String())
-		}
-
-		ignext, _, err := ignition30.Parse(ignextBytes)
-		if err != nil {
-			return ign, fmt.Errorf("snippet parse error: %v, expect v1.0.0", err)
-		}
-		ign = ignition30.Merge(ign, ignext)
-	}
-	return ign, nil
+	return marshalJSON(ign, pretty)
 }
 
 // Translate Container Linux Config as Ignition JSON.

@@ -4,6 +4,17 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.10.0
+
+* Change how older (< 1.4) Butane Configs are parsed to Ignition ([#116](https://github.com/poseidon/terraform-provider-ct/pull/116))
+  * Parse Ignition bytes to the forward compatible Ignition version ([docs](https://github.com/poseidon/terraform-provider-ct#versions))
+  * Parse v1.3 Butane Configs to Ignition v3.3
+  * Parse v1.2 Butane Configs to Ignition v3.3
+  * Parse v1.1 Butane Configs to Ignition v3.3
+  * Parse v1.0 Butane Configs to Ignition v3.3
+* Add support for verison skew among Butane Config snippets
+  * Butane Config and snippets will always convert to the current Ignition version
+
 ## v0.9.2
 
 * Update butane, ignition, and Terraform SDK modules
