@@ -73,7 +73,9 @@ github.com/armon/go-radix v1.0.0/go.mod h1:ufUuZ+zHj4x4TnLV4JWEpy2hxWSpsRywHrMgI
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5/go.mod h1:wHh0iHkYZB8zMSxRWpUBQtwG5a7fFgvEO+odwuTv2gs=
 github.com/aws/aws-sdk-go v1.15.78/go.mod h1:E3/ieXAlvM0XWO57iftYVDLLvQ824smPP3ATZkfNZeM=
 github.com/aws/aws-sdk-go v1.30.28/go.mod h1:5zCpMtNQVjRREroY7sYe8lOMRSxkhG6MZveU8YkpAk0=
+github.com/aws/aws-sdk-go v1.37.0 h1:GzFnhOIsrGyQ69s7VgqtrG2BG8v7X7vwB3Xpbd/DBBk=
 github.com/aws/aws-sdk-go v1.37.0/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
+github.com/beevik/etree v1.1.1-0.20200718192613-4a2f8b9d084c/go.mod h1:0yGO2rna3S9DkITDWHY1bMtcY4IJ4w+4S+EooZUR0bE=
 github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d/go.mod h1:6QX/PXZ00z/TKoufEY6K/a0k6AhaJrQKdFe6OfVXsa4=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
@@ -105,8 +107,9 @@ github.com/coreos/go-systemd/v22 v22.0.0 h1:XJIw/+VlJ+87J+doOxznsAWIdmWuViOVhkQa
 github.com/coreos/go-systemd/v22 v22.0.0/go.mod h1:xO0FLkIi5MaZafQlIrOotqXZ90ih+1atmu1JpKERPPk=
 github.com/coreos/ignition v0.35.0 h1:UFodoYq1mOPrbEjtxIsZbThcDyQwAI1owczRDqWmKkQ=
 github.com/coreos/ignition v0.35.0/go.mod h1:WJQapxzEn9DE0ryxsGvm8QnBajm/XsS/PkrDqSpz+bA=
-github.com/coreos/ignition/v2 v2.13.0 h1:1ouW+d0nOuPUbLjxxOCnC+dWQxynr8Mt5exqJoCD7b4=
 github.com/coreos/ignition/v2 v2.13.0/go.mod h1:HO1HWYWcvAIbHu6xewoKxPGBTyZ32FLwGIuipw5d63o=
+github.com/coreos/ignition/v2 v2.14.0 h1:KfkCCnA6AK0kts/1zxzzNH5lDMCQN9sqqGcGs+RJVX4=
+github.com/coreos/ignition/v2 v2.14.0/go.mod h1:wxc4qdYEIHLygzWbVVEuoD7lQGTZmMgX0VjAPYBbeEQ=
 github.com/coreos/vcontext v0.0.0-20211021162308-f1dbbca7bef4 h1:pfSsrvbjUFGINaPGy0mm2QKQKTdq7IcbUa+nQwsz2UM=
 github.com/coreos/vcontext v0.0.0-20211021162308-f1dbbca7bef4/go.mod h1:HckqHnP/HI41vS0bfVjJ20u6jD0biI5+68QwZm5Xb9U=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
@@ -393,6 +396,7 @@ github.com/vmihailenco/msgpack/v4 v4.3.12/go.mod h1:gborTTJjAo/GWTqqRjrLCn9pgNN+
 github.com/vmihailenco/tagparser v0.1.1 h1:quXMXlA39OCbd2wAdTsGDlK9RkOk6Wuw+x37wVyIuWY=
 github.com/vmihailenco/tagparser v0.1.1/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgqMEUPoW2WPyhdI=
 github.com/vmware/vmw-guestinfo v0.0.0-20170707015358-25eff159a728/go.mod h1:x9oS4Wk2s2u4tS29nEaDLdzvuHdB19CvSGJjPgkZJNk=
+github.com/vmware/vmw-guestinfo v0.0.0-20220317130741-510905f0efa3/go.mod h1:CSBTxrhePCm0cmXNKDGeu+6bOQzpaEklfCqEpn89JWk=
 github.com/vmware/vmw-ovflib v0.0.0-20170608004843-1f217b9dc714/go.mod h1:jiPk45kn7klhByRvUq5i2vo1RtHKBHj+iWGFpxbXuuI=
 github.com/xanzy/ssh-agent v0.3.0 h1:wUMzuKtKilRgBAD1sUb8gOwwRr2FGoBVumcjoOACClI=
 github.com/xanzy/ssh-agent v0.3.0/go.mod h1:3s9xbODqPuuhK9JV1R321M/FlMZSBvE5aY6eAcqrDh0=
