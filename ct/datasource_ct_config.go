@@ -28,6 +28,12 @@ func dataSourceCTConfig() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"files_dir": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+				ForceNew: true,
+			},
 			"platform": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -78,6 +84,7 @@ func dataSourceCTConfigRead(ctx context.Context, d *schema.ResourceData, meta in
 func renderConfig(d *schema.ResourceData) (string, error) {
 	// unchecked assertions seem to be the norm in Terraform :S
 	content := d.Get("content").(string)
+	filesDir := d.Get("files_dir").(string)
 	platform := d.Get("platform").(string)
 	pretty := d.Get("pretty_print").(bool)
 	strict := d.Get("strict").(bool)
@@ -91,7 +98,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	}
 
 	// Butane Config
-	ign, err := butaneToIgnition([]byte(content), pretty, strict, snippets)
+	ign, err := butaneToIgnition([]byte(content), filesDir, pretty, strict, snippets)
 	if err == common.ErrNoVariant {
 		// consider as Container Linux Config
 		ign, err = renderCLC([]byte(content), platform, pretty, strict, snippets)
@@ -100,8 +107,11 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 }
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
-func butaneToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
+func butaneToIgnition(data []byte, filesDir string, pretty, strict bool, snippets []string) ([]byte, error) {
 	ignBytes, report, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
+		TranslateOptions: common.TranslateOptions{
+			FilesDir: filesDir,
+		},
 		Pretty: pretty,
 	})
 	// ErrNoVariant indicates data is a CLC, not an FCC
@@ -113,11 +123,11 @@ func butaneToIgnition(data []byte, pretty, strict bool, snippets []string) ([]by
 	}
 
 	// merge FCC snippets into main Ignition config
-	return mergeFCCSnippets(ignBytes, pretty, strict, snippets)
+	return mergeFCCSnippets(ignBytes, filesDir, pretty, strict, snippets)
 }
 
 // Parse Fedora CoreOS Ignition and Butane snippets into Ignition Config.
-func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) ([]byte, error) {
+func mergeFCCSnippets(ignBytes []byte, filesDir string, pretty, strict bool, snippets []string) ([]byte, error) {
 	ign, _, err := ignition33.ParseCompatibleVersion(ignBytes)
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)
@@ -125,6 +135,9 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 
 	for _, snippet := range snippets {
 		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
+			TranslateOptions: common.TranslateOptions{
+				FilesDir: filesDir,
+			},
 			Pretty: pretty,
 		})
 		if err != nil {

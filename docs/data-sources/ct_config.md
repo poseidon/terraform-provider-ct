@@ -26,12 +26,12 @@ See the [Container Linux](examples/container-linux.tf) or [Fedora CoreOS](exampl
 ## Argument Reference
 
 * `content` - contents of a Container Linux Config (CLC) or Fedora CoreOS Config (FCC) that should be validated and transpiled to Ignition.
+* `files_dir` - set path when using `local` as source when including files (default: "").
 * `strict` - strictly treat validation warnings as errors (default: false).
-* `pretty_print` - indent transpiled Ignition for visual prettiness (default: false)
+* `pretty_print` - indent transpiled Ignition for visual prettiness (default: false).
 * `snippets` - list of Container Linux Config (CLC) or Fedora CoreOS Config (FCC) snippets to merge into the content. For FCCs, content and snippet configs must have the same `version`.
-* `platform` - (Container Linux only) - enable [platform-specific](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) susbstitutions
+* `platform` - (Container Linux only) - enable [platform-specific](https://github.com/coreos/container-linux-config-transpiler/blob/master/config/platform/platform.go) susbstitutions.
 
 ## Argument Attributes
 
-* `rendered` - transpiled Ignition configuration
-
+* `rendered` - transpiled Ignition configuration.
