@@ -13,14 +13,13 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.10.0"
+      version = "0.11.0"
     }
   }
 }
 ```
 
-
-Define a Butane config (for Fedora CoreOS) or Container Linux Config (for Flatcar Linux):
+Define a Butane config for Fedora CoreOS or Flatcar Linux:
 
 ```yaml
 # Butane config
@@ -33,6 +32,20 @@ passwd:
       ssh_authorized_keys:
         - ssh-key foo
 ```
+
+```yaml
+# Butane config
+---
+variant: flatcar
+version: 1.0.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-key foo
+```
+
+Container Linux Configs are deprecated:
 
 ```yaml
 # Container Linux Config
@@ -97,7 +110,7 @@ Before `terraform-provider-ct` v0.10.0, Butane configs contained a `version` tha
 
 ### Binary
 
-To develop the provider plugin locally, build an executable with Go v1.16+.
+To develop the provider plugin locally, build an executable with Go v1.17+.
 
 ```
 make

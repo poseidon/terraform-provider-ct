@@ -4,6 +4,13 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.11.0
+
+* Update coreos/butane from v0.14.0 to v0.15.0 ([#126](https://github.com/poseidon/terraform-provider-ct/pull/126))
+  * Add `flatcar` Butane Config variant with spec version 1.0.0 (generates Ignition v3.3.0)
+* Deprecate Container Linux Configs (please migrate to Butane Configs)
+* Update Go version to v1.18
+
 ## v0.10.0
 
 * Change how older (< 1.4) Butane Configs are parsed to Ignition ([#116](https://github.com/poseidon/terraform-provider-ct/pull/116))
