@@ -1,12 +1,12 @@
 # terraform-provider-ct [![Build Status](https://github.com/poseidon/terraform-provider-ct/workflows/test/badge.svg)](https://github.com/poseidon/terraform-provider-ct/actions?query=workflow%3Atest+branch%3Amaster)
 
-`terraform-provider-ct` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) or [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
+`terraform-provider-ct` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
 
 ## Usage
 
 Configure the config transpiler provider (e.g. `providers.tf`).
 
-```hcl
+```tf
 provider "ct" {}
 
 terraform {
@@ -22,8 +22,6 @@ terraform {
 Define a Butane config for Fedora CoreOS or Flatcar Linux:
 
 ```yaml
-# Butane config
----
 variant: fcos
 version: 1.4.0
 passwd:
@@ -34,22 +32,8 @@ passwd:
 ```
 
 ```yaml
-# Butane config
----
 variant: flatcar
 version: 1.0.0
-passwd:
-  users:
-    - name: core
-      ssh_authorized_keys:
-        - ssh-key foo
-```
-
-Container Linux Configs are deprecated:
-
-```yaml
-# Container Linux Config
----
 passwd:
   users:
     - name: core
@@ -90,12 +74,16 @@ $ terraform init
 
 Butane configs are converted to the current (according to this provider) stable Ignition config and merged together. For example, a Butane Config with `version: 1.2.0` would produce an Ignition config with version `v3.3.0`. This relies on Ignition's [forward compatibility](https://github.com/coreos/ignition/blob/main/config/v3_3/config.go#L61).
 
-Container Linux Configs render a fixed Ignition version, depending on the `terraform-provider-ct` release, so updating alters the rendered Ignition version.
+| terraform-provider-ct | Butane variant | Butane version | Ignition verison |
+|-----------------------|----------------|----------------|------------------|
+| 0.12.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0 | 3.3.0 |
+| 0.12.x                | flatcar | 1.0.0                             | 3.3.0 |
 
-Before `terraform-provider-ct` v0.10.0, Butane configs contained a `version` that was associated with an Ignition format version. For example, a Butane config with `version: 1.0.0` would produce an Ignition config with version `3.0.0`.
+Before `poseidon/ct` v0.12.0, `ct_config` content could be a Butane Config or a Container Linux Config (CLC). Before `poseidon/ct` v0.10.0, Butane configs contained a `version` that was associated with an Ignition format version. For example, a Butane config with `version: 1.0.0` would produce an Ignition config with version `3.0.0`.
 
 | terraform-provider-ct | CLC to Ignition     | Butane to Ignition    |
 |-----------------------|---------------------|--------------------|
+| 0.11.x                | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3, 1.4) -> Ignition 3.3 |
 | 0.10.x                | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3, 1.4) -> Ignition 3.3 |
 | 0.9.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3, 1.4) -> Ignition (3.0, 3.1, 3.2, 3.2, 3.3)
 | 0.8.x                 | Renders 2.3.0       | Butane (1.0, 1.1, 1.2, 1.3) -> Ignition (3.0, 3.1, 3.2, 3.2)

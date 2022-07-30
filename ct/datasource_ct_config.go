@@ -12,10 +12,6 @@ import (
 
 	butane "github.com/coreos/butane/config"
 	"github.com/coreos/butane/config/common"
-	clct "github.com/coreos/container-linux-config-transpiler/config"
-
-	ignition "github.com/coreos/ignition/config/v2_3"
-	ignitionTypes "github.com/coreos/ignition/config/v2_3/types"
 	ignition33 "github.com/coreos/ignition/v2/config/v3_3"
 )
 
@@ -29,10 +25,11 @@ func dataSourceCTConfig() *schema.Resource {
 				Required: true,
 			},
 			"platform": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "",
-				ForceNew: true,
+				Type:       schema.TypeString,
+				Optional:   true,
+				Default:    "",
+				Deprecated: "platform is no longer used",
+				ForceNew:   true,
 			},
 			"snippets": &schema.Schema{
 				Type: schema.TypeList,
@@ -78,7 +75,6 @@ func dataSourceCTConfigRead(ctx context.Context, d *schema.ResourceData, meta in
 func renderConfig(d *schema.ResourceData) (string, error) {
 	// unchecked assertions seem to be the norm in Terraform :S
 	content := d.Get("content").(string)
-	platform := d.Get("platform").(string)
 	pretty := d.Get("pretty_print").(bool)
 	strict := d.Get("strict").(bool)
 	snippetsIface := d.Get("snippets").([]interface{})
@@ -92,10 +88,6 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 
 	// Butane Config
 	ign, err := butaneToIgnition([]byte(content), pretty, strict, snippets)
-	if err == common.ErrNoVariant {
-		// consider as Container Linux Config
-		ign, err = renderCLC([]byte(content), platform, pretty, strict, snippets)
-	}
 	return string(ign), err
 }
 
@@ -146,44 +138,6 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 	}
 
 	return marshalJSON(ign, pretty)
-}
-
-// Translate Container Linux Config as Ignition JSON.
-func renderCLC(data []byte, platform string, pretty, strict bool, snippets []string) ([]byte, error) {
-	ign, err := clcToIgnition(data, platform, strict)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, snippet := range snippets {
-		ignext, err := clcToIgnition([]byte(snippet), platform, strict)
-		if err != nil {
-			return nil, err
-		}
-		ign = ignition.Append(ign, ignext)
-	}
-
-	return marshalJSON(ign, pretty)
-}
-
-// Parse Container Linux config and convert to Ignition v2.2.0 format.
-func clcToIgnition(data []byte, platform string, strict bool) (ignitionTypes.Config, error) {
-	// parse bytes into a Container Linux Config
-	clc, ast, report := clct.Parse([]byte(data))
-
-	if strict && len(report.Entries) > 0 {
-		return ignitionTypes.Config{}, fmt.Errorf("error strict parsing Container Linux Config: %v", report.String())
-	}
-
-	if report.IsFatal() {
-		return ignitionTypes.Config{}, fmt.Errorf("error parsing Container Linux Config: %v", report.String())
-	}
-	// convert Container Linux Config to an Ignition Config
-	ign, report := clct.Convert(clc, platform, ast)
-	if report.IsFatal() {
-		return ignitionTypes.Config{}, fmt.Errorf("error converting to Ignition: %v", report.String())
-	}
-	return ign, nil
 }
 
 func marshalJSON(v interface{}, pretty bool) ([]byte, error) {

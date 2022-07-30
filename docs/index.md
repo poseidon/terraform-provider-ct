@@ -1,6 +1,6 @@
 # config-transpiler Provider
 
-`terraform-provider-ct` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) or [Container Linux Config](https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
+`terraform-provider-ct` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
 
 ## Usage
 
@@ -22,8 +22,6 @@ terraform {
 Define a Butane config for Fedora CoreOS or Flatcar Linux:
 
 ```yaml
-# Butane config
----
 variant: fcos
 version: 1.4.0
 passwd:
@@ -34,22 +32,8 @@ passwd:
 ```
 
 ```yaml
-# Butane config
----
 variant: flatcar
 version: 1.0.0
-passwd:
-  users:
-    - name: core
-      ssh_authorized_keys:
-        - ssh-key foo
-```
-
-Container Linux Configs are deprecated:
-
-```yaml
-# Container Linux Config
----
 passwd:
   users:
     - name: core
