@@ -1,7 +1,8 @@
+variant: flatcar
+version: 1.0.0
 storage:
   files:
     - path: "/etc/coreos/update.conf"
-      filesystem: rootfs
       mode: 0644
       contents:
         inline: |

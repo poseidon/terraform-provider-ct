@@ -1,24 +1,18 @@
-# Fedora CoreOS Config -> Ignition
-resource "local_file" "fedora-coreos-ign" {
-  content = data.ct_config.fedora-coreos-config.rendered
-  filename = "${path.module}/output/fedora-coreos.ign"
-}
-
-# Fedora CoreOS Config
+# Butane Config for Fedora CoreOS
 data "ct_config" "fedora-coreos-config" {
-  content      = data.template_file.fedora-coreos-worker.rendered
+  content = templatefile("${path.module}/content/fcos.yaml", {
+    message = "Hello World!"
+  })
+  strict       = true
   pretty_print = true
 
   snippets = [
-    file("${path.module}/content/fcc-snippet.yaml"),
+    file("${path.module}/content/fcos-snippet.yaml"),
   ]
 }
 
-# Content (e.g. possibly templated)
-data "template_file" "fedora-coreos-worker" {
-  template = file("${path.module}/content/fcc.yaml")
-
-  vars = {
-    message = "Hello World!"
-  }
+# Render as Ignition
+resource "local_file" "fedora-coreos" {
+  content  = data.ct_config.fedora-coreos-config.rendered
+  filename = "${path.module}/output/fedora-coreos.ign"
 }
