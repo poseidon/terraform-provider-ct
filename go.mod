@@ -3,7 +3,6 @@ module github.com/poseidon/terraform-provider-ct
 require (
 	github.com/coreos/butane v0.15.0
 	github.com/coreos/ignition/v2 v2.14.0
-	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.20.0
 )
 

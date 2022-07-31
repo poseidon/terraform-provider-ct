@@ -4,9 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -69,7 +67,7 @@ func dataSourceCTConfigRead(ctx context.Context, d *schema.ResourceData, meta in
 	if err := d.Set("rendered", rendered); err != nil {
 		return diag.FromErr(err)
 	}
-	d.SetId(strconv.Itoa(hashcode.String(rendered)))
+	d.SetId(hashcode(rendered))
 	return diags
 }
 
