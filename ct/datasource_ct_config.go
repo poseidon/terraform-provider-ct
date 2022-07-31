@@ -20,18 +20,18 @@ func dataSourceCTConfig() *schema.Resource {
 		ReadContext: dataSourceCTConfigRead,
 
 		Schema: map[string]*schema.Schema{
-			"content": &schema.Schema{
+			"content": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"platform": &schema.Schema{
+			"platform": {
 				Type:       schema.TypeString,
 				Optional:   true,
 				Default:    "",
 				Deprecated: "platform is no longer used",
 				ForceNew:   true,
 			},
-			"snippets": &schema.Schema{
+			"snippets": {
 				Type: schema.TypeList,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
@@ -39,17 +39,17 @@ func dataSourceCTConfig() *schema.Resource {
 				Optional: true,
 				ForceNew: true,
 			},
-			"pretty_print": &schema.Schema{
+			"pretty_print": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
-			"strict": &schema.Schema{
+			"strict": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
-			"rendered": &schema.Schema{
+			"rendered": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "rendered ignition configuration",
@@ -66,7 +66,9 @@ func dataSourceCTConfigRead(ctx context.Context, d *schema.ResourceData, meta in
 		return diag.FromErr(err)
 	}
 
-	d.Set("rendered", rendered)
+	if err := d.Set("rendered", rendered); err != nil {
+		return diag.FromErr(err)
+	}
 	d.SetId(strconv.Itoa(hashcode.String(rendered)))
 	return diags
 }

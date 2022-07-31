@@ -6,7 +6,7 @@
 
 Configure the config transpiler provider (e.g. `providers.tf`).
 
-```hcl
+```tf
 provider "ct" {}
 
 terraform {
@@ -43,7 +43,7 @@ passwd:
 
 Define a `ct_config` data source and render for machine consumption.
 
-```hcl
+```tf
 data "ct_config" "worker" {
   content      = file("worker.yaml")
   strict       = true

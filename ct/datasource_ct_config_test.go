@@ -175,19 +175,19 @@ func TestButaneConfigV14(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV14Resource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV14WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV14WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
@@ -218,30 +218,6 @@ EOT
 }
 `
 
-const fedoraCoreOSV13Expected = `{
-  "ignition": {
-    "version": "3.2.0"
-  },
-  "passwd": {
-    "users": [
-      {
-        "name": "core",
-        "sshAuthorizedKeys": [
-          "key"
-        ]
-      }
-    ]
-  },
-  "storage": {
-    "luks": [
-      {
-        "device": "/dev/vdb",
-        "name": "data"
-      }
-    ]
-  }
-}`
-
 const fedoraCoreOSV13WithSnippets = `
 data "ct_config" "fedora-coreos-snippets" {
   pretty_print = true
@@ -269,42 +245,6 @@ EOT
 	]
 }
 `
-
-const fedoraCoreOSV13WithSnippetsExpected = `{
-  "ignition": {
-    "config": {
-      "replace": {
-        "verification": {}
-      }
-    },
-    "proxy": {},
-    "security": {
-      "tls": {}
-    },
-    "timeouts": {},
-    "version": "3.3.0"
-  },
-  "kernelArguments": {},
-  "passwd": {
-    "users": [
-      {
-        "name": "core",
-        "sshAuthorizedKeys": [
-          "key"
-        ]
-      }
-    ]
-  },
-  "storage": {},
-  "systemd": {
-    "units": [
-      {
-        "enabled": true,
-        "name": "docker.service"
-      }
-    ]
-  }
-}`
 
 const fedoraCoreOSV13WithSnippetsPrettyFalse = `
 data "ct_config" "fedora-coreos-snippets" {
@@ -338,19 +278,19 @@ func TestButaneConfigV13(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV13Resource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV13WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV13WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
@@ -380,30 +320,6 @@ passwd:
 EOT
 }
 `
-
-const fedoraCoreOSV12Expected = `{
-  "ignition": {
-    "version": "3.2.0"
-  },
-  "passwd": {
-    "users": [
-      {
-        "name": "core",
-        "sshAuthorizedKeys": [
-          "key"
-        ]
-      }
-    ]
-  },
-  "storage": {
-    "luks": [
-      {
-        "device": "/dev/vdb",
-        "name": "data"
-      }
-    ]
-  }
-}`
 
 const fedoraCoreOSV12WithSnippets = `
 data "ct_config" "fedora-coreos-snippets" {
@@ -465,19 +381,19 @@ func TestButaneConfigV12(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV12Resource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV12WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV12WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
@@ -594,19 +510,19 @@ func TestButaneConfigV11(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV11Resource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33BeforeButaneV12),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV11WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV11WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
@@ -693,19 +609,19 @@ func TestButaneConfigV10(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV10Resource,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33BeforeButaneV12),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV10WithSnippets,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
 				),
 			},
-			r.TestStep{
+			{
 				Config: fedoraCoreOSV10WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
@@ -783,7 +699,7 @@ func TestFedoraCoreOSMix_SnippetBehind(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: fedoraCoreOSMixSnippetBehind,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV33MixExpected),
@@ -825,7 +741,7 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: fedoraCoreOSMixSnippetAhead,
 				Check: r.ComposeTestCheckFunc(
 					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV33MixExpected),
@@ -847,7 +763,7 @@ func TestInvalidResource(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config:      invalidResource,
 				ExpectError: regexp.MustCompile("An argument named \"some_invalid_field\" is not expected here"),
 			},

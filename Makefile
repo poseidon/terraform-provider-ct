@@ -1,11 +1,10 @@
 export CGO_ENABLED:=0
-export GO111MODULE=on
 
 VERSION=$(shell git describe --tags --match=v* --always --dirty)
 SEMVER=$(shell git describe --tags --match=v* --always --dirty | cut -c 2-)
 
 .PHONY: all
-all: build test vet lint fmt
+all: build test vet fmt
 
 .PHONY: build
 build: clean bin/terraform-provider-ct
@@ -20,10 +19,6 @@ test:
 .PHONY: vet
 vet:
 	@go vet -all ./...
-
-.PHONY: lint
-lint:
-	@golint -set_exit_status `go list ./...`
 
 .PHONY: fmt
 fmt:
