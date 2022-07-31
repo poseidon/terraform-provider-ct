@@ -41,7 +41,7 @@ passwd:
         - ssh-key foo
 ```
 
-Define a `ct_config` data source and render for machine consumption.
+Define a `ct_config` data source with strict validation.
 
 ```tf
 data "ct_config" "worker" {
@@ -54,7 +54,22 @@ data "ct_config" "worker" {
     file("storage.yaml"),
   ]
 }
+```
 
+Optionally, template the `content`.
+
+```tf
+data "ct_config" "worker" {
+  content = templatefile("worker.yaml", {
+    ssh_authorized_key = "ssh-ed25519 AAAA...",
+  })
+  strict       = true
+}
+```
+
+Render the `ct_config` as Ignition for use by machine instances.
+
+```tf
 resource "aws_instance" "worker" {
   user_data = data.ct_config.worker.rendered
 }

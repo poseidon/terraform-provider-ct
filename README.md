@@ -1,4 +1,5 @@
-# terraform-provider-ct [![Build Status](https://github.com/poseidon/terraform-provider-ct/workflows/test/badge.svg)](https://github.com/poseidon/terraform-provider-ct/actions?query=workflow%3Atest+branch%3Amaster)
+# terraform-provider-ct [![GoDoc](https://pkg.go.dev/badge/github.com/poseidon/terraform-provider-ct.svg)](https://pkg.go.dev/github.com/poseidon/terraform-provider-ct) [![Workflow](https://github.com/poseidon/terraform-provider-ct/actions/workflows/test.yaml/badge.svg)](https://github.com/poseidon/terraform-provider-ct/actions/workflows/test.yaml?query=branch%3Amain) [![Sponsors](https://img.shields.io/github/sponsors/poseidon?logo=github)](https://github.com/sponsors/poseidon) [![Twitter](https://img.shields.io/badge/follow-news-1da1f2?logo=twitter)](https://twitter.com/poseidonlabs)
+
 
 `terraform-provider-ct` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
 
@@ -41,7 +42,7 @@ passwd:
         - ssh-key foo
 ```
 
-Define a `ct_config` data source and render for machine consumption.
+Define a `ct_config` data source with strict validation.
 
 ```tf
 data "ct_config" "worker" {
@@ -54,7 +55,22 @@ data "ct_config" "worker" {
     file("storage.yaml"),
   ]
 }
+```
 
+Optionally, template the `content`.
+
+```tf
+data "ct_config" "worker" {
+  content = templatefile("worker.yaml", {
+    ssh_authorized_key = "ssh-ed25519 AAAA...",
+  })
+  strict       = true
+}
+```
+
+Render the `ct_config` as Ignition for use by machine instances.
+
+```tf
 resource "aws_instance" "worker" {
   user_data = data.ct_config.worker.rendered
 }
