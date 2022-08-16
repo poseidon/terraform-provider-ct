@@ -7,3 +7,7 @@ updates:
   pull-request-branch-name:
     separator: "-"
   open-pull-requests-limit: 3
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily

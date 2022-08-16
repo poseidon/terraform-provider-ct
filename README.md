@@ -1,4 +1,5 @@
-# terraform-provider-ct [![GoDoc](https://pkg.go.dev/badge/github.com/poseidon/terraform-provider-ct.svg)](https://pkg.go.dev/github.com/poseidon/terraform-provider-ct) [![Workflow](https://github.com/poseidon/terraform-provider-ct/actions/workflows/test.yaml/badge.svg)](https://github.com/poseidon/terraform-provider-ct/actions/workflows/test.yaml?query=branch%3Amain) ![Downloads](https://img.shields.io/github/downloads/poseidon/terraform-provider-ct/total) [![Sponsors](https://img.shields.io/github/sponsors/poseidon?logo=github)](https://github.com/sponsors/poseidon) [![Twitter](https://img.shields.io/badge/follow-news-1da1f2?logo=twitter)](https://twitter.com/poseidonlabs)
+# terraform-provider-ct
+[![GoDoc](https://pkg.go.dev/badge/github.com/poseidon/terraform-provider-ct.svg)](https://pkg.go.dev/github.com/poseidon/terraform-provider-ct) [![Workflow](https://github.com/poseidon/terraform-provider-ct/actions/workflows/test.yaml/badge.svg)](https://github.com/poseidon/terraform-provider-ct/actions/workflows/test.yaml?query=branch%3Amain) ![Downloads](https://img.shields.io/github/downloads/poseidon/terraform-provider-ct/total) [![Sponsors](https://img.shields.io/github/sponsors/poseidon?logo=github)](https://github.com/sponsors/poseidon) [![Twitter](https://img.shields.io/badge/follow-news-1da1f2?logo=twitter)](https://twitter.com/poseidonlabs)
 
 `terraform-provider-ct` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
 
@@ -113,7 +114,7 @@ Before `poseidon/ct` v0.12.0, `ct_config` content could be a Butane Config or a 
 
 ### Binary
 
-To develop the provider plugin locally, build an executable with Go v1.17+.
+To develop the provider plugin locally, build an executable with Go v1.18+.
 
 ```
 make

@@ -1,5 +1,7 @@
 module github.com/poseidon/terraform-provider-ct
 
+go 1.18
+
 require (
 	github.com/coreos/butane v0.15.0
 	github.com/coreos/ignition/v2 v2.14.0
@@ -64,5 +66,3 @@ require (
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-go 1.17
