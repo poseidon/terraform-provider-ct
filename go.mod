@@ -3,7 +3,7 @@ module github.com/poseidon/terraform-provider-ct
 go 1.18
 
 require (
-	github.com/coreos/butane v0.16.0
+	github.com/coreos/butane v0.17.0
 	github.com/coreos/ignition/v2 v2.14.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.1
 )
@@ -15,7 +15,7 @@ require (
 	github.com/clarketm/json v1.17.1 // indirect
 	github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
-	github.com/coreos/go-systemd/v22 v22.4.0 // indirect
+	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/coreos/vcontext v0.0.0-20220810162454-88bd546c634c // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
@@ -49,7 +49,7 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/oklog/run v1.0.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/testify v1.8.0 // indirect
+	github.com/stretchr/testify v1.8.1 // indirect
 	github.com/vincent-petithory/dataurl v1.0.0 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	github.com/vmihailenco/msgpack/v4 v4.3.12 // indirect
