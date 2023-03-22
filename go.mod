@@ -1,6 +1,6 @@
 module github.com/poseidon/terraform-provider-ct
 
-go 1.18
+go 1.19
 
 require (
 	github.com/coreos/butane v0.17.0
