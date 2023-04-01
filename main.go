@@ -3,11 +3,11 @@ package main
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 
-	"github.com/poseidon/terraform-provider-ct/ct"
+	"github.com/poseidon/terraform-provider-ct/internal"
 )
 
 func main() {
 	plugin.Serve(&plugin.ServeOpts{
-		ProviderFunc: ct.Provider,
+		ProviderFunc: internal.Provider,
 	})
 }

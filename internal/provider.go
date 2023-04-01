@@ -1,4 +1,4 @@
-package ct
+package internal
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
