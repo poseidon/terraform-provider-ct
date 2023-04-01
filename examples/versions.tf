@@ -5,7 +5,7 @@ terraform {
     local = "~> 1.2"
     ct = {
       source  = "poseidon/ct"
-      version = "~> 0.11.0"
+      version = "~> 0.12.0"
       #source  = "terraform.localhost/poseidon/ct"
       #version = "0.12.0"
     }

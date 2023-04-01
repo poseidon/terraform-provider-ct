@@ -4,12 +4,14 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.12.0
+
 * Remove support for Container Linux Configs ([#132](https://github.com/poseidon/terraform-provider-ct/pull/132))
   * Butane Configs support `fcos` and `flatcar` variants
+  * Focus on converting Butane Configs (with different variants) to Ignition
   * Flatcar Linux now supports Ignition v3.3.0
-  * Focus on converting Butane Configsi (with different variants) to Ignition
-* Remove unused github.com/coroes/ignition (v1) dependencies
-* Deprecate the `platform` field, its no longer used
+* Remove unused `github.com/coroes/ignition` (v1) dependencies
+* Deprecate the `platform` field, it's no longer used
 
 ## v0.11.0
 
