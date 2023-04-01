@@ -13,9 +13,9 @@ import (
 	ignition "github.com/coreos/ignition/v2/config/v3_4"
 )
 
-func dataSourceCTConfig() *schema.Resource {
+func DatasourceConfig() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceCTConfigRead,
+		ReadContext: datasourceConfigRead,
 
 		Schema: map[string]*schema.Schema{
 			"content": {
@@ -56,7 +56,7 @@ func dataSourceCTConfig() *schema.Resource {
 	}
 }
 
-func dataSourceCTConfigRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func datasourceConfigRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	rendered, err := renderConfig(d)

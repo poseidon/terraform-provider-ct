@@ -8,7 +8,7 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		DataSourcesMap: map[string]*schema.Resource{
-			"ct_config": dataSourceCTConfig(),
+			"ct_config": DatasourceConfig(),
 		},
 	}
 }

@@ -5,12 +5,7 @@ import (
 	"testing"
 
 	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
-
-var testProviders = map[string]*schema.Provider{
-	"ct": Provider(),
-}
 
 // Fedora CoreOS variant, v1.5.0
 
