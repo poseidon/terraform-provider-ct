@@ -4,6 +4,9 @@ Notable changes between releases.
 
 ## Latest
 
+* Update the target stable Ignition spec version to v3.4.0 ([#156](https://github.com/poseidon/terraform-provider-ct/pull/156))
+  * Parse Butane Configs to Ignition v3.4.0
+
 ## v0.12.0
 
 * Remove support for Container Linux Configs ([#132](https://github.com/poseidon/terraform-provider-ct/pull/132))

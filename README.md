@@ -92,10 +92,12 @@ $ terraform init
 
 ## Versions
 
-Butane configs are converted to the current (according to this provider) stable Ignition config and merged together. For example, a Butane Config with `version: 1.2.0` would produce an Ignition config with version `v3.3.0`. This relies on Ignition's [forward compatibility](https://github.com/coreos/ignition/blob/main/config/v3_3/config.go#L61).
+Butane configs are converted to the current (according to this provider) stable Ignition config and merged together. For example, `poseidon/ct` `v0.12.0` would convert a Butane Config with `variant: fcos` and `version: 1.2.0` to an Ignition config with version `v3.3.0`. This relies on Ignition's [forward compatibility](https://github.com/coreos/ignition/blob/main/config/v3_3/config.go#L61).
 
-| terraform-provider-ct | Butane variant | Butane version | Ignition verison |
+| poseidon/ct           | Butane variant | Butane version | Ignition verison |
 |-----------------------|----------------|----------------|------------------|
+| 0.13.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0, 1.5.0 | 3.4.0 |
+| 0.13.x                | flatcar | 1.0.0, 1.1.0                      | 3.4.0 |
 | 0.12.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0 | 3.3.0 |
 | 0.12.x                | flatcar | 1.0.0                             | 3.3.0 |
 

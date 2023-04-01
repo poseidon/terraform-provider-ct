@@ -7,9 +7,7 @@ SEMVER=$(shell git describe --tags --match=v* --always --dirty | cut -c 2-)
 all: build test vet fmt
 
 .PHONY: build
-build: clean bin/terraform-provider-ct
-
-bin/terraform-provider-ct:
+build:
 	@go build -o $@ github.com/poseidon/terraform-provider-ct
 
 .PHONY: test
@@ -23,6 +21,10 @@ vet:
 .PHONY: fmt
 fmt:
 	@test -z $$(go fmt ./...)
+
+.PHONY: lint
+lint:
+	@golangci-lint run ./...
 
 .PHONY: clean
 clean:

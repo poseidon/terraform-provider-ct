@@ -12,7 +12,112 @@ var testProviders = map[string]*schema.Provider{
 	"ct": Provider(),
 }
 
-// Fedora CoreOS
+// Fedora CoreOS variant, v1.5.0
+
+const fedoraCoreOSV15Resource = `
+data "ct_config" "fedora-coreos" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.5.0
+storage:
+  luks:
+    - name: data
+      device: /dev/vdb
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+}
+`
+
+const fedoraCoreOSV15WithSnippets = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.5.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.5.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+const fedoraCoreOSV15WithSnippetsPrettyFalse = `
+data "ct_config" "fedora-coreos-snippets" {
+  pretty_print = false
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.5.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+	snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.5.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true
+EOT
+	]
+}
+`
+
+func TestButaneConfig_FCOSv1_5(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config: fedoraCoreOSV15Resource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
+				),
+			},
+			{
+				Config: fedoraCoreOSV15WithSnippets,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
+				),
+			},
+			{
+				Config: fedoraCoreOSV15WithSnippetsPrettyFalse,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
+				),
+			},
+		},
+	})
+}
+
+// Fedora CoreOS variant, v1.4.0
 
 const fedoraCoreOSV14Resource = `
 data "ct_config" "fedora-coreos" {
@@ -35,7 +140,7 @@ EOT
 }
 `
 
-const ignitionV33Expected = `{
+const ignitionV34Expected = `{
   "ignition": {
     "config": {
       "replace": {
@@ -47,7 +152,7 @@ const ignitionV33Expected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.3.0"
+    "version": "3.4.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -105,7 +210,7 @@ EOT
 }
 `
 
-const ignitionV33WithSnippetsExpected = `{
+const ignitionV34WithSnippetsExpected = `{
   "ignition": {
     "config": {
       "replace": {
@@ -117,7 +222,7 @@ const ignitionV33WithSnippetsExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.3.0"
+    "version": "3.4.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -169,33 +274,35 @@ EOT
 }
 `
 
-const ignitionV33WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.3.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+const ignitionV34WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.4.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
 
-func TestButaneConfigV14(t *testing.T) {
+func TestButaneConfig_FCOSv1_4(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
 				Config: fedoraCoreOSV14Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV14WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV14WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
 	})
 }
+
+// Fedora CoreOS variant, v1.3.0
 
 const fedoraCoreOSV13Resource = `
 data "ct_config" "fedora-coreos" {
@@ -274,31 +381,33 @@ EOT
 }
 `
 
-func TestButaneConfigV13(t *testing.T) {
+func TestButaneConfig_FCOSv1_3(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
 				Config: fedoraCoreOSV13Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV13WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV13WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
 	})
 }
+
+// Fedora CoreOS variant, v1.2.0
 
 const fedoraCoreOSV12Resource = `
 data "ct_config" "fedora-coreos" {
@@ -377,31 +486,33 @@ EOT
 }
 `
 
-func TestButaneConfigV12(t *testing.T) {
+func TestButaneConfig_FCOSv1_2(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
 				Config: fedoraCoreOSV12Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV12WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV12WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
 	})
 }
+
+// Fedora CoreOS variant, v1.1.0
 
 const fedoraCoreOSV11Resource = `
 data "ct_config" "fedora-coreos" {
@@ -421,7 +532,7 @@ EOT
 `
 
 // Butane v1.2 added storage.luks, which we exercise
-const ignitionV33BeforeButaneV12 = `{
+const ignitionV34BeforeButaneV12 = `{
   "ignition": {
     "config": {
       "replace": {
@@ -433,7 +544,7 @@ const ignitionV33BeforeButaneV12 = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.3.0"
+    "version": "3.4.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -506,31 +617,33 @@ EOT
 }
 `
 
-func TestButaneConfigV11(t *testing.T) {
+func TestButaneConfig_FCOSv1_1(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
 				Config: fedoraCoreOSV11Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33BeforeButaneV12),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34BeforeButaneV12),
 				),
 			},
 			{
 				Config: fedoraCoreOSV11WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV11WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
 	})
 }
+
+// Fedora CoreOS variant, v1.0.0
 
 const fedoraCoreOSV10Resource = `
 data "ct_config" "fedora-coreos" {
@@ -605,26 +718,26 @@ EOT
 }
 `
 
-func TestButaneConfigV10(t *testing.T) {
+func TestButaneConfig_FCOSv1_0(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
 				Config: fedoraCoreOSV10Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33BeforeButaneV12),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34BeforeButaneV12),
 				),
 			},
 			{
 				Config: fedoraCoreOSV10WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV10WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -659,7 +772,7 @@ EOT
 }
 `
 
-const ignitionV33MixExpected = `{
+const ignitionV34MixExpected = `{
   "ignition": {
     "config": {
       "replace": {
@@ -671,7 +784,7 @@ const ignitionV33MixExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.3.0"
+    "version": "3.4.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -702,7 +815,7 @@ func TestFedoraCoreOSMix_SnippetBehind(t *testing.T) {
 			{
 				Config: fedoraCoreOSMixSnippetBehind,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV33MixExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV34MixExpected),
 				),
 			},
 		},
@@ -744,7 +857,7 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 			{
 				Config: fedoraCoreOSMixSnippetAhead,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV33MixExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV34MixExpected),
 				),
 			},
 		},

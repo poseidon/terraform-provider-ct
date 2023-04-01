@@ -10,7 +10,7 @@ import (
 
 	butane "github.com/coreos/butane/config"
 	"github.com/coreos/butane/config/common"
-	ignition33 "github.com/coreos/ignition/v2/config/v3_3"
+	ignition "github.com/coreos/ignition/v2/config/v3_4"
 )
 
 func dataSourceCTConfig() *schema.Resource {
@@ -110,7 +110,7 @@ func butaneToIgnition(data []byte, pretty, strict bool, snippets []string) ([]by
 
 // Parse Fedora CoreOS Ignition and Butane snippets into Ignition Config.
 func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	ign, _, err := ignition33.ParseCompatibleVersion(ignBytes)
+	ign, _, err := ignition.ParseCompatibleVersion(ignBytes)
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)
 	}
@@ -130,11 +130,11 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 			return nil, fmt.Errorf("strict parsing error: %v", report.String())
 		}
 
-		ignext, _, err := ignition33.ParseCompatibleVersion(ignextBytes)
+		ignext, _, err := ignition.ParseCompatibleVersion(ignextBytes)
 		if err != nil {
 			return nil, fmt.Errorf("snippet parse error: %v, expect v1.4.0", err)
 		}
-		ign = ignition33.Merge(ign, ignext)
+		ign = ignition.Merge(ign, ignext)
 	}
 
 	return marshalJSON(ign, pretty)
