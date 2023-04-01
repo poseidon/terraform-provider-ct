@@ -22,13 +22,6 @@ func DatasourceConfig() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"platform": {
-				Type:       schema.TypeString,
-				Optional:   true,
-				Default:    "",
-				Deprecated: "platform is no longer used",
-				ForceNew:   true,
-			},
 			"snippets": {
 				Type: schema.TypeList,
 				Elem: &schema.Schema{

@@ -4,8 +4,11 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.13.0
+
 * Update the target stable Ignition spec version to v3.4.0 ([#156](https://github.com/poseidon/terraform-provider-ct/pull/156))
-  * Parse Butane Configs to Ignition v3.4.0
+  * Parse Butane Configs to Ignition v3.4.0 ([#159](https://github.com/poseidon/terraform-provider-ct/pull/159))
+* Remove deprecated `platform` field
 * Move implementation to an `internal` package ([#157](https://github.com/poseidon/terraform-provider-ct/pull/157))
 
 ## v0.12.0
