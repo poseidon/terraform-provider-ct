@@ -13,7 +13,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.12.0"
+      version = "0.13.0"
     }
   }
 }
@@ -23,7 +23,7 @@ Define a Butane config for Fedora CoreOS or Flatcar Linux:
 
 ```yaml
 variant: fcos
-version: 1.4.0
+version: 1.5.0
 passwd:
   users:
     - name: core
@@ -33,7 +33,7 @@ passwd:
 
 ```yaml
 variant: flatcar
-version: 1.0.0
+version: 1.1.0
 passwd:
   users:
     - name: core

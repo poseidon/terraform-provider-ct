@@ -8,6 +8,8 @@ Notable changes between releases.
 
 * Update the target stable Ignition spec version to v3.4.0 ([#156](https://github.com/poseidon/terraform-provider-ct/pull/156))
   * Parse Butane Configs to Ignition v3.4.0 ([#159](https://github.com/poseidon/terraform-provider-ct/pull/159))
+  * Add support for `fcos` [v1.5.0](https://coreos.github.io/butane/config-fcos-v1_5/) Butane Configs
+  * Add support for `flatcar` [v1.1.0](https://coreos.github.io/butane/config-flatcar-v1_1/) Butane Configs
 * Remove deprecated `platform` field
 * Move implementation to an `internal` package ([#157](https://github.com/poseidon/terraform-provider-ct/pull/157))
 
