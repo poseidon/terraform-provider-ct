@@ -5,6 +5,7 @@ data "ct_config" "fedora-coreos-config" {
   })
   strict       = true
   pretty_print = true
+  files_dir    = "${path.module}/content"
 
   snippets = [
     file("${path.module}/content/fcos-snippet.yaml"),

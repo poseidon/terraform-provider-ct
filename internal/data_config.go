@@ -40,6 +40,11 @@ func DatasourceConfig() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"files_dir": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+			},
 			"rendered": {
 				Type:        schema.TypeString,
 				Computed:    true,
@@ -71,6 +76,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	pretty := d.Get("pretty_print").(bool)
 	strict := d.Get("strict").(bool)
 	snippetsIface := d.Get("snippets").([]interface{})
+	filesDir := d.Get("files_dir").(string)
 
 	snippets := make([]string, len(snippetsIface))
 	for i, v := range snippetsIface {
@@ -80,14 +86,17 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	}
 
 	// Butane Config
-	ign, err := butaneToIgnition([]byte(content), pretty, strict, snippets)
+	ign, err := butaneToIgnition([]byte(content), pretty, strict, snippets, filesDir)
 	return string(ign), err
 }
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
-func butaneToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
+func butaneToIgnition(data []byte, pretty, strict bool, snippets []string, filesDir string) ([]byte, error) {
 	ignBytes, report, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
 		Pretty: pretty,
+		TranslateOptions: common.TranslateOptions{
+			FilesDir: filesDir,
+		},
 	})
 	// ErrNoVariant indicates data is a CLC, not an FCC
 	if err != nil {

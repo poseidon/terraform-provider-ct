@@ -12,6 +12,10 @@ storage:
       contents:
         inline: |
           ${message}
+    - path: /etc/foo
+      contents:
+        local: foo.txt
+
 passwd:
   users:
     - name: core

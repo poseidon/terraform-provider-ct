@@ -878,3 +878,68 @@ func TestInvalidResource(t *testing.T) {
 		},
 	})
 }
+
+const fileInclude = `
+data "ct_config" "file-include" {
+  content = <<-EOT
+---
+variant: fcos
+version: 1.5.0
+storage:
+  files:
+    - path: /etc/foo
+      contents:
+        local: foo.txt
+EOT
+  strict = true
+  pretty_print = true
+  files_dir = "../examples/content"
+}
+`
+const ignitionFileIncludeExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.4.0"
+  },
+  "kernelArguments": {},
+  "passwd": {},
+  "storage": {
+    "files": [
+      {
+        "group": {},
+        "path": "/etc/foo",
+        "user": {},
+        "contents": {
+          "compression": "",
+          "source": "data:,some%20content%0A",
+          "verification": {}
+        }
+      }
+    ]
+  },
+  "systemd": {}
+}`
+
+func TestFileInclude(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config: fileInclude,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.file-include", "files_dir", "../examples/content"),
+					r.TestCheckResourceAttr("data.ct_config.file-include", "rendered", ignitionFileIncludeExpected),
+				),
+			},
+		},
+	})
+}
