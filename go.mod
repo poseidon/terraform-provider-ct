@@ -3,7 +3,7 @@ module github.com/poseidon/terraform-provider-ct
 go 1.19
 
 require (
-	github.com/coreos/butane v0.19.0
+	github.com/coreos/butane v0.20.0
 	github.com/coreos/ignition/v2 v2.17.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.32.0
 )
