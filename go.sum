@@ -16,8 +16,8 @@ github.com/clarketm/json v1.17.1/go.mod h1:ynr2LRfb0fQU34l07csRNBTcivjySLLiY1YzQ
 github.com/cloudflare/circl v1.3.3/go.mod h1:5XYMA4rFBvNIrhs50XuiBJ15vF2pZn4nnUKZrLbUZFA=
 github.com/cloudflare/circl v1.3.7 h1:qlCDlTPz2n9fu58M0Nh1J/JzcFpfgkFHHX3O35r5vcU=
 github.com/cloudflare/circl v1.3.7/go.mod h1:sRTcRWXGLrKw6yIGJ+l7amYJFfAXbZG0kBSc8r4zxgA=
-github.com/coreos/butane v0.19.0 h1:F4uuWwIaOCA6YrBOKoVU1cb25SMIkuValW9p1/PXyO8=
-github.com/coreos/butane v0.19.0/go.mod h1:dfa3/aWa58qfWMK/CGm3OR3T328x6x2nm66MgZURCTs=
+github.com/coreos/butane v0.20.0 h1:lKdyBDazlM5cenywmAT6Fcwp5B2rVeYtIqZDSbYu3MA=
+github.com/coreos/butane v0.20.0/go.mod h1:JPxQB/3omxqSg1ZWAOg5x3aslzx4nDvmb7Wyv8gC150=
 github.com/coreos/go-json v0.0.0-20230131223807-18775e0fb4fb h1:rmqyI19j3Z/74bIRhuC59RB442rXUazKNueVpfJPxg4=
 github.com/coreos/go-json v0.0.0-20230131223807-18775e0fb4fb/go.mod h1:rcFZM3uxVvdyNmsAV2jopgPD1cs5SPWJWU5dOz2LUnw=
 github.com/coreos/go-semver v0.3.1 h1:yi21YpKnrx1gt5R+la8n5WgS0kCrsPp33dmEyHReZr4=
