@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.5
 
 require (
-	github.com/coreos/butane v0.20.0
+	github.com/coreos/butane v0.21.0
 	github.com/coreos/ignition/v2 v2.19.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.34.0
 )
