@@ -117,7 +117,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 			if err == common.ErrNoVariant {
 				return nil, fmt.Errorf("Butane snippets require `variant`: %v", err)
 			}
-			return nil, fmt.Errorf("Butane translate error: %v", err)
+			return nil, fmt.Errorf("Butane translate error: %v\n%s", err, report.String())
 		}
 		if strict && len(report.Entries) > 0 {
 			return nil, fmt.Errorf("strict parsing error: %v", report.String())
