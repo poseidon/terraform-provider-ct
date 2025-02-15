@@ -1,6 +1,11 @@
 name: test
 on:
   push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   go:
     uses: poseidon/.github/.github/workflows/golang-library.yaml@main
