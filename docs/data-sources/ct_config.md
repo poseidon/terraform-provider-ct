@@ -21,7 +21,7 @@ resource "aws_instance" "worker" {
 }
 ```
 
-See the [Flatcar Container Linux](examples/flatcar-linux.tf) or [Fedora CoreOS](examples/fedora-coreos.tf) examples.
+See the [Flatcar Container Linux](../../examples/flatcar-linux.tf) or [Fedora CoreOS](../../examples/fedora-coreos.tf) examples.
 
 ## Argument Reference
 
