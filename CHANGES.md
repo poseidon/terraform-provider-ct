@@ -4,6 +4,15 @@ Notable changes between releases.
 
 ## Latest
 
+## v0.14.0
+
+* Update Butane from v0.24.0 to v0.25.1 ([#223](https://github.com/poseidon/terraform-provider-ct/pull/223), [#219](https://github.com/poseidon/terraform-provider-ct/pull/219), [#212](https://github.com/poseidon/terraform-provider-ct/pull/212), [#199](https://github.com/poseidon/terraform-provider-ct/pull/199))
+* Update Ignition from v2.22.0 to v2.24.0 ([#226](https://github.com/poseidon/terraform-provider-ct/pull/226), [#220](https://github.com/poseidon/terraform-provider-ct/pull/220), [#215](https://github.com/poseidon/terraform-provider-ct/pull/215))
+* Update Terraform Plugin SDK from v2.36.0 to v2.38.1 ([#222](https://github.com/poseidon/terraform-provider-ct/pull/222), [#221](https://github.com/poseidon/terraform-provider-ct/pull/221))
+* Add experimental `files_dir` support to allow embedding local files relative to directory ([5d67e66](https://github.com/poseidon/terraform-provider-ct/commit/5d67e66))
+* Improve error messages by including Butane translate reports ([8782f05](https://github.com/poseidon/terraform-provider-ct/commit/8782f05))
+* Update Go from v1.19 to v1.24.0 with toolchain v1.25.3
+
 ## v0.13.0
 
 * Update the target stable Ignition spec version to v3.4.0 ([#156](https://github.com/poseidon/terraform-provider-ct/pull/156))
