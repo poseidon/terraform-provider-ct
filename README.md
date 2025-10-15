@@ -18,7 +18,7 @@ terraform {
   required_providers {
     ct = {
       source  = "poseidon/ct"
-      version = "0.13.0"
+      version = "0.14.0"
     }
   }
 }
@@ -96,6 +96,8 @@ Butane configs are converted to the current (according to this provider) stable 
 
 | poseidon/ct           | Butane variant | Butane version | Ignition verison |
 |-----------------------|----------------|----------------|------------------|
+| 0.14.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0, 1.5.0 | 3.4.0 |
+| 0.14.x                | flatcar | 1.0.0, 1.1.0                      | 3.4.0 |
 | 0.13.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0, 1.5.0 | 3.4.0 |
 | 0.13.x                | flatcar | 1.0.0, 1.1.0                      | 3.4.0 |
 | 0.12.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0 | 3.3.0 |
