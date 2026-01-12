@@ -7,6 +7,86 @@ import (
 	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
+// Fedora CoreOS variant, v1.7.0-experimental
+
+const fedoraCoreOSV17expResource = `
+data "ct_config" "fedora-coreos" {
+  pretty_print = true
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.7.0-experimental
+storage:
+  luks:
+    - name: data
+      device: /dev/vdb
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+}
+`
+
+const ignitionV36expExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.6.0-experimental"
+  },
+  "kernelArguments": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "luks": [
+      {
+        "cex": {},
+        "clevis": {
+          "custom": {}
+        },
+        "device": "/dev/vdb",
+        "keyFile": {
+          "verification": {}
+        },
+        "name": "data"
+      }
+    ]
+  },
+  "systemd": {}
+}`
+
+func TestButaneConfig_FCOSv1_7exp(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config: fedoraCoreOSV17expResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV36expExpected),
+				),
+			},
+		},
+	})
+}
+
 // Fedora CoreOS variant, v1.5.0
 
 const fedoraCoreOSV15Resource = `
@@ -147,7 +227,7 @@ const ignitionV34Expected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.5.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -163,6 +243,7 @@ const ignitionV34Expected = `{
   "storage": {
     "luks": [
       {
+        "cex": {},
         "clevis": {
           "custom": {}
         },
@@ -217,7 +298,7 @@ const ignitionV34WithSnippetsExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.5.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -269,7 +350,7 @@ EOT
 }
 `
 
-const ignitionV34WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.4.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+const ignitionV34WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.5.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
 
 func TestButaneConfig_FCOSv1_4(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
@@ -539,7 +620,7 @@ const ignitionV34BeforeButaneV12 = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.5.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -779,7 +860,7 @@ const ignitionV34MixExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.5.0"
   },
   "kernelArguments": {},
   "passwd": {

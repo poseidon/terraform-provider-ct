@@ -10,7 +10,7 @@ import (
 
 	butane "github.com/coreos/butane/config"
 	"github.com/coreos/butane/config/common"
-	ignition "github.com/coreos/ignition/v2/config/v3_4"
+	ignition "github.com/coreos/ignition/v2/config/v3_6_experimental"
 )
 
 func DatasourceConfig() *schema.Resource {
