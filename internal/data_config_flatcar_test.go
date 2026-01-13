@@ -12,6 +12,7 @@ const flatcarV12expResource = `
 data "ct_config" "flatcar" {
   pretty_print = true
   strict = true
+  experimental = true
   content = <<EOT
 ---
 variant: flatcar

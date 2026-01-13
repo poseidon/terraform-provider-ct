@@ -13,6 +13,7 @@ const fedoraCoreOSV17expResource = `
 data "ct_config" "fedora-coreos" {
   pretty_print = true
   strict = true
+  experimental = true
   content = <<EOT
 ---
 variant: fcos
