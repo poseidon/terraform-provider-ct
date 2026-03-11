@@ -10,7 +10,10 @@ import (
 
 	butane "github.com/coreos/butane/config"
 	"github.com/coreos/butane/config/common"
-	ignition "github.com/coreos/ignition/v2/config/v3_4"
+	ignition_rel "github.com/coreos/ignition/v2/config/v3_5"
+	types_rel "github.com/coreos/ignition/v2/config/v3_5/types"
+	ignition_exp "github.com/coreos/ignition/v2/config/v3_6_experimental"
+	types_exp "github.com/coreos/ignition/v2/config/v3_6_experimental/types"
 )
 
 func DatasourceConfig() *schema.Resource {
@@ -51,6 +54,12 @@ func DatasourceConfig() *schema.Resource {
 				Computed:    true,
 				Description: "rendered ignition configuration",
 			},
+			"experimental": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "use experimental version in ignition configuration",
+			},
 		},
 	}
 }
@@ -78,6 +87,7 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	filesDir := d.Get("files_dir").(string)
 	strict := d.Get("strict").(bool)
 	snippetsIface := d.Get("snippets").([]interface{})
+	experimental := d.Get("experimental").(bool)
 
 	snippets := make([]string, len(snippetsIface))
 	for i, v := range snippetsIface {
@@ -87,12 +97,12 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 	}
 
 	// Butane Config
-	ign, err := butaneToIgnition([]byte(content), pretty, filesDir, strict, snippets)
+	ign, err := butaneToIgnition([]byte(content), pretty, filesDir, strict, snippets, experimental)
 	return string(ign), err
 }
 
 // Translate Fedora CoreOS config to Ignition v3.X.Y
-func butaneToIgnition(data []byte, pretty bool, filesDir string, strict bool, snippets []string) ([]byte, error) {
+func butaneToIgnition(data []byte, pretty bool, filesDir string, strict bool, snippets []string, experimental bool) ([]byte, error) {
 	ignBytes, report, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
 		TranslateOptions: common.TranslateOptions{
 			FilesDir: filesDir,
@@ -108,12 +118,12 @@ func butaneToIgnition(data []byte, pretty bool, filesDir string, strict bool, sn
 	}
 
 	// merge FCC snippets into main Ignition config
-	return mergeFCCSnippets(ignBytes, pretty, filesDir, strict, snippets)
+	return mergeFCCSnippets(ignBytes, pretty, filesDir, strict, snippets, experimental)
 }
 
 // Parse Fedora CoreOS Ignition and Butane snippets into Ignition Config.
-func mergeFCCSnippets(ignBytes []byte, pretty bool, filesDir string, strict bool, snippets []string) ([]byte, error) {
-	ign, _, err := ignition.ParseCompatibleVersion(ignBytes)
+func mergeFCCSnippets(ignBytes []byte, pretty bool, filesDir string, strict bool, snippets []string, experimental bool) ([]byte, error) {
+	ign, _, err := ignParseCompatibleVersion(ignBytes, experimental)
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)
 	}
@@ -136,14 +146,32 @@ func mergeFCCSnippets(ignBytes []byte, pretty bool, filesDir string, strict bool
 			return nil, fmt.Errorf("strict parsing error: %v", report.String())
 		}
 
-		ignext, _, err := ignition.ParseCompatibleVersion(ignextBytes)
+		ignext, _, err := ignParseCompatibleVersion(ignextBytes, experimental)
 		if err != nil {
 			return nil, fmt.Errorf("snippet parse error: %v, expect v1.4.0", err)
 		}
-		ign = ignition.Merge(ign, ignext)
+		ign = ignMerge(ign, ignext, experimental)
 	}
 
 	return marshalJSON(ign, pretty)
+}
+
+func ignMerge(parent, child interface{}, experimental bool) any {
+	if experimental {
+		parent_exp := parent.(types_exp.Config)
+		child_exp := child.(types_exp.Config)
+		return ignition_exp.Merge(parent_exp, child_exp)
+	}
+	parent_rel := parent.(types_rel.Config)
+	child_rel := child.(types_rel.Config)
+	return ignition_rel.Merge(parent_rel, child_rel)
+}
+
+func ignParseCompatibleVersion(raw []byte, experimental bool) (any, any, error) {
+	if experimental {
+		return ignition_exp.ParseCompatibleVersion(raw)
+	}
+	return ignition_rel.ParseCompatibleVersion(raw)
 }
 
 func marshalJSON(v interface{}, pretty bool) ([]byte, error) {

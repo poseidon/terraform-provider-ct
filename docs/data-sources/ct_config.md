@@ -29,6 +29,7 @@ See the [Flatcar Container Linux](../../examples/flatcar-linux.tf) or [Fedora Co
 * `strict` - strictly treat validation warnings as errors (default: false).
 * `pretty_print` - indent transpiled Ignition for visual prettiness (default: false)
 * `snippets` - list of Butane snippets to merge into the content. Content and snippet configs must have the same `version` and `variant`.
+* `experimental` - enable support for experimental butane and ignition config specs (default: false)
 
 ## Argument Attributes
 
