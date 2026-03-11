@@ -49,6 +49,7 @@ func DatasourceConfig() *schema.Resource {
 			"rendered": {
 				Type:        schema.TypeString,
 				Computed:    true,
+				Sensitive:   true,
 				Description: "rendered ignition configuration",
 			},
 		},
