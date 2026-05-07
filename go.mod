@@ -2,7 +2,7 @@ module github.com/poseidon/terraform-provider-ct
 
 go 1.25.8
 
-toolchain go1.26.2
+toolchain go1.26.3
 
 require (
 	github.com/coreos/butane v0.27.0
