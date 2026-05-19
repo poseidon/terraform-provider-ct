@@ -19,11 +19,11 @@ terraform {
 }
 ```
 
-Define a Butane config for Fedora CoreOS or Flatcar Linux:
+Define a Butane config for a supported platform (e.g. Fedora CoreOS, Flatcar Linux, Fedora IoT, OpenShift, or RHEL for Edge):
 
 ```yaml
 variant: fcos
-version: 1.5.0
+version: 1.7.0
 passwd:
   users:
     - name: core

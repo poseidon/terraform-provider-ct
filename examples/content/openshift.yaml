@@ -1,11 +1,10 @@
----
-variant: fcos
-version: 1.7.0
+variant: openshift
+version: 4.21.0
+metadata:
+  name: worker
+  labels:
+    machineconfiguration.openshift.io/role: worker
 storage:
-  filesystems:
-    - path: /
-      device: /dev/disk/by-label/ROOT
-      format: ext4
   files:
     - path: /etc/motd
       mode: 0644

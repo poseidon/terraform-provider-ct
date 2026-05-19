@@ -21,16 +21,21 @@ resource "aws_instance" "worker" {
 }
 ```
 
-See the [Flatcar Container Linux](../../examples/flatcar-linux.tf) or [Fedora CoreOS](../../examples/fedora-coreos.tf) examples.
+See the [Flatcar Linux](../../examples/flatcar-linux.tf), [Fedora CoreOS](../../examples/fedora-coreos.tf), [Fedora IoT](../../examples/fedora-iot.tf), [OpenShift](../../examples/openshift.tf), or [RHEL for Edge](../../examples/rhel-edge.tf) examples.
 
 ## Argument Reference
 
-* `content` - contents of a Butane Config that should be validated and transpiled to Ignition.
+* `content` - contents of a Butane Config that should be validated and transpiled to Ignition (supports `fcos`, `flatcar`, `fiot`, `r4e`, and `openshift` variants).
 * `strict` - strictly treat validation warnings as errors (default: false).
-* `pretty_print` - indent transpiled Ignition for visual prettiness (default: false)
-* `snippets` - list of Butane snippets to merge into the content. Content and snippet configs must have the same `version` and `variant`.
+* `pretty_print` - indent transpiled Ignition for visual prettiness (default: false).
+* `use_mapped_version` - if true, output the Ignition version corresponding to the given Butane version, matching Butane CLI behavior (default: false).
+* `files_dir` - allow embedding local files relative to this directory.
+* `snippets` - list of Butane snippets to merge into the content. Snippets must have the same `variant` as the main content.
 
 ## Argument Attributes
 
-* `rendered` - transpiled Ignition configuration
+* `rendered` - rendered Ignition configuration (or MachineConfig YAML for the `openshift` variant).
 
+## Versions
+
+Butane configs and snippets are automatically upgraded to the latest stable Ignition specification supported by the provider.

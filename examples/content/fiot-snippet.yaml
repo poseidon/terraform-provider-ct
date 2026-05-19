@@ -1,0 +1,6 @@
+variant: fiot
+version: 1.0.0
+systemd:
+  units:
+    - name: docker.service
+      enabled: true

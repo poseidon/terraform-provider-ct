@@ -6,21 +6,17 @@ import (
 	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-// Flatcar variant, v1.1.0 -> ignition 3.4.0
+// RHEL for Edge (r4e) variant, v1.1.0 -> ignition 3.4.0
 
-const flatcarV11Resource = `
-data "ct_config" "flatcar" {
+const r4eV11Resource = `
+data "ct_config" "r4e" {
   pretty_print = true
   use_mapped_version = true
   strict = true
   content = <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.1.0
-storage:
-  luks:
-    - name: data
-      device: /dev/vdb
 passwd:
   users:
     - name: core
@@ -30,14 +26,14 @@ EOT
 }
 `
 
-const flatcarV11WithSnippets = `
-data "ct_config" "flatcar-snippets" {
+const r4eV11WithSnippets = `
+data "ct_config" "r4e-snippets" {
   pretty_print = true
   use_mapped_version = true
   strict = true
   content = <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.1.0
 passwd:
   users:
@@ -48,7 +44,7 @@ EOT
 	snippets = [
 <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.1.0
 systemd:
   units:
@@ -59,14 +55,14 @@ EOT
 }
 `
 
-const flatcarV11WithSnippetsPrettyFalse = `
-data "ct_config" "flatcar-snippets" {
+const r4eV11WithSnippetsPrettyFalse = `
+data "ct_config" "r4e-snippets" {
   pretty_print = false
   use_mapped_version = true
   strict = true
   content = <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.1.0
 passwd:
   users:
@@ -77,7 +73,7 @@ EOT
 	snippets = [
 <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.1.0
 systemd:
   units:
@@ -88,42 +84,38 @@ EOT
 }
 `
 
-func TestButaneConfig_Flatcar_v1_1(t *testing.T) {
-	ign := flatcarIgnVersion["1.1.0"]
+func TestButaneConfig_R4E_v1_1(t *testing.T) {
+	ign := r4eIgnVersion["1.1.0"]
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
-				Config: flatcarV11Resource,
-				Check:  r.TestCheckResourceAttr("data.ct_config.flatcar", "rendered", ignExpectWithLuks(ign)),
+				Config: r4eV11Resource,
+				Check:  r.TestCheckResourceAttr("data.ct_config.r4e", "rendered", ignExpectNoLuks(ign)),
 			},
 			{
-				Config: flatcarV11WithSnippets,
-				Check:  r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", ignExpectWithSnippets(ign)),
+				Config: r4eV11WithSnippets,
+				Check:  r.TestCheckResourceAttr("data.ct_config.r4e-snippets", "rendered", ignExpectWithSnippets(ign)),
 			},
 			{
-				Config: flatcarV11WithSnippetsPrettyFalse,
-				Check:  r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", ignExpectWithSnippetsCompact(ign)),
+				Config: r4eV11WithSnippetsPrettyFalse,
+				Check:  r.TestCheckResourceAttr("data.ct_config.r4e-snippets", "rendered", ignExpectWithSnippetsCompact(ign)),
 			},
 		},
 	})
 }
 
-// Flatcar variant, v1.0.0 -> ignition 3.3.0
+// RHEL for Edge (r4e) variant, v1.0.0 -> ignition 3.3.0
 
-const flatcarV10Resource = `
-data "ct_config" "flatcar" {
+const r4eV10Resource = `
+data "ct_config" "r4e" {
   pretty_print = true
   use_mapped_version = true
   strict = true
   content = <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.0.0
-storage:
-  luks:
-    - name: data
-      device: /dev/vdb
 passwd:
   users:
     - name: core
@@ -133,14 +125,14 @@ EOT
 }
 `
 
-const flatcarV10WithSnippets = `
-data "ct_config" "flatcar-snippets" {
+const r4eV10WithSnippets = `
+data "ct_config" "r4e-snippets" {
   pretty_print = true
   use_mapped_version = true
   strict = true
   content = <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.0.0
 passwd:
   users:
@@ -151,7 +143,7 @@ EOT
 	snippets = [
 <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.0.0
 systemd:
   units:
@@ -162,14 +154,14 @@ EOT
 }
 `
 
-const flatcarV10WithSnippetsPrettyFalse = `
-data "ct_config" "flatcar-snippets" {
+const r4eV10WithSnippetsPrettyFalse = `
+data "ct_config" "r4e-snippets" {
   pretty_print = false
   use_mapped_version = true
   strict = true
   content = <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.0.0
 passwd:
   users:
@@ -180,7 +172,7 @@ EOT
 	snippets = [
 <<EOT
 ---
-variant: flatcar
+variant: r4e
 version: 1.0.0
 systemd:
   units:
@@ -191,22 +183,22 @@ EOT
 }
 `
 
-func TestButaneConfig_Flatcar_v1_0(t *testing.T) {
-	ign := flatcarIgnVersion["1.0.0"]
+func TestButaneConfig_R4E_v1_0(t *testing.T) {
+	ign := r4eIgnVersion["1.0.0"]
 	r.UnitTest(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
-				Config: flatcarV10Resource,
-				Check:  r.TestCheckResourceAttr("data.ct_config.flatcar", "rendered", ignExpectWithLuks(ign)),
+				Config: r4eV10Resource,
+				Check:  r.TestCheckResourceAttr("data.ct_config.r4e", "rendered", ignExpectNoLuks(ign)),
 			},
 			{
-				Config: flatcarV10WithSnippets,
-				Check:  r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", ignExpectWithSnippets(ign)),
+				Config: r4eV10WithSnippets,
+				Check:  r.TestCheckResourceAttr("data.ct_config.r4e-snippets", "rendered", ignExpectWithSnippets(ign)),
 			},
 			{
-				Config: flatcarV10WithSnippetsPrettyFalse,
-				Check:  r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", ignExpectWithSnippetsCompact(ign)),
+				Config: r4eV10WithSnippetsPrettyFalse,
+				Check:  r.TestCheckResourceAttr("data.ct_config.r4e-snippets", "rendered", ignExpectWithSnippetsCompact(ign)),
 			},
 		},
 	})
