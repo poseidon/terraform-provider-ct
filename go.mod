@@ -5,7 +5,9 @@ go 1.25.8
 toolchain go1.26.3
 
 require (
+	github.com/clarketm/json v1.17.1
 	github.com/coreos/butane v0.27.0
+	github.com/coreos/go-semver v0.3.1
 	github.com/coreos/ignition/v2 v2.26.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
 )
@@ -15,10 +17,8 @@ require (
 	github.com/agext/levenshtein v1.2.2 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.41.1 // indirect
-	github.com/clarketm/json v1.17.1 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/coreos/go-json v0.0.0-20230131223807-18775e0fb4fb // indirect
-	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd/v22 v22.7.0 // indirect
 	github.com/coreos/vcontext v0.0.0-20230201181013-d72178a18687 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect

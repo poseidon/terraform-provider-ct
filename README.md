@@ -24,11 +24,11 @@ terraform {
 }
 ```
 
-Define a Butane config for Fedora CoreOS or Flatcar Linux:
+Define a Butane config for a supported platform (e.g. Fedora CoreOS, Flatcar Linux, Fedora IoT, OpenShift, or RHEL for Edge):
 
 ```yaml
 variant: fcos
-version: 1.5.0
+version: 1.7.0
 passwd:
   users:
     - name: core
@@ -92,16 +92,21 @@ $ terraform init
 
 ## Versions
 
-Butane configs are converted to the current (according to this provider) stable Ignition config and merged together. For example, `poseidon/ct` `v0.12.0` would convert a Butane Config with `variant: fcos` and `version: 1.2.0` to an Ignition config with version `v3.3.0`. This relies on Ignition's [forward compatibility](https://github.com/coreos/ignition/blob/main/config/v3_3/config.go#L61).
+Butane configs are automatically upgraded to the current (according to this provider) stable Ignition specification. For example, `poseidon/ct` `v0.14.0` converts Butane Configs to Ignition config version `v3.6.0` (except for OpenShift which renders MachineConfig YAML).
+
+To disable this upgrade behavior and produce the Ignition version that matches the Butane spec mapping (like the Butane CLI), set `use_mapped_version = true` on the `ct_config` data source. This is recommended for platforms with limited Ignition support, such as Fedora IoT.
 
 | poseidon/ct           | Butane variant | Butane version | Ignition verison |
 |-----------------------|----------------|----------------|------------------|
-| 0.14.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0, 1.5.0 | 3.4.0 |
-| 0.14.x                | flatcar | 1.0.0, 1.1.0                      | 3.4.0 |
-| 0.13.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0, 1.5.0 | 3.4.0 |
-| 0.13.x                | flatcar | 1.0.0, 1.1.0                      | 3.4.0 |
-| 0.12.x                | fcos    | 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0 | 3.3.0 |
-| 0.12.x                | flatcar | 1.0.0                             | 3.3.0 |
+| 0.14.x                | fcos           | 1.0.0 - 1.7.0  | 3.6.0            |
+| 0.14.x                | flatcar        | 1.0.0, 1.1.0   | 3.6.0            |
+| 0.14.x                | fiot           | 1.0.0          | 3.6.0            |
+| 0.14.x                | r4e            | 1.0.0, 1.1.0   | 3.6.0            |
+| 0.14.x                | openshift      | 4.8.0 - 4.21.0 | 3.2.0 - 3.5.0    |
+| 0.13.x                | fcos           | 1.0.0 - 1.5.0  | 3.4.0            |
+| 0.13.x                | flatcar        | 1.0.0, 1.1.0   | 3.4.0            |
+| 0.12.x                | fcos           | 1.0.0 - 1.4.0  | 3.3.0            |
+| 0.12.x                | flatcar        | 1.0.0          | 3.3.0            |
 
 Before `poseidon/ct` v0.12.0, `ct_config` content could be a Butane Config or a Container Linux Config (CLC). Before `poseidon/ct` v0.10.0, Butane configs contained a `version` that was associated with an Ignition format version. For example, a Butane config with `version: 1.0.0` would produce an Ignition config with version `3.0.0`.
 

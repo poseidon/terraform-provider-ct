@@ -1,11 +1,6 @@
----
-variant: fcos
-version: 1.7.0
+variant: fiot
+version: 1.0.0
 storage:
-  filesystems:
-    - path: /
-      device: /dev/disk/by-label/ROOT
-      format: ext4
   files:
     - path: /etc/motd
       mode: 0644
