@@ -6,6 +6,87 @@ import (
 	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
+// Flatcar variant, v1.2.0-experimental
+
+const flatcarV12expResource = `
+data "ct_config" "flatcar" {
+  pretty_print = true
+  strict = true
+  experimental = true
+  content = <<EOT
+---
+variant: flatcar
+version: 1.2.0-experimental
+storage:
+  luks:
+    - name: data
+      device: /dev/vdb
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - key
+EOT
+}
+`
+
+const flatcarExpExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.6.0-experimental"
+  },
+  "kernelArguments": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "luks": [
+      {
+        "cex": {},
+        "clevis": {
+          "custom": {}
+        },
+        "device": "/dev/vdb",
+        "keyFile": {
+          "verification": {}
+        },
+        "name": "data"
+      }
+    ]
+  },
+  "systemd": {}
+}`
+
+func TestButaneConfig_Flatcar_v1_2exp(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config: flatcarV12expResource,
+				Check: r.ComposeTestCheckFunc(
+					r.TestCheckResourceAttr("data.ct_config.flatcar", "rendered", flatcarExpExpected),
+				),
+			},
+		},
+	})
+}
+
 // Flatcar variant, v1.1.0
 
 const flatcarV11Resource = `
@@ -146,7 +227,7 @@ const flatcarExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.5.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -162,6 +243,7 @@ const flatcarExpected = `{
   "storage": {
     "luks": [
       {
+        "cex": {},
         "clevis": {
           "custom": {}
         },
@@ -216,7 +298,7 @@ const flatcarWithSnippetsExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.5.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -268,7 +350,7 @@ EOT
 }
 `
 
-const flatcarWithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.4.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+const flatcarWithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.5.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
 
 func TestButaneConfig_Flatcar_v1_0(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
