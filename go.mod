@@ -6,7 +6,7 @@ toolchain go1.27.2
 
 require (
 	github.com/coreos/butane v0.29.0
-	github.com/coreos/ignition/v2 v2.27.0
+	github.com/coreos/ignition/v2 v2.28.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
 )
 
