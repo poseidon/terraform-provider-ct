@@ -61,6 +61,29 @@ data "ct_config" "worker" {
 }
 ```
 
+Files referenced in the Butane configuration must be placed in the `files_dir` directory. This is equivalent to the butane argument `--files-dir`.
+
+The file is located at `./config/ssh-port.conf`.
+
+```tf
+data "ct_config" "worker" {
+  content      = file("worker.yaml")
+  strict       = true
+  pretty_print = false
+  files_dir    = "./config"
+}
+```
+
+```yaml
+variant: fcos
+version: 1.5.0
+storage:
+  files:
+    - path: /etc/ssh/sshd_config.d/99-ssh-port.conf
+      contents:
+        local: ssh-port.conf
+```
+
 Optionally, template the `content`.
 
 ```tf
